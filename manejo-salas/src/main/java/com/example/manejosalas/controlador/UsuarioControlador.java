@@ -34,11 +34,12 @@ public class UsuarioControlador {
 	}
 	
 	@DeleteMapping
-	public boolean delete(@RequestBody Usuario usuario) {
-		return false;
+	public void delete(@RequestBody Usuario usuario) {
+		Usuario usuarioRegistrado = usuarioDAO.findByCorreo(usuario.getCorreo());
+		usuarioDAO.deleteById(usuarioRegistrado.getID());
 	}
 	
-	class UsuarioValidaciones{
+	public class UsuarioValidaciones{
 		
 		public final Usuario usuarioRegistrado;
 		public final Usuario usuarioPrueba;
