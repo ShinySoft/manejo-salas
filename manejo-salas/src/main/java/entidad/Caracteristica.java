@@ -1,4 +1,4 @@
-package com.example.manejosalas;
+package entidad;
 
 public class Caracteristica{
 

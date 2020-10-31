@@ -1,4 +1,4 @@
-package com.example.manejosalas;
+package entidad;
 
 public class Horario {
     private boolean lunes = false;

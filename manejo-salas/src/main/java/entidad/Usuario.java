@@ -1,11 +1,27 @@
-package com.example.manejosalas;
+package entidad;
+import javax.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.Id;
 
+@Entity
 public class Usuario{
+	
+	@Id
     private int ID;
+	
+	@Column
     private String perfil;
+	
+	@Column
     private String nombre;
+	
+	@Column
     private String apellido;
+	
+	@Column
     private String correo;
+	
+	@Column
     private String password;
 
     public Usuario(int ID,String perfil, String nombre, String apellido, String correo, String password){

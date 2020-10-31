@@ -1,4 +1,4 @@
-package com.example.manejosalas;
+package entidad;
 //INCOMPLETA
 public class Solicitud{
     private int ID;

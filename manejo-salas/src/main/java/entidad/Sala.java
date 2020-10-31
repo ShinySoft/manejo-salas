@@ -1,4 +1,4 @@
-package com.example.manejosalas;
+package entidad;
 
 import java.util.ArrayList;
 import java.util.List;
