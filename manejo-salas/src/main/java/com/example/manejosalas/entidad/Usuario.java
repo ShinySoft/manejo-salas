@@ -29,6 +29,7 @@ public class Usuario implements Serializable{
 	
 	@Column
     private String password;
+		
 /*
     public Usuario(int ID,String perfil, String nombre, String apellido, String correo, String password){
         this.ID = ID;
