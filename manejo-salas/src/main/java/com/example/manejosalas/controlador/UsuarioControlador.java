@@ -29,8 +29,8 @@ public class UsuarioControlador {
 	@GetMapping("/register")
 	public String register(Model model){
 		model.addAttribute("userForm", new Usuario());
-		model.addAttribute("perfiles",Perfil.getPerfiles());
-		//model.addAttribute("userList", usuarioDAO.findAll());
+		model.addAttribute("userList", usuarioDAO.findAll());
+		model.addAttribute("perfiles",Perfil.getPerfiles());		
 		model.addAttribute("listTab","active");		
 		return "mostrar-todos";
 	}
