@@ -13,7 +13,7 @@ public class Usuario implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	@Id
-    private int ID;
+    private int id;
 	
 	@Column
     private String perfil;
@@ -29,7 +29,7 @@ public class Usuario implements Serializable{
 	
 	@Column
     private String password;
-		
+
 /*
     public Usuario(int ID,String perfil, String nombre, String apellido, String correo, String password){
         this.ID = ID;
@@ -41,8 +41,12 @@ public class Usuario implements Serializable{
     }
 */
 	
-    public int getID(){
-        return ID;
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getId(){
+        return id;
     }
 
     public String getPerfil(){
@@ -66,7 +70,7 @@ public class Usuario implements Serializable{
     }
 
     public void setID (int ID){
-        this.ID = ID;
+        this.id = ID;
     }
 
     public void setPerfil (String perfil){

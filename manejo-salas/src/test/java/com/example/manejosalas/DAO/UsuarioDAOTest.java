@@ -74,7 +74,7 @@ public class UsuarioDAOTest {
 	    usr2.setPassword("kkk");
 	    entityManager.persist(usr2);
 
-	    Usuario foundTutorial = usuarioDAO.findById(usr2.getID()).get();
+	    Usuario foundTutorial = usuarioDAO.findById(usr2.getId()).get();
 
 	    assertThat(foundTutorial).isEqualTo(usr2);
 	  }
@@ -97,13 +97,13 @@ public class UsuarioDAOTest {
 	    updatedUsr2.setID(2);
 	    updatedUsr2.setPassword("macarena");
 
-	    Usuario usr = usuarioDAO.findById(usr2.getID()).get();
+	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
 	    usr.setPassword(updatedUsr2.getPassword());
 	    usuarioDAO.save(usr);
 
-	    Usuario checkTut = usuarioDAO.findById(usr2.getID()).get();
+	    Usuario checkTut = usuarioDAO.findById(usr2.getId()).get();
 	    
-	    assertThat(checkTut.getID()).isEqualTo(usr2.getID());
+	    assertThat(checkTut.getId()).isEqualTo(usr2.getId());
 	    assertThat(checkTut.getPassword()).isEqualTo(updatedUsr2.getPassword());	    
 	  }	
 	  
@@ -125,7 +125,7 @@ public class UsuarioDAOTest {
 
 		  entityManager.persist(usr3);
 
-		  usuarioDAO.deleteById(usr1.getID());
+		  usuarioDAO.deleteById(usr1.getId());
 		  
 		  Iterable<Usuario> usuarios = usuarioDAO.findAll();
 		  		  

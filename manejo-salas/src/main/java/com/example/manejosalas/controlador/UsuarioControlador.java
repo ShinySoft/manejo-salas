@@ -1,29 +1,39 @@
 package com.example.manejosalas.controlador;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Usuario;
 
-@RestController
+@Controller
 @RequestMapping("usuarios")
 public class UsuarioControlador {
 
 	@Autowired
 	UsuarioDAO usuarioDAO;		
 
-
-	@PostMapping("/register")
-	public void register(@RequestBody Usuario usuario) {		
-		usuarioDAO.save(usuario);
-	}
+	@GetMapping("/")
+	public String index() {
+		return "index";
+	}	
 	
+	@GetMapping("/register")
+	public String register(Model model){
+		//model.addAttribute("userForm", new Usuario());
+		//model.addAttribute("perfiles",Perfil.getPerfiles());
+		model.addAttribute("userList", usuarioDAO.findAll());
+		model.addAttribute("listTab","active");		
+		return "mostrar-todos";
+	}
 	
 	@GetMapping("/login")
 	public Usuario login(@RequestBody Usuario usuario) throws Exception {
@@ -32,11 +42,35 @@ public class UsuarioControlador {
 		
 	}
 	
+	@PostMapping("/register")
+	public void register(@RequestBody Usuario usuario) {		
+		usuarioDAO.save(usuario);
+	}	
+	
 	@DeleteMapping
 	public void delete(@RequestBody Usuario usuario) {
-		Usuario usuarioRegistrado = usuarioDAO.findByCorreo(usuario.getCorreo());
-		usuarioDAO.deleteById(usuarioRegistrado.getID());
+		Usuario usuarioRegistrado = usuarioDAO.findByCorreo(usuario.getCorreo());		
+		usuarioDAO.deleteById(usuarioRegistrado.getId());
 	}
+	
+	@GetMapping("/mostrar-todos")
+	public String mostrarTodos(Model model) {
+		model.addAttribute("userList", usuarioDAO.findAll());
+		return "mostrar-todos";
+	}		
+	
+	
+	@GetMapping("/test")
+	public String test(Model model){
+		String message;
+		
+		message = "F to pay respect";
+		model.addAttribute("name", message);
+		
+		return "index";
+	}
+	
+	
 	
 	public class UsuarioValidaciones{
 		
@@ -76,25 +110,39 @@ public class UsuarioControlador {
 
 
 
-enum Perfil{
-    ADMIN("A"),
-    SOLICITANTE("S")
-    ;
-
-    private final String text;
-
-    /**
-     * @param text
-     */
-    Perfil(final String text) {
-        this.text = text;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Enum#toString()
-     */
-    @Override
-    public String toString() {
-        return text;
-    }
+class Perfil{
+	
+	private String id;
+	private String value;
+	
+	
+	public Perfil(String id, String value) {
+		super();
+		this.id = id;
+		this.value = value;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public static Iterable<Perfil> getPerfiles(){
+		
+		ArrayList<Perfil> perfiles = new ArrayList();
+				
+		perfiles.add(new Perfil("A", "ADMINISTRADOR"));
+		perfiles.add(new Perfil("U", "USUARIO"));
+		//perfiles.add(new Perfil(3, "SUPER"));
+		return perfiles;	
+	}
+	
 }
