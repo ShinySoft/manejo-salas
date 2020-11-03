@@ -13,13 +13,18 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
-@Table(name = "Sala")
+@Table(name = "sala")
 public class Sala implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7513910887225154174L;
+
 	@Id
-    private int ID;
+    private int id;
 	
 	@Column
-    private int edificioID;
+    private int edificioId;
     
 	@Column
 	private String nombre;
@@ -55,11 +60,11 @@ public class Sala implements Serializable{
     }*/
 
     public int getID(){
-        return ID;
+        return id;
     }
 
     public int getEdificioID(){
-        return edificioID;
+        return edificioId;
     }
 
     public String getNombre(){
@@ -87,11 +92,11 @@ public class Sala implements Serializable{
     }
 
     public void setID(int ID){
-        this.ID=ID;
+        this.id=ID;
     }
 
     public void setEdificioID(int edificioID){
-        this.edificioID = edificioID;
+        this.edificioId = edificioID;
     }
 
     public void setNombre(String nombre){

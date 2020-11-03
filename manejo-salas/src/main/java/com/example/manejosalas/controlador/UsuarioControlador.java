@@ -29,7 +29,7 @@ public class UsuarioControlador {
 	@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("name", "Santiago");
-		return "index";
+		return "index";		
 	}	
 	
 	@GetMapping("/register")
@@ -134,28 +134,6 @@ public class UsuarioControlador {
 		return "mostrar-todos";		
 	}
 	
-	@DeleteMapping
-	public void delete(@RequestBody Usuario usuario) {
-		Usuario usuarioRegistrado = usuarioDAO.findByCorreo(usuario.getCorreo());		
-		usuarioDAO.deleteById(usuarioRegistrado.getId());
-	}
-	
-	@GetMapping("/mostrar-todos")
-	public String mostrarTodos(Model model) {
-		model.addAttribute("userList", usuarioDAO.findAll());
-		return "mostrar-todos";
-	}		
-	
-	
-	@GetMapping("/test")
-	public String test(Model model){
-		String message;
-		
-		message = "F to pay respect";
-		model.addAttribute("name", message);
-		
-		return "index";
-	}
 	
 
 	public class UsuarioValidaciones{
