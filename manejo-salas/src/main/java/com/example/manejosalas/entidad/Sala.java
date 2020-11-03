@@ -3,20 +3,43 @@ package com.example.manejosalas.entidad;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sala{
+import javax.persistence.Entity;
+
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+@Entity
+@Table(name = "Sala")
+public class Sala implements Serializable{
+	@Id
     private int ID;
+	
+	@Column
     private int edificioID;
-    private String nombre;
-    private String tipo;
-    private int capacidad;
-    private String encargado;
-    private boolean sonido;
-    private boolean videoBeam;
-    private boolean microfono;
-    private List <Caracteristica> caracteristicas = new ArrayList<Caracteristica>();
-    private List <Horario> horario = new ArrayList<Horario>();
     
-    public Sala (int ID, int edificioID, String nombre, String tipo, int Capacidad, String encargado, boolean sonido, boolean videoBeam, boolean microfono, 
+	@Column
+	private String nombre;
+    
+	@Column
+	private String tipo;
+    
+	@Column
+	private int capacidad;
+    
+	@Column
+	private int encargado;
+    
+	@Column
+	private String caracteristicas;
+    
+	@OneToMany(cascade = CascadeType.ALL)
+	private List <Horario> ocupacion = new ArrayList<Horario>();
+    
+    /*public Sala (int ID, int edificioID, String nombre, String tipo, int Capacidad, String encargado, boolean sonido, boolean videoBeam, boolean microfono, 
                 List<Caracteristica> caracteristicas, List<Horario> horario){
         this.ID = ID;    
         this.edificioID = edificioID;
@@ -29,7 +52,7 @@ public class Sala{
         this.microfono = microfono;
         this.caracteristicas = caracteristicas;
         this.horario = horario;
-    }
+    }*/
 
     public int getID(){
         return ID;
@@ -51,16 +74,16 @@ public class Sala{
         return capacidad;
     }
 
-    public String getEncargado(){
+    public int getEncargado(){
         return encargado;
     }
 
-    public List<Caracteristica> getCaracterisicas(){
+    public String getCaracterisicas(){
         return caracteristicas;
     }
 
     public List<Horario> getHorario(){
-        return horario;
+        return ocupacion;
     }
 
     public void setID(int ID){
@@ -83,24 +106,20 @@ public class Sala{
         this.capacidad = capacidad;
     }
 
-    public void setEncargado(String encargado){
+    public void setEncargado(int encargado){
         this.encargado = encargado;
     }
 
-    public void setCaracterisca (Caracteristica caracteristica){
-        this.caracteristicas.add(caracteristica);
+    public void setCaracteristicas (String caracteristica){
+        this.caracteristicas = (caracteristica);
     } 
 
-    public void setCaracteristicas (List<Caracteristica> caracteristicas){
-        this.caracteristicas = caracteristicas;
-    }
-
     public void setHorario (Horario horario){
-        this.horario.add(horario);
+        this.ocupacion.add(horario);
     } 
 
     public void setNuevoHorario (List<Horario> horario){
-        this.horario = horario;
+        this.ocupacion = horario;
     }
 
     
