@@ -19,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.SalaDAO;
-import com.example.manejosalas.controlador.UsuarioControlador.UsuarioValidaciones;
 
 @RestController
 @RequestMapping("salas")
-public class SalaControlador {
+public class SalaControlador extends SalaServicio {
 	@Autowired
 	SalaDAO salaDAO;
 
@@ -35,12 +34,7 @@ public class SalaControlador {
 	@PostMapping("/add")
 	public void add(Sala sala) {
 		salaDAO.save(sala);
-	}
-	
-	@PostMapping("/delete/{id}")
-	public void delete(int id) {
-		salaDAO.deleteById(id);
-	}
+	}	
 	
 	@PostMapping("/update/{id}")
 	public void update(Model model, @PathVariable(name = "id") int id) {		
@@ -52,25 +46,12 @@ public class SalaControlador {
 		
 		model.addAttribute("salaList", salaDAO.findAll());		
 				
-		return "salas";
+		return "";
 	}	
-	
-	
-
-	class SalaServicio {
 		
-		public void mapSala(Sala salaAModificar,Sala sala2) {
-			salaAModificar.setCapacidad(sala2.getCapacidad());
-			salaAModificar.setCaracteristicas(sala2.getCaracterisicas());
-			salaAModificar.setEdificioID(sala2.getEdificioID());
-			salaAModificar.setEncargado(sala2.getEncargado());
-			salaAModificar.setNuevoHorario(sala2.getHorario());
-			salaAModificar.setID(sala2.getID());
-			salaAModificar.setNombre(sala2.getNombre());
-			salaAModificar.setTipo(sala2.getTipo());
-		}
-		
-		
+	@PostMapping("/delete/{id}")
+	public void delete(int id) {
+		salaDAO.deleteById(id);
 	}
 	
 }
