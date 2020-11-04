@@ -1,13 +1,30 @@
 package com.example.manejosalas.entidad;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import java.io.Serializable;
+
 import javax.persistence.Column;
 
 @Entity
-@Table(name = "Ocupacion")
+@Table(name = "ocupacion")
+public class Ocupacion implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2831648488868113260L;
 
-public class Horario {
+	@Id
+	private int id;
+	
+	@Column
+	private int salaedificioid;
+	
+	@Column
+	private int salaid;
+	
 	@Column
     private boolean lunes = false;
 
@@ -29,29 +46,26 @@ public class Horario {
 	@Column
     private boolean domingo = false;
 
-	@Column(name="7-9")
+	@Column(name="siete_nueve")
     private boolean siete_nueve = false;
 
-	@Column(name="9-11")
+	@Column(name="nueve_once")
     private boolean nueve_once = false;
 
-	@Column(name="11-1")
+	@Column(name="once_una")
     private boolean once_una = false;
 
-	@Column(name="2-4")
+	@Column(name="dos_cuatro")
     private boolean dos_cuatro = false;
 
-	@Column(name="4-6")
+	@Column(name="cuatro_seis")
     private boolean cuatro_seis = false;
 
-	@Column(name="6-8")
+	@Column(name="seis_ocho")
     private boolean seis_ocho = false;
 
-	@Column(name="8-10")
+	@Column(name="ocho_diez")
     private boolean ocho_diez = false;
-
-	@Column
-    private String razon;
 
 	@Column
     private String descripcion;
@@ -117,9 +131,7 @@ public class Horario {
     public boolean getOcho_diez(){
         return ocho_diez;
     }
-    public String getRazon(){
-        return razon;
-    }
+
     public String getDescripcion(){
         return descripcion;
     }
@@ -166,9 +178,7 @@ public class Horario {
     public void setOcho_diez(boolean ocho_diez){
         this.ocho_diez = ocho_diez;
     }  
-    public void setRazon(String razon){
-        this.razon = razon;
-    } 
+
     public void setDescripcion(String descripcion){
         this.descripcion = descripcion;
     }

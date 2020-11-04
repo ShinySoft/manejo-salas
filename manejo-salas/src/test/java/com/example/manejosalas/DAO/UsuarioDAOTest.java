@@ -60,16 +60,16 @@ public class UsuarioDAOTest {
 	}	
 	
 	  @Test
-	  public void findUsuario_byID() {
+	  public void findUsuario_byId() {
 		  
 	    Usuario usr1 = new Usuario();
-	    usr1.setID(1);
+	    usr1.setId(1);
 	    usr1.setCorreo("f2@unal.edu.co");
 	    usr1.setPassword("kkk");
 	    entityManager.persist(usr1);
 
 	    Usuario usr2 = new Usuario();
-	    usr2.setID(2);
+	    usr2.setId(2);
 	    usr2.setCorreo("f@unal.edu.co");
 	    usr2.setPassword("kkk");
 	    entityManager.persist(usr2);
@@ -80,21 +80,21 @@ public class UsuarioDAOTest {
 	  }
 	
 	  @Test
-	  public void updateUsuario_byID() {
+	  public void updateUsuario_byId() {
 	    Usuario usr1 = new Usuario();
-	    usr1.setID(1);
+	    usr1.setId(1);
 	    usr1.setCorreo("correo1@unal.edu.co");
 	    usr1.setPassword("rock1234");
 	    entityManager.persist(usr1);
 
 	    Usuario usr2 = new Usuario();
-	    usr2.setID(2);
+	    usr2.setId(2);
 	    usr2.setCorreo("correo2@unal.edu.co");
 	    usr2.setPassword("crack1234");
 	    entityManager.persist(usr2);
 
 	    Usuario updatedUsr2 = new Usuario();
-	    updatedUsr2.setID(2);
+	    updatedUsr2.setId(2);
 	    updatedUsr2.setPassword("macarena");
 
 	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
@@ -108,20 +108,20 @@ public class UsuarioDAOTest {
 	  }	
 	  
 	  @Test
-	  public void deleteUsuario_byID(){
+	  public void deleteUsuario_byId(){
 		  
 		  Usuario usr1 = new Usuario();
-		  usr1.setID(1);
+		  usr1.setId(1);
 		  
 		  entityManager.persist(usr1);
 		  
 		  Usuario usr2 = new Usuario();
-		  usr2.setID(2);
+		  usr2.setId(2);
 
 		  entityManager.persist(usr2);
 
 		  Usuario usr3 = new Usuario();
-		  usr3.setID(3);
+		  usr3.setId(3);
 
 		  entityManager.persist(usr3);
 

@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "sala")
+
+
 public class Sala implements Serializable{
 	/**
 	 * 
@@ -23,7 +25,7 @@ public class Sala implements Serializable{
 	@Id
     private int id;
 	
-	@Column
+	@Id
     private int edificioId;
     
 	@Column
@@ -42,7 +44,7 @@ public class Sala implements Serializable{
 	private String caracteristicas;
     
 	@OneToMany(cascade = CascadeType.ALL)
-	private List <Horario> ocupacion = new ArrayList<Horario>();
+	private List <Ocupacion> ocupacion = new ArrayList<Ocupacion>();
     
     /*public Sala (int ID, int edificioID, String nombre, String tipo, int Capacidad, String encargado, boolean sonido, boolean videoBeam, boolean microfono, 
                 List<Caracteristica> caracteristicas, List<Horario> horario){
@@ -87,7 +89,7 @@ public class Sala implements Serializable{
         return caracteristicas;
     }
 
-    public List<Horario> getHorario(){
+    public List<Ocupacion> getHorario(){
         return ocupacion;
     }
 
@@ -119,11 +121,11 @@ public class Sala implements Serializable{
         this.caracteristicas = (caracteristica);
     } 
 
-    public void setHorario (Horario horario){
+    public void setHorario (Ocupacion horario){
         this.ocupacion.add(horario);
     } 
 
-    public void setNuevoHorario (List<Horario> horario){
+    public void setNuevoHorario (List<Ocupacion> horario){
         this.ocupacion = horario;
     }
 
