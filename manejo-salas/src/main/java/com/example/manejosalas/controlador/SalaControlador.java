@@ -67,15 +67,23 @@ public class SalaControlador extends SalaServicio {
 	}	
 	
 	@GetMapping("/edit-sala/{id}/{edificioId}")
-	public String update(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+	public ModelAndView update(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
 		
 		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
 		
-		model.addAttribute("salaList", salaDAO.findAll());					
+		ModelAndView modelAndView = new ModelAndView();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("editMode","true");
 		model.addAttribute("salaRegistro", salaRegistrada);
 		model.addAttribute("formTab","active");
+		model.addAttribute("editMode","true");
 		
-		return "view";
+		model.addAttribute("disableFields","true");
+		
+		modelAndView.setViewName ( "view" );	
+		
+		return modelAndView;
 	}
 	
 	@GetMapping("/delete/{id}/{edificioId}")
@@ -91,12 +99,20 @@ public class SalaControlador extends SalaServicio {
 		return showSalas(model);
 	}	
 	
-	@PostMapping("/update")
-	public String edit(@ModelAttribute("salaForm")Sala sala, BindingResult result, ModelMap model){
+	@PostMapping("/edit")
+	public ModelAndView edit(@ModelAttribute("salaForm")Sala sala, BindingResult result, ModelMap model){
 		
-		model.addAttribute("salaList", salaDAO.findAll());		
-				
-		return "";
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId((int)sala.getId(), (int)sala.getEdificioId());			
+		
+		try {
+			mapSala(salaRegistrada, sala);
+			salaDAO.save(salaRegistrada);
+		}
+		catch(Exception e) {
+			model.addAttribute("salaFormErrorMessage", "Error al actualizar la información");
+		}
+						
+		return showSalas((Model)model);
 	}	
 		
 	@PostMapping("/delete/{id}/{edificioId}")

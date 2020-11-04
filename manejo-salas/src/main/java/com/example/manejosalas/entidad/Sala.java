@@ -162,6 +162,13 @@ public class Sala implements Serializable{
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Sala [id=" + id + ", edificioId=" + edificioId + ", nombre=" + nombre + ", tipo=" + tipo
+				+ ", capacidad=" + capacidad + ", encargado=" + encargado + ", caracteristicas=" + caracteristicas
+				+ ", ocupacion=" + ocupacion + "]";
+	}
     
     /*public Sala (int ID, int edificioID, String nombre, String tipo, int Capacidad, String encargado, boolean sonido, boolean videoBeam, boolean microfono, 
                 List<Caracteristica> caracteristicas, List<Horario> horario){
