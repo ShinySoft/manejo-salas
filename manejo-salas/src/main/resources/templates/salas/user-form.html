@@ -1,49 +1,55 @@
-<form class="form" role="form" autocomplete="off"  th:object="${userForm}" th:action="${editMode} ?@{/usuarios/edit} :@{/usuarios/register}" method="post">
+<form class="form" role="form" autocomplete="off"  th:object="${salaRegistro}" th:action="@" method="post">
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Id</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="number" th:field="${salaRegistro.id}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Edificioid
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="number" th:field="${salaRegistro.edificioid}" >
+		</div>
+	</div>
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="text" th:field="${userForm.nombre}" >
+			<input class="form-control" type="text" th:field="${salaRegistro.nombre}" >
 		</div>
 	</div>
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Apellido
+		<label class="col-lg-3 col-form-label form-control-label">Tipo
 			</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="text" th:field="${userForm.apellido}" >
+			<input class="form-control" type="text" th:field="${salaRegistro.tipo}" >
 		</div>
 	</div>
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Correo Electronico</label>
+		<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="email" th:field="${userForm.correo}">
+			<input class="form-control" type="number" th:field="${salaRegistro.capacidad}">
 		</div>
 	</div>
 	<div class="form-group row">
-		<label th:text="Perfil" class="col-lg-3 col-form-label form-control-label"></label>
+		<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
 		<div class="col-lg-9">
-			<select class="form-control" size="3" th:field="${userForm.perfil}">
-				<option th:each="perfil :${perfiles}" th:value="${perfil.id}" th:text="${perfil.value}">
-				</option>
-			</select>
+			<input class="form-control" type="number" th:field="${salaRegistro.encargado}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Caracteristicas
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.caracteristicas}" >
 		</div>
 	</div>
 	
-	<!-- ESTE DIV SOLO SE MUESTRA SI ESA CONDICIÓN SE CUMPLE -->
-	<div class="form-group row" th:if="${editMode==null or editMode==false}">
-		<label class="col-lg-3 col-form-label form-control-label">Password</label>
-		<div class="col-lg-9">
-			<input class="form-control" type="password" th:field="${userForm.password}">
-		</div>
-	</div>
-	<div class="form-group row" th:if="${editMode==null or editMode==false}">
-		<label class="col-lg-3 col-form-label form-control-label">Confirm</label>
-		<div class="col-lg-9">
-			<input class="form-control" type="password">
-		</div>
-	</div>
+	<!-- ESTE DIV SOLO SE MUESTRA SI ESA CONDICIï¿½N SE CUMPLE -->
+	
 	<div class="form-group row">
 		<div class="col-lg-12 text-center">
-			<a type="reset" class="btn btn-secondary"  th:href="@{'/usuarios/form/cancel'}">Cancel</a>
+			<a type="reset" class="btn btn-secondary"  th:href="@{'/salas/form/cancel'}">Cancel</a>
 			<input type="submit" class="btn btn-primary"
 				value="Save Changes">
 		</div>
