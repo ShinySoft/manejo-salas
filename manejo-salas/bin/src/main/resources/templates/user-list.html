@@ -1,0 +1,39 @@
+<div class="table-responsive">
+	<table id="userList" class="table table-bordered table-hover table-striped">
+		<thead class="thead-light">
+		<tr>			
+			<th scope="col">Perfil</th>
+			<th scope="col">Nombre</th>
+			<th scope="col">Apellido</th>
+			<th scope="col">E-mail</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="user: ${userList}">			
+			<td th:text="${user.perfil}"></td>
+			<td th:text="${user.nombre}"></td>
+			<td th:text="${user.apellido}"></td>
+			<td th:text="${user.correo}"></td>
+			<td>	
+					<a href="#" th:href="@{'/usuarios/edit-usuario/'+ ${user.correo}}"><i class="fas fa-edit"></i></a>																			
+					| <a href="#" th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i class="fas fa-user-times"></i></a>					
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<div class="alert alert-danger text-center" th:if="${listErrorMessage}" th:text="${listErrorMessage}">Error Message</div>
+</div>
+
+<script type="text/javascript">
+function confirmDelete(id){
+	$('#deleteModal').modal('show');
+	$("#userIdHiddenInput").val(id);
+}
+
+function deleteUser(){
+	var id = $("#userIdHiddenInput").val();
+    window.location = "/usuarios/delete/"+id;
+}
+</script>
+
