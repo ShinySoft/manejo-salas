@@ -1,8 +1,32 @@
 package com.example.manejosalas.controlador;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.manejosalas.DAO.SalaDAO;
 import com.example.manejosalas.entidad.Sala;
 
+import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.Usuario;
+
 public class SalaServicio {
+	
+	@Autowired
+	SalaDAO SalaDAO;
+	
+	public Sala buscarSala (Sala sala) throws Exception {
+		Sala salaEncontrada = SalaDAO.findById(sala.getID());
+		if(salaEncontrada != null) {
+			return sala;
+		}
+		throw new Exception("Sala no existente");
+	}
+	
+	public Iterable<Sala> getSalas() {
+		return SalaDAO.findAll();
+	}
 
 		public void mapSala(Sala salaAModificar,Sala sala2) {
 			salaAModificar.setCapacidad(sala2.getCapacidad());

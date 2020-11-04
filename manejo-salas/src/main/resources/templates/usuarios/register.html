@@ -1,18 +1,18 @@
-<form id="formRegistro" th:object="${userRegister}" th:action="${/usuarios/register}" method="post">
+<form class="form" id="formRegistro" th:object="${userRegister}" th:action="@{/usuarios/register}" method="post">
     <div class="form-group">
         <label for="nombreRegistro">Nombre de usuario</label>
-        <input type="text" class="form-control" th:field="${userRegister.nombre}" id="nombreRegistro" minlength="1" maxlength="6"
+        <input type="text" class="form-control" th:field="${userRegister.nombre}" id="nombreRegistro" minlength="1" maxlength="10"
             required>
     </div>
     <div class="form-group">
         <label for="nombreRegistro">Apellido de usuario</label>
-        <input type="text" class="form-control" th:field="${userRegister.apellido}" id="apellidoRegistro" minlength="1" maxlength="6"
+        <input type="text" class="form-control" th:field="${userRegister.apellido}" id="apellidoRegistro" minlength="1" maxlength="10"
             required>
     </div>
     <div class ="form-group">
         <label class="col-lg-3 col-form-label form-control-label">Perfil</label>
 		<div class="col-lg-9">
-			<select class="form-control" th:field="${userRegister.perfil}" th:disabled="${disableFields}">
+			<select class="form-control" th:field="${userRegister.perfil}" >
 				<option th:each="perfil :${perfiles}" th:value="${perfil.id}" th:text="${perfil.value}">
 				</option>
 			</select>
@@ -22,17 +22,17 @@
 
     <div class="form-group">
         <label for="nombreRegistro">Correo de usuario</label>
-        <input type="text" class="form-control" th:field="${userRegister.correo}" id="nombreRegistro" minlength="1" maxlength="6"
+        <input type="text" class="form-control" th:field="${userRegister.correo}" id="nombreRegistro" minlength="1" maxlength="20"
             required>
     </div>
     <div class="form-group">
         <label for="passwordRegistro">Clave</label>
         <input type="password" class="form-control" th:field="${userRegister.password}" id="passwordRegistro" minlength="3"
-            maxlength="5" required>
+            maxlength="12" required>
     </div>
     <div class="form-group">
         <label for="exampleInputPassword1">Confirma tu Clave</label>
-        <input type="password" class="form-control" id="confirmPwd" minlength="3" maxlength="5"
+        <input type="password" class="form-control" id="confirmPwd" minlength="3" maxlength="12"
             required>
     </div>
     <input type="submit" id="registro" value="Registrarme" class="btn btn-primary">

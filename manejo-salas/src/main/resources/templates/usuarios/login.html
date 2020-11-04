@@ -1,4 +1,4 @@
-<form id="formIngreso" th:object="${userLogin}" th:action="${/usuarios/login}" method="post">
+<form id="formIngreso" th:object="${userLogin}" th:action="@{/usuarios/login}" method="post">
     <div class="form-group">
         <label for="nombreIngreso">Nombre de usuario</label>
         <input type="text" class="form-control" th:field="${userLogin.nombre}" id="nombreIngreso" minlength="1" maxlength="6" required>

@@ -21,28 +21,34 @@ import com.example.manejosalas.entidad.Usuario;
 
 @Controller
 @RequestMapping("usuarios")
-public class UsuarioControlador {
+public class UsuarioControlador extends UsuarioServicio{
 
 	@Autowired
 	UsuarioDAO usuarioDAO;		
 
 	@GetMapping("/")
-	public String index() {		
+	public String index(Model model) {				
+		model.addAttribute("userLogin", new Usuario());
+		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("perfiles",Perfil.getPerfiles());						
+		model.addAttribute("loginTab","active");		
 		return "index";		
 	}	
 	
 	@GetMapping("/register")
 	public String register(Model model){
-		model.addAttribute("userRegister", new Usuario());		
-		model.addAttribute("perfiles",Perfil.getPerfiles());		
+		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("perfiles",Perfil.getPerfiles());
+		model.addAttribute("userLogin", new Usuario());		
 		model.addAttribute("registerTab","active");		
 		return "index";
 	}
 	
 	@GetMapping("/login")
 	public String login(Model model) throws Exception {
+		model.addAttribute("userLogin", new Usuario());
 		model.addAttribute("userRegister", new Usuario());
-		model.addAttribute("perfiles",Perfil.getPerfiles());		
+		model.addAttribute("perfiles",Perfil.getPerfiles());				
 		model.addAttribute("loginTab","active");
 		return "index";
 	}	
@@ -50,6 +56,33 @@ public class UsuarioControlador {
 	@GetMapping("/register/cancel")
 	public String cancelRegisterUsuario(ModelMap model) {
 		return "redirect:/usuarios/register";
+	}
+	
+	@PostMapping("/register")
+	public String registerAction(@ModelAttribute("userRegister")Usuario usuario, BindingResult result, Model model) {
+		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("perfiles",Perfil.getPerfiles());
+		model.addAttribute("userLogin", new Usuario());			
+		model.addAttribute("loginTab","active");	
+		
+		try {
+			verifyUsuarioEncontrado(usuario);
+			usuarioDAO.save(usuario);
+		}
+		catch(Exception e) {
+						
+		}
+		return "index";
+	}
+	
+	@PostMapping("/login")
+	public String loginAction(@ModelAttribute("userLogin")Usuario usuario, BindingResult result, Model model) {
+		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("perfiles",Perfil.getPerfiles());
+		model.addAttribute("userLogin", new Usuario());			
+		model.addAttribute("registerTab","active");		
+		model.addAttribute("loginTab","active");
+		return "index";
 	}	
 	
 
