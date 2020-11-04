@@ -27,8 +27,7 @@ public class UsuarioControlador {
 	UsuarioDAO usuarioDAO;		
 
 	@GetMapping("/")
-	public String index(Model model) {
-		model.addAttribute("name", "Santiago");
+	public String index() {		
 		return "index";		
 	}	
 	

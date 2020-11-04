@@ -10,12 +10,13 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 @Entity
 @Table(name = "sala")
-
-
+@IdClass(SalaId.class)
 public class Sala implements Serializable{
 	/**
 	 * 

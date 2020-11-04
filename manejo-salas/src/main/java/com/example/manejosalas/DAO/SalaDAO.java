@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.manejosalas.entidad.Sala;
 
 @Repository
-public interface SalaDAO extends JpaRepository<Sala,Integer>{
+public interface SalaDAO extends JpaRepository<Sala, Integer>{
 	
 	public List<Sala> findAll();
 	
