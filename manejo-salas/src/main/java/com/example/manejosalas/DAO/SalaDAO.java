@@ -15,6 +15,7 @@ public interface SalaDAO extends JpaRepository<Sala, Integer>{
 	
 	public Sala findById(int id);
 	
+	public Sala findByIdAndEdificioId(int id, int edificioId);
 	public Sala findByedificioId(int id);
 		
 }

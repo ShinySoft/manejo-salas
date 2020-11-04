@@ -41,7 +41,8 @@ public class SalaControlador extends SalaServicio {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAll();
-		//model.addAttribute("salaRegistro", new Sala());
+		
+		model.addAttribute("salaRegistro", new Sala());
 		
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
@@ -60,14 +61,35 @@ public class SalaControlador extends SalaServicio {
 	}		
 			
 	@PostMapping("/add")
-	public void add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
+	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
 		salaDAO.save(sala);
+		return showSalas(model);
 	}	
 	
-	@PostMapping("/edit-sala/{id}/{edificioId}")
-	public void update(Model model, @PathVariable(name = "id") int id) {		
-		//salaDAO.save(sala);
+	@GetMapping("/edit-sala/{id}/{edificioId}")
+	public String update(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		model.addAttribute("salaList", salaDAO.findAll());					
+		model.addAttribute("salaRegistro", salaRegistrada);
+		model.addAttribute("formTab","active");
+		
+		return "view";
 	}
+	
+	@GetMapping("/delete/{id}/{edificioId}")
+	public ModelAndView deleteUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		try {
+			Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+			
+			salaDAO.delete(salaRegistrada);
+		} 
+		catch (Exception uoin) {
+			model.addAttribute("listErrorMessage",uoin.getMessage());
+		}
+		return showSalas(model);
+	}	
 	
 	@PostMapping("/update")
 	public String edit(@ModelAttribute("salaForm")Sala sala, BindingResult result, ModelMap model){

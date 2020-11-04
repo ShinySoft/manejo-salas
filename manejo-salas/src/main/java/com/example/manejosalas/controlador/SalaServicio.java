@@ -17,7 +17,7 @@ public class SalaServicio {
 	SalaDAO SalaDAO;
 	
 	public Sala buscarSala (Sala sala) throws Exception {
-		Sala salaEncontrada = SalaDAO.findById(sala.getId());
+		Sala salaEncontrada = SalaDAO.findByIdAndEdificioId(sala.getId(), sala.getEdificioId());
 		if(salaEncontrada != null) {
 			return sala;
 		}
