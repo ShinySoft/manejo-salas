@@ -1,5 +1,6 @@
 package com.example.manejosalas.controlador;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.SalaDAO;
@@ -26,17 +29,42 @@ public class SalaControlador extends SalaServicio {
 	@Autowired
 	SalaDAO salaDAO;
 
+	@GetMapping("/")
+	public String showSalasRoot(Model model) {
+		model.addAttribute("salaRegistro", new Sala());
+		model.addAttribute("salaList", salaDAO.findAll());		
+		return "view";
+	}
+	
+	@GetMapping("/view")
+	public ModelAndView showSalas(Model model) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		Iterable<Sala> salas = salaDAO.findAll();
+		//model.addAttribute("salaRegistro", new Sala());
+		
+		modelAndView.setViewName ( "view" );
+		model.addAttribute("salaList", salas);
+		model.addAttribute("listTab","active");		
+		return modelAndView;
+	}	
+	
+	@GetMapping("/todas")
+	public Iterable<Sala> todas(){
+		return salaDAO.findAll();
+	}
+	
 	@GetMapping("/form/cancel")
 	public String cancelEditSala(ModelMap model) {
-		return "redirect:/sala/add";
+		return "redirect:/salas/";
 	}		
 			
 	@PostMapping("/add")
-	public void add(Sala sala) {
+	public void add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
 		salaDAO.save(sala);
 	}	
 	
-	@PostMapping("/update/{id}")
+	@PostMapping("/edit-sala/{id}/{edificioId}")
 	public void update(Model model, @PathVariable(name = "id") int id) {		
 		//salaDAO.save(sala);
 	}
@@ -49,7 +77,7 @@ public class SalaControlador extends SalaServicio {
 		return "";
 	}	
 		
-	@PostMapping("/delete/{id}")
+	@PostMapping("/delete/{id}/{edificioId}")
 	public void delete(int id) {
 		salaDAO.deleteById(id);
 	}

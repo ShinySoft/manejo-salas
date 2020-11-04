@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>User Information and Form</title>
+	<title>Salas y Espacios</title>
 	
 	<!--JQUERY-->
 	<script
@@ -21,9 +21,10 @@
 		href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
 	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 	
-	<!-- Nuestro css-->
+	<!-- Nuestro css
 	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
 		th:href="@{/css/user-form.css}">
+-->
 
 	<!-- DATA TABLE -->
 	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -52,29 +53,29 @@
 
 		</ul>
 		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show" th:classappend=" ${listTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
+			<div class="tab-pane fade show " th:classappend=" ${listTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
 				<div class="card">
 					<div class="card-header">
-						<h4>Roster</h4>
+						<h4>Salas</h4>
 					</div>
 					<div class="card-body">						
-						<div th:include="user-list.html" th:remove="tag"></div>
+						<div th:include="salas/sala-list.html" th:remove="tag"></div>
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade show" th:classappend=" ${formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
+			<div class="tab-pane fade show " th:classappend=" ${formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
 				<div class="card">
 					<div class="card-header">
-						<h4>User Information</h4>
+						<h4>Detalles</h4>
 					</div>
 					<div class="card-body">
-						 <div th:include="user-form.html" th:remove="tag"></div>
+						  <!-- <div th:include="salas/sala-form.html" th:remove="tag"></div>-->
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div th:include="confirm-delete-dialog.html" th:remove="tag"></div>
+<div th:include="salas/confirm-delete-dialog.html" th:remove="tag"></div>
 </body>
 </html>

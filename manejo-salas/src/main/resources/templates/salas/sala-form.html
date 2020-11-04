@@ -1,15 +1,10 @@
-<form class="form" role="form" autocomplete="off"  th:object="${salaRegistro}" th:action="@" method="post">
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Id</label>
-		<div class="col-lg-9">
-			<input class="form-control" type="number" th:field="${salaRegistro.id}" >
-		</div>
-	</div>
+<form class="form" role="form" autocomplete="off"  th:object="${salaRegistro}" th:action="@{/salas/add}" method="post">
+
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Edificioid
 			</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="number" th:field="${salaRegistro.edificioid}" >
+			<input class="form-control" type="text" th:field="${salaRegistro.edificioid}" >
 		</div>
 	</div>
 	<div class="form-group row">
@@ -28,13 +23,13 @@
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="number" th:field="${salaRegistro.capacidad}">
+			<input class="form-control" type="text" th:field="${salaRegistro.capacidad}">
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
 		<div class="col-lg-9">
-			<input class="form-control" type="number" th:field="${salaRegistro.encargado}" >
+			<input class="form-control" type="text" th:field="${salaRegistro.encargado}" >
 		</div>
 	</div>
 	<div class="form-group row">
@@ -54,5 +49,5 @@
 				value="Save Changes">
 		</div>
 	</div>
-<div class="alert alert-danger text-center" th:if="${formErrorMessage}" th:text="${formErrorMessage}">Error Message</div>	
+<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}" th:text="${salaFormErrorMessage}">Error Message</div>	
 </form>

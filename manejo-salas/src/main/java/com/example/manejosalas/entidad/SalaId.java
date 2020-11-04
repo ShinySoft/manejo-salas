@@ -19,7 +19,9 @@ public class SalaId implements Serializable {
 	
     private int edificioId;
 
-
+    public SalaId(){
+    	
+    }
 	public SalaId(int id, int edificioId) {
 		super();
 		this.id = id;

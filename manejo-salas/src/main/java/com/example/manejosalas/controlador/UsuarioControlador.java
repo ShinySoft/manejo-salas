@@ -24,7 +24,7 @@ import com.example.manejosalas.entidad.Usuario;
 public class UsuarioControlador extends UsuarioServicio{
 
 	@Autowired
-	UsuarioDAO usuarioDAO;		
+	UsuarioDAO usuarioDAO;	
 
 	@GetMapping("/")
 	public String index(Model model) {				
@@ -50,7 +50,9 @@ public class UsuarioControlador extends UsuarioServicio{
 		model.addAttribute("userRegister", new Usuario());
 		model.addAttribute("perfiles",Perfil.getPerfiles());				
 		model.addAttribute("loginTab","active");
+		
 		return "index";
+			
 	}	
 		
 	@GetMapping("/register/cancel")
@@ -70,19 +72,38 @@ public class UsuarioControlador extends UsuarioServicio{
 			usuarioDAO.save(usuario);
 		}
 		catch(Exception e) {
-						
+			model.addAttribute("perfiles",Perfil.getPerfiles());
+			model.addAttribute("registerErrorMessage",e.getMessage());
+			model.addAttribute("registerTab","active");
 		}
 		return "index";
 	}
 	
 	@PostMapping("/login")
 	public String loginAction(@ModelAttribute("userLogin")Usuario usuario, BindingResult result, Model model) {
-		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("userLogin", new Usuario());
 		model.addAttribute("perfiles",Perfil.getPerfiles());
-		model.addAttribute("userLogin", new Usuario());			
-		model.addAttribute("registerTab","active");		
+		model.addAttribute("userLogin", new Usuario());					
 		model.addAttribute("loginTab","active");
-		return "index";
+		
+		try {
+			Usuario usuario_registrado = getUsuarioRegistrado(usuario);
+			if(getAdmin(usuario_registrado)) {				
+				return "redirect:/salas/view";
+			}
+			else {
+				throw new Exception("No cuenta con los permisos");
+			}
+		}
+		catch(Exception e) {
+			model.addAttribute("userRegister", new Usuario());
+			model.addAttribute("perfiles",Perfil.getPerfiles());
+			model.addAttribute("userLogin", new Usuario());
+			model.addAttribute("registerErrorMessage",e.getMessage());
+			model.addAttribute("registerTab","active");
+			return "index";
+		}
+		
 	}	
 	
 

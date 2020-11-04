@@ -43,6 +43,13 @@ public class UsuarioServicio{
 		throw new Exception("El usuario no existe");
 	}
 	
+	public boolean getAdmin(Usuario usuario) {
+		if(usuario.getPerfil().equals("A")) {
+			return true;
+		}
+		return false;
+	}	
+	
 	public boolean validarClave(Usuario usuario) throws Exception {
 		Usuario usuarioEncontrado = usuarioDAO.findByCorreo(usuario.getCorreo());
 		if(usuario.getPassword().equals(usuarioEncontrado.getPassword())){

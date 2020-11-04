@@ -17,7 +17,7 @@ public class SalaServicio {
 	SalaDAO SalaDAO;
 	
 	public Sala buscarSala (Sala sala) throws Exception {
-		Sala salaEncontrada = SalaDAO.findById(sala.getID());
+		Sala salaEncontrada = SalaDAO.findById(sala.getId());
 		if(salaEncontrada != null) {
 			return sala;
 		}
@@ -30,11 +30,11 @@ public class SalaServicio {
 
 		public void mapSala(Sala salaAModificar,Sala sala2) {
 			salaAModificar.setCapacidad(sala2.getCapacidad());
-			salaAModificar.setCaracteristicas(sala2.getCaracterisicas());
-			salaAModificar.setEdificioID(sala2.getEdificioID());
+			salaAModificar.setCaracteristicas(sala2.getCaracteristicas());
+			salaAModificar.setEdificioId(sala2.getEdificioId());
 			salaAModificar.setEncargado(sala2.getEncargado());
-			salaAModificar.setNuevoHorario(sala2.getHorario());
-			salaAModificar.setID(sala2.getID());
+			salaAModificar.setOcupacion(sala2.getOcupacion());
+			salaAModificar.setId(sala2.getId());
 			salaAModificar.setNombre(sala2.getNombre());
 			salaAModificar.setTipo(sala2.getTipo());
 		}	

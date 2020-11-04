@@ -1,12 +1,12 @@
 <form id="formIngreso" th:object="${userLogin}" th:action="@{/usuarios/login}" method="post">
     <div class="form-group">
-        <label for="nombreIngreso">Nombre de usuario</label>
-        <input type="text" class="form-control" th:field="${userLogin.nombre}" id="nombreIngreso" minlength="1" maxlength="6" required>
+        <label for="nombreIngreso">Correo</label>
+        <input type="text" class="form-control" th:field="${userLogin.correo}" id="nombreIngreso" minlength="1" maxlength="25" required>
     </div>
     <div class="form-group">
-        <label for="passwordIngreso">Contrase�a</label>
+        <label for="passwordIngreso">Clave</label>
         <input type="password" class="form-control" th:field="${userLogin.password}" id="passwordIngreso" minlength="3"
-            maxlength="5" required>
+            maxlength="25" required>
     </div>
     <input type="submit" value="Ingresar" id="ingreso" class="btn btn-primary">
 </form>
