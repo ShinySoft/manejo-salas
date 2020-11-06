@@ -57,7 +57,7 @@ public class SalaControlador extends SalaServicio {
 	
 	@GetMapping("/form/cancel")
 	public String cancelEditSala(ModelMap model) {
-		return "redirect:/salas/";
+		return "redirect:/salas/view";
 	}		
 			
 	@PostMapping("/add")
