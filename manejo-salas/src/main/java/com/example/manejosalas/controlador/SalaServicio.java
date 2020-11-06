@@ -32,8 +32,7 @@ public class SalaServicio {
 			salaAModificar.setCapacidad(sala2.getCapacidad());
 			salaAModificar.setCaracteristicas(sala2.getCaracteristicas());
 			salaAModificar.setEdificioId(sala2.getEdificioId());
-			salaAModificar.setEncargado(sala2.getEncargado());
-			salaAModificar.setOcupacion(sala2.getOcupacion());
+			salaAModificar.setEncargado(sala2.getEncargado());			
 			salaAModificar.setId(sala2.getId());
 			salaAModificar.setNombre(sala2.getNombre());
 			salaAModificar.setTipo(sala2.getTipo());

@@ -30,6 +30,9 @@ public class Usuario implements Serializable{
 	
 	@Column
     private String password;
+	
+	@Column
+	private boolean estado;
 
 /*
     public Usuario(int ID,String perfil, String nombre, String apellido, String correo, String password){

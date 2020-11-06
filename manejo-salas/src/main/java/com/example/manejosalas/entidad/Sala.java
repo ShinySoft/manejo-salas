@@ -43,9 +43,7 @@ public class Sala implements Serializable{
     
 	@Column
 	private String caracteristicas;
-    
-	@Column
-	private int ocupacion;
+
 
 	public int getId() {
 		return id;
@@ -103,13 +101,7 @@ public class Sala implements Serializable{
 		this.caracteristicas = caracteristicas;
 	}
 
-	public int getOcupacion() {
-		return ocupacion;
-	}
 
-	public void setOcupacion(int ocupacion) {
-		this.ocupacion = ocupacion;
-	}
 
 	@Override
 	public int hashCode() {
@@ -120,8 +112,7 @@ public class Sala implements Serializable{
 		result = prime * result + edificioId;
 		result = prime * result + encargado;
 		result = prime * result + id;
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ocupacion;
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());		
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
 		return result;
 	}
@@ -153,8 +144,6 @@ public class Sala implements Serializable{
 				return false;
 		} else if (!nombre.equals(other.nombre))
 			return false;
-		if (ocupacion != other.ocupacion)
-			return false;
 		if (tipo == null) {
 			if (other.tipo != null)
 				return false;
@@ -167,7 +156,7 @@ public class Sala implements Serializable{
 	public String toString() {
 		return "Sala [id=" + id + ", edificioId=" + edificioId + ", nombre=" + nombre + ", tipo=" + tipo
 				+ ", capacidad=" + capacidad + ", encargado=" + encargado + ", caracteristicas=" + caracteristicas
-				+ ", ocupacion=" + ocupacion + "]";
+				;
 	}
     
     /*public Sala (int ID, int edificioID, String nombre, String tipo, int Capacidad, String encargado, boolean sonido, boolean videoBeam, boolean microfono, 
