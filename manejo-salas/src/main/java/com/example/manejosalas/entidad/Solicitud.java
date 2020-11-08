@@ -1,15 +1,15 @@
 package com.example.manejosalas.entidad;
 //INCOMPLETA
 public class Solicitud{
-    private int ID;
-    private int usuarioID;
-    private int salaID;
-    private int salaEdificioID;
-    private String fechaSolicitud;
-    private String fechaPrestamo;
+    private int id;
+    private int usuarioid;
+    private int salaid;
+    private int salaedificioid;
+    private String fecha_solicitud;
+    private String fecha_prestamo;
     private String estado;
 
-    public Solicitud(int ID, int usuarioID, int salaID, int salaEdificioID, String fechaSolicitud, String fechaPrestamo, String estado){
+    /*public Solicitud(int ID, int usuarioID, int salaID, int salaEdificioID, String fechaSolicitud, String fechaPrestamo, String estado){
         this.ID = ID;
         this.usuarioID = usuarioID; 
         this.salaID = salaID;
@@ -17,26 +17,26 @@ public class Solicitud{
         this.fechaSolicitud = fechaSolicitud;
         this.fechaPrestamo = fechaPrestamo;
         this.estado = estado;
-    }
+    }*/
 
 
     public int getID(){
-        return ID;
+        return id;
     }
     public int getUsuarioID(){
-        return usuarioID;
+        return usuarioid;
     }
     public int getSalaID(){
-        return salaID;
+        return salaid;
     }
     public int getSalaEdificioID(){
-        return salaEdificioID;
+        return salaedificioid;
     }
-    public String getFechaSolicitud(){
-        return fechaSolicitud;
+    public String getFecha_solicitud(){
+        return fecha_solicitud;
     }
-    public String getFechaPrestamo(){
-        return fechaPrestamo;
+    public String getFecha_prestamo(){
+        return fecha_prestamo;
     }
     public String getEstado(){
         return estado;
@@ -44,5 +44,25 @@ public class Solicitud{
 
     public void setEstado (String estado){
         this.estado = estado;
+    }
+
+    public void setId (int id){
+        this.id = id;
+    }
+
+    public void setSalaId (int salaid){
+        this.salaid = id;
+    }
+    
+    public void setSalaEdificioId (int salaedificioid){
+        this.salaedificioid = salaedificioid;
+    }
+
+    public void setFecha_solicitud (String fecha_solicitud){
+        this.fecha_solicitud = fecha_solicitud;
+    }
+
+    public void setFecha_prestamo (String fecha_prestamo){
+        this.fecha_prestamo = fecha_prestamo;
     }
 }
