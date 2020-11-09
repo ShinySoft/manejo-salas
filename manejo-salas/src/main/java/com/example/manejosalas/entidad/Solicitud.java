@@ -1,13 +1,36 @@
 package com.example.manejosalas.entidad;
-//INCOMPLETA
+import javax.persistence.Entity;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "solicitud")
 public class Solicitud{
+	
+	@Id
     private int id;
+	
+	@Column
     private int usuarioid;
-    private int salaid;
-    private int salaedificioid;
-    private String fecha_solicitud;
-    private String fecha_prestamo;
-    private String estado;
+    
+	@Column
+	private int salaid;
+    
+	@Column
+	private int salaedificioid;
+    
+	@Column
+	private String fecha_solicitud;
+    
+	@Column
+	private String fecha_prestamo;
+    
+	@Column
+	private String estado;
 
     /*public Solicitud(int ID, int usuarioID, int salaID, int salaEdificioID, String fechaSolicitud, String fechaPrestamo, String estado){
         this.ID = ID;
