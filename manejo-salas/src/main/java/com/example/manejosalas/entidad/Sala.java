@@ -11,7 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -41,7 +41,7 @@ public class Sala implements Serializable{
 	@Column
 	private int encargado;
     
-	@Column
+	@ManyToMany(cascade = CascadeType.ALL)
 	private String caracteristicas;
 
 

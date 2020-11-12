@@ -1,11 +1,11 @@
 package com.example.manejosalas.entidad;
+
 import javax.persistence.Entity;
-
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
 @Table(name = "solicitud")
@@ -24,10 +24,10 @@ public class Solicitud{
 	private int salaedificioid;
     
 	@Column
-	private String fecha_solicitud;
+	private Timestamp fecha_solicitud;
     
 	@Column
-	private String fecha_prestamo;
+	private Date fecha_prestamo;
     
 	@Column
 	private String estado;
@@ -55,10 +55,10 @@ public class Solicitud{
     public int getSalaEdificioID(){
         return salaedificioid;
     }
-    public String getFecha_solicitud(){
+    public Timestamp getFecha_solicitud(){
         return fecha_solicitud;
     }
-    public String getFecha_prestamo(){
+    public Date getFecha_prestamo(){
         return fecha_prestamo;
     }
     public String getEstado(){
@@ -81,11 +81,11 @@ public class Solicitud{
         this.salaedificioid = salaedificioid;
     }
 
-    public void setFecha_solicitud (String fecha_solicitud){
+    public void setFecha_solicitud (Timestamp fecha_solicitud){
         this.fecha_solicitud = fecha_solicitud;
     }
 
-    public void setFecha_prestamo (String fecha_prestamo){
+    public void setFecha_prestamo (Date fecha_prestamo){
         this.fecha_prestamo = fecha_prestamo;
     }
 }
