@@ -42,7 +42,7 @@ public class Sala implements Serializable{
 	private int encargado;
     
 	@ManyToMany(cascade = CascadeType.ALL)
-	private String caracteristicas;
+	private List<Caracteristica> caracteristicas;
 
 
 	public int getId() {
@@ -93,12 +93,16 @@ public class Sala implements Serializable{
 		this.encargado = encargado;
 	}
 
-	public String getCaracteristicas() {
+	public List<Caracteristica> getCaracteristicas() {
 		return caracteristicas;
 	}
 
-	public void setCaracteristicas(String caracteristicas) {
+	public void setCaracteristicas(List<Caracteristica> caracteristicas) {
 		this.caracteristicas = caracteristicas;
+	}
+
+	public void setCaracteristica(Caracteristica caracteristica) {
+		caracteristicas.add(caracteristica);
 	}
 
 
