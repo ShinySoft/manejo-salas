@@ -1,11 +1,13 @@
 package com.example.manejosalas.entidad;
+
 import javax.persistence.Entity;
-
+import javax.persistence.CascadeType;
 import java.io.Serializable;
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 @Entity
 @Table(name = "usuario")
@@ -32,7 +34,10 @@ public class Usuario implements Serializable{
     private String password;
 	
 	@Column
-	private boolean estado;
+    private boolean estado;
+    
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioid")
+    //private List<Solicitud> solicitudes;
 
 /*
     public Usuario(int ID,String perfil, String nombre, String apellido, String correo, String password){
@@ -45,10 +50,6 @@ public class Usuario implements Serializable{
     }
 */
 	
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public int getId(){
         return id;
     }
@@ -73,7 +74,7 @@ public class Usuario implements Serializable{
         return password;
     }
 
-    public void setID (int ID){
+    public void setId (int ID){
         this.id = ID;
     }
 

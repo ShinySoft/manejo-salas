@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.sql.Date;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "solicitud")
@@ -14,14 +15,14 @@ public class Solicitud{
 	@Id
     private int id;
 	
-	@Column
-    private int usuarioid;
+	@ManyToOne
+    private Usuario usuarioid;
     
-	@Column
-	private int salaid;
+	@ManyToOne
+	private Sala salaid;
     
-	@Column
-	private int salaedificioid;
+	@ManyToOne
+	private Edificio salaedificioid;
     
 	@Column
 	private Timestamp fecha_solicitud;
@@ -46,13 +47,13 @@ public class Solicitud{
     public int getID(){
         return id;
     }
-    public int getUsuarioID(){
+    public Usuario getUsuarioID(){
         return usuarioid;
     }
-    public int getSalaID(){
+    public Sala getSalaID(){
         return salaid;
     }
-    public int getSalaEdificioID(){
+    public Edificio getSalaEdificioID(){
         return salaedificioid;
     }
     public Timestamp getFecha_solicitud(){
@@ -73,11 +74,15 @@ public class Solicitud{
         this.id = id;
     }
 
-    public void setSalaId (int salaid){
-        this.salaid = id;
+    public void setUsuario(Usuario usuario){
+        this.usuarioid = usuario;
+    }
+
+    public void setSalaId (Sala salaid){
+        this.salaid = salaid;
     }
     
-    public void setSalaEdificioId (int salaedificioid){
+    public void setSalaEdificioId (Edificio salaedificioid){
         this.salaedificioid = salaedificioid;
     }
 
