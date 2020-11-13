@@ -47,14 +47,14 @@ public class SolicitudDAOTest {
 		//solicitud.setFecha_solicitud('2020-11-11 23:59:59');
 		solicitud.setId(123);
 		solicitud.setSalaEdificioId(453);
-		solicitud.setSalaId(205);	    
+		solicitud.setSalaId(205);			
 	    
 		solicitudDAO.save(solicitud);
 	    
 		assertThat(solicitud).hasFieldOrPropertyWithValue("estado","A");
-		assertThat(solicitud).hasFieldOrPropertyWithValue("id","123");
-		assertThat(solicitud).hasFieldOrPropertyWithValue("salaedificioid","453");
-		assertThat(solicitud).hasFieldOrPropertyWithValue("salaid","205");			
+		assertThat(solicitud).hasFieldOrPropertyWithValue("id",123);
+		assertThat(solicitud).hasFieldOrPropertyWithValue("salaedificioid",453);
+		assertThat(solicitud).hasFieldOrPropertyWithValue("salaid",205);			
 	}	
 	//----------------------------------------------------------------------
 	  @Test

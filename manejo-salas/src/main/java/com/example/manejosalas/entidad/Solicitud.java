@@ -74,7 +74,7 @@ public class Solicitud{
     }
 
     public void setSalaId (int salaid){
-        this.salaid = id;
+        this.salaid = salaid;
     }
     
     public void setSalaEdificioId (int salaedificioid){
