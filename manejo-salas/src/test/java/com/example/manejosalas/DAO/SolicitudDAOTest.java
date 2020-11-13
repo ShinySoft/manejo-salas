@@ -1,7 +1,6 @@
 package com.example.manejosalas.DAO;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.manejosalas.entidad.Solicitud;
-import com.example.manejosalas.entidad.Usuario;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -21,10 +19,7 @@ public class SolicitudDAOTest {
 	private TestEntityManager entityManager;
 	
 	@Autowired
-	private SolicitudDAO solicitudDAO;
-	
-	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private SolicitudDAO solicitudDAO;	
 	
 	@Test
 	public void findById_thenReturnSolicitud() {
@@ -56,78 +51,49 @@ public class SolicitudDAOTest {
 		assertThat(solicitud).hasFieldOrPropertyWithValue("salaedificioid",453);
 		assertThat(solicitud).hasFieldOrPropertyWithValue("salaid",205);			
 	}	
-	//----------------------------------------------------------------------
-	  @Test
-	  public void findUsuario_byId() {
-		  
-	    Usuario usr1 = new Usuario();
-	    usr1.setId(1);
-	    usr1.setCorreo("f2@unal.edu.co");
-	    usr1.setPassword("kkk");
-	    entityManager.persist(usr1);
-
-	    Usuario usr2 = new Usuario();
-	    usr2.setId(2);
-	    usr2.setCorreo("f@unal.edu.co");
-	    usr2.setPassword("kkk");
-	    entityManager.persist(usr2);
-
-	    Usuario foundTutorial = usuarioDAO.findById(usr2.getId()).get();
-
-	    assertThat(foundTutorial).isEqualTo(usr2);
-	  }
 	
 	  @Test
-	  public void updateUsuario_byId() {
-	    Usuario usr1 = new Usuario();
-	    usr1.setId(1);
-	    usr1.setCorreo("correo1@unal.edu.co");
-	    usr1.setPassword("rock1234");
-	    entityManager.persist(usr1);
+	  public void findSolicitud_byId() {
+		  
+		Solicitud solicitud = new Solicitud();
+		solicitud.setEstado("A");		
+		solicitud.setId(123);
+		solicitud.setSalaEdificioId(453);
+		solicitud.setSalaId(205);
+	    entityManager.persist(solicitud);
 
-	    Usuario usr2 = new Usuario();
-	    usr2.setId(2);
-	    usr2.setCorreo("correo2@unal.edu.co");
-	    usr2.setPassword("crack1234");
-	    entityManager.persist(usr2);
+	    Solicitud solicitud2 = new Solicitud();
+		solicitud2.setEstado("A");		
+		solicitud2.setId(124);
+		solicitud2.setSalaEdificioId(453);
+		solicitud2.setSalaId(205);
+	    entityManager.persist(solicitud2);	    
 
-	    Usuario updatedUsr2 = new Usuario();
-	    updatedUsr2.setId(2);
-	    updatedUsr2.setPassword("macarena");
+	    Solicitud prueba = solicitudDAO.findById(solicitud2.getID());
 
-	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
-	    usr.setPassword(updatedUsr2.getPassword());
-	    usuarioDAO.save(usr);
-
-	    Usuario checkTut = usuarioDAO.findById(usr2.getId()).get();
-	    
-	    assertThat(checkTut.getId()).isEqualTo(usr2.getId());
-	    assertThat(checkTut.getPassword()).isEqualTo(updatedUsr2.getPassword());	    
+	    assertThat(prueba).isEqualTo(solicitud2);
 	  }	
-	  
+	  	  
 	  @Test
-	  public void deleteUsuario_byId(){
+	  public void deleteSolicitud_byId(){
 		  
-		  Usuario usr1 = new Usuario();
-		  usr1.setId(1);
+		  Solicitud solicitud = new Solicitud();
+		  solicitud.setId(1);		  
+		  entityManager.persist(solicitud);
 		  
-		  entityManager.persist(usr1);
+		  Solicitud solicitud2 = new Solicitud();
+		  solicitud2.setId(2);		  
+		  entityManager.persist(solicitud2);
+
+		  Solicitud solicitud3 = new Solicitud();
+		  solicitud3.setId(3);		  
+		  entityManager.persist(solicitud3);
+
+		  solicitudDAO.deleteById(solicitud.getID());
 		  
-		  Usuario usr2 = new Usuario();
-		  usr2.setId(2);
-
-		  entityManager.persist(usr2);
-
-		  Usuario usr3 = new Usuario();
-		  usr3.setId(3);
-
-		  entityManager.persist(usr3);
-
-		  usuarioDAO.deleteById(usr1.getId());
-		  
-		  Iterable<Usuario> usuarios = usuarioDAO.findAll();
+		  Iterable<Solicitud> solicitudes = solicitudDAO.findAll();
 		  		  
-		  assertThat(usuarios).hasSize(2).contains(usr2, usr3);		  
+		  assertThat(solicitudes).hasSize(2).contains(solicitud2, solicitud3);		  
 	  }
 
 }
