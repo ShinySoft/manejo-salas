@@ -54,7 +54,7 @@ public class SalaDAOTest {
 	    sla2.setCapacidad(25);	   
 	    entityManager.persist(sla2);
 
-	    Sala foundTutorial = salaDAO.findById(sla2.getID()).get();
+	    Sala foundTutorial = salaDAO.findById(sla2.getId());
 
 	    assertThat(foundTutorial).isEqualTo(sla2);
 	  }
@@ -77,11 +77,11 @@ public class SalaDAOTest {
 	    updatedSla2.setId(2);
 	    updatedSla2.setCapacidad(35);
 
-	    Sala sla = salaDAO.findById(sla2.getId()).get();
+	    Sala sla = salaDAO.findById(sla2.getId());
 	    sla.setCapacidad(updatedSla2.getCapacidad());
 	    salaDAO.save(sla);
 
-	    Sala checkTut = salaDAO.findById(sla2.getId()).get();
+	    Sala checkTut = salaDAO.findById(sla2.getId());
 	    
 	    assertThat(checkTut.getId()).isEqualTo(sla2.getId());
 	    assertThat(checkTut.getCapacidad()).isEqualTo(updatedSla2.getCapacidad());	    
