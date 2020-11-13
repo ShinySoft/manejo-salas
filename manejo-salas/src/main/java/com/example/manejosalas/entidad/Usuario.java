@@ -72,6 +72,10 @@ public class Usuario implements Serializable{
     public String getPassword(){
         return password;
     }
+    
+    public boolean getEstado(){
+        return estado;
+    }
 
     public void setID (int ID){
         this.id = ID;
@@ -95,6 +99,10 @@ public class Usuario implements Serializable{
 
     public void setPassword (String password){
         this.password = password;
+    }
+    
+    public void setEstado (boolean estado){
+        this.estado = estado;
     }
 
 	@Override
