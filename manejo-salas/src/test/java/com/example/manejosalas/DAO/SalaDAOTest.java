@@ -35,28 +35,34 @@ public class SalaDAOTest {
 	    
 		assertThat(sala).hasFieldOrPropertyWithValue("nombre","Lab Microprocesadores");
 		assertThat(sala).hasFieldOrPropertyWithValue("tipo","Laboratorio");
-		assertThat(sala).hasFieldOrPropertyWithValue("capacidad","30");
-		assertThat(sala).hasFieldOrPropertyWithValue("encargado","3");	
+		assertThat(sala).hasFieldOrPropertyWithValue("capacidad",30);
+		assertThat(sala).hasFieldOrPropertyWithValue("encargado",3);	
 	}	
 	
 	  @Test
 	  public void findSala_byId() {
 		  
 	    Sala sla1 = new Sala();
+	    sla1.setEdificioId(453);
 	    sla1.setId(1);
+	    sla1.setEncargado(2);
+	    sla1.setTipo("Lab");
 	    sla1.setNombre("Laboratorio1");
 	    sla1.setCapacidad(30);
 	    entityManager.persist(sla1);
 
 	    Sala sla2 = new Sala();
-	    sla2.setId(1);
+	    sla2.setEdificioId(454);
+	    sla2.setId(2);
+	    sla2.setEncargado(3);
+	    sla2.setTipo("Lab");
 	    sla2.setNombre("Laboratorio2");
 	    sla2.setCapacidad(25);	   
 	    entityManager.persist(sla2);
 
-	    Sala foundTutorial = salaDAO.findById(sla2.getId());
+	    Sala prueba = salaDAO.findById(sla2.getId());
 
-	    assertThat(foundTutorial).isEqualTo(sla2);
+	    assertThat(prueba).isEqualTo(sla2);
 	  }
 	
 	  @Test
@@ -81,10 +87,10 @@ public class SalaDAOTest {
 	    sla.setCapacidad(updatedSla2.getCapacidad());
 	    salaDAO.save(sla);
 
-	    Sala checkTut = salaDAO.findById(sla2.getId());
+	    Sala prueba = salaDAO.findById(sla2.getId());
 	    
-	    assertThat(checkTut.getId()).isEqualTo(sla2.getId());
-	    assertThat(checkTut.getCapacidad()).isEqualTo(updatedSla2.getCapacidad());	    
+	    assertThat(prueba.getId()).isEqualTo(sla2.getId());
+	    assertThat(prueba.getCapacidad()).isEqualTo(updatedSla2.getCapacidad());	    
 	  }	
 	  
 	  @Test
