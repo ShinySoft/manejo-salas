@@ -21,8 +21,8 @@ public class Solicitud{
 	@ManyToOne
 	private Sala salaid;
     
-	@ManyToOne
-	private Edificio salaedificioid;
+	//@ManyToOne
+	//private Edificio salaedificioid;
     
 	@Column
 	private Timestamp fecha_solicitud;
@@ -53,9 +53,9 @@ public class Solicitud{
     public Sala getSalaID(){
         return salaid;
     }
-    public Edificio getSalaEdificioID(){
+    /*public Edificio getSalaEdificioID(){
         return salaedificioid;
-    }
+    }*/
     public Timestamp getFecha_solicitud(){
         return fecha_solicitud;
     }
@@ -82,9 +82,9 @@ public class Solicitud{
         this.salaid = salaid;
     }
     
-    public void setSalaEdificioId (Edificio salaedificioid){
+    /*public void setSalaEdificioId (Edificio salaedificioid){
         this.salaedificioid = salaedificioid;
-    }
+    }*/
 
     public void setFecha_solicitud (Timestamp fecha_solicitud){
         this.fecha_solicitud = fecha_solicitud;
