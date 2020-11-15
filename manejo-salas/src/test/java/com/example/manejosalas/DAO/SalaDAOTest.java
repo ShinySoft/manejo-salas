@@ -119,8 +119,8 @@ public class SalaDAOTest {
 
 		  entityManager.persist(sla3);
 
-		  salaDAO.deleteById(1);
-		  //salaDAO.deleteByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());
+		  //salaDAO.deleteById(1);
+		  salaDAO.deleteByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());
 		  
 		  Iterable<Sala> salas = salaDAO.findAll();
 		  		  
