@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.SalaId;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -41,8 +42,11 @@ public class SalaDAOTest {
 	  public void findSala_byId() {
 		  
 	    Sala sla1 = new Sala();
+	    SalaId slaid = new SalaId();
 	    sla1.setEdificioId(453);
 	    sla1.setId(1);
+	    slaid.setId(sla1.getId());
+	    slaid.setEdificioId(sla1.getEdificioId());
 	    sla1.setEncargado(2);
 	    sla1.setTipo("Lab");
 	    sla1.setNombre("Laboratorio1");
@@ -50,15 +54,18 @@ public class SalaDAOTest {
 	    entityManager.persist(sla1);
 
 	    Sala sla2 = new Sala();
+	    SalaId slaid2 = new SalaId();	    	    
+	    slaid2.setId(401);
+	    slaid2.setEdificioId(454);
+	    sla2.setId(401);
 	    sla2.setEdificioId(454);
-	    sla2.setId(2);
 	    sla2.setEncargado(3);
 	    sla2.setTipo("Lab");
 	    sla2.setNombre("Laboratorio2");
 	    sla2.setCapacidad(25);	   
 	    entityManager.persist(sla2);
 
-	    Sala prueba = salaDAO.findById(sla2.getId());
+	    Sala prueba = salaDAO.findByIdAndEdificioId(sla2.getId(), sla2.getEdificioId());
 
 	    assertThat(prueba).isEqualTo(sla2);
 	  }
@@ -80,12 +87,12 @@ public class SalaDAOTest {
 	    Sala updatedSla2 = new Sala();
 	    updatedSla2.setId(2);
 	    updatedSla2.setCapacidad(35);
-
-	    Sala sla = salaDAO.findById(sla2.getId());
+	  
+	    Sala sla = salaDAO.findByIdAndEdificioId(sla2.getId(), sla2.getEdificioId());
 	    sla.setCapacidad(updatedSla2.getCapacidad());
 	    salaDAO.save(sla);
 
-	    Sala prueba = salaDAO.findById(sla2.getId());
+	    Sala prueba =salaDAO.findByIdAndEdificioId(sla2.getId(), sla2.getEdificioId());
 	    
 	    assertThat(prueba.getId()).isEqualTo(sla2.getId());
 	    assertThat(prueba.getCapacidad()).isEqualTo(updatedSla2.getCapacidad());	    
@@ -96,20 +103,24 @@ public class SalaDAOTest {
 		  
 		  Sala sla1 = new Sala();
 		  sla1.setId(1);
+		  sla1.setEdificioId(454);
 		  
 		  entityManager.persist(sla1);
 		  
 		  Sala sla2 = new Sala();
 		  sla2.setId(2);
+		  sla1.setEdificioId(401);
 
 		  entityManager.persist(sla2);
 
 		  Sala sla3 = new Sala();
 		  sla3.setId(3);
+		  sla1.setEdificioId(453);
 
 		  entityManager.persist(sla3);
 
-		  salaDAO.deleteById(sla1.getId());
+		  salaDAO.deleteById(1);
+		  //salaDAO.deleteByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());
 		  
 		  Iterable<Sala> salas = salaDAO.findAll();
 		  		  

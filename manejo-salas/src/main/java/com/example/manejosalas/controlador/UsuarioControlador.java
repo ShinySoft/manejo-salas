@@ -76,7 +76,7 @@ public class UsuarioControlador extends UsuarioServicio{
 			model.addAttribute("registerErrorMessage",e.getMessage());
 			model.addAttribute("registerTab","active");
 		}
-		return "index";
+		return "redirect:/";
 	}
 	
 	@PostMapping("/login")
@@ -102,20 +102,15 @@ public class UsuarioControlador extends UsuarioServicio{
 			model.addAttribute("registerErrorMessage",e.getMessage());
 			model.addAttribute("registerTab","active");
 			return "index";
-		}
-		
+		}		
 	}	
-	
-
 }
-
 
 
 class Perfil{
 	
 	private String id;
-	private String value;
-	
+	private String value;	
 	
 	public Perfil(String id, String value) {
 		super();

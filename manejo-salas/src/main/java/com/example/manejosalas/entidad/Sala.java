@@ -23,10 +23,10 @@ public class Sala implements Serializable{
 	 */
 	private static final long serialVersionUID = 7513910887225154174L;
 
-	@Id
+	@Id	
     private int id;
 
-	@Id
+	@Id	
     private int edificioId;
     
 	@Column
