@@ -25,7 +25,7 @@ public class UsuarioControladorTest {
 	@Before
 	public void setUp() {
 		Usuario usuario = new Usuario();
-		usuario.setID(1);
+		usuario.setId(1);
 		usuario.setCorreo("usuarioPrueba@unal.edu.co");
 		
 		Mockito.when(usuarioDAO.findByCorreo(usuario.getCorreo())).thenReturn(usuario);

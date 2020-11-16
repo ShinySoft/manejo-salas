@@ -9,7 +9,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Solicitud;
+import com.example.manejosalas.entidad.Usuario;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -20,6 +22,12 @@ public class SolicitudDAOTest {
 	
 	@Autowired
 	private SolicitudDAO solicitudDAO;	
+	
+	@Autowired
+	private UsuarioDAO usuarioDAO;
+	
+	@Autowired
+	private SalaDAO salaDAO;
 	
 	@Test
 	public void findById_thenReturnSolicitud() {
@@ -36,37 +44,46 @@ public class SolicitudDAOTest {
 	
 	@Test
 	public void saveSolicitud_inDataBase() {
+		
 		Solicitud solicitud = new Solicitud();
+		Usuario usr = new Usuario();
+		Sala sla =new Sala();
+		usr = usuarioDAO.findByCorreo("jgarzo@unal.edu.co");
+		sla = salaDAO.findByIdAndEdificioId(1, 4);			
 		solicitud.setEstado("A");
 		//solicitud.setFecha_prestamo('2020/11/11');
 		//solicitud.setFecha_solicitud('2020-11-11 23:59:59');
-		solicitud.setId(123);
-		solicitud.setSalaEdificioId(453);
-		solicitud.setSalaId(205);			
+		solicitud.setId(123);			
+		solicitud.setSalaId(sla);	
+		solicitud.setUsuario(usr);
 	    
 		solicitudDAO.save(solicitud);
 	    
 		assertThat(solicitud).hasFieldOrPropertyWithValue("estado","A");
 		assertThat(solicitud).hasFieldOrPropertyWithValue("id",123);
-		assertThat(solicitud).hasFieldOrPropertyWithValue("salaedificioid",453);
-		assertThat(solicitud).hasFieldOrPropertyWithValue("salaid",205);			
+		assertThat(solicitud).hasFieldOrPropertyWithValue("salaid", sla);	
+		assertThat(solicitud).hasFieldOrPropertyWithValue("usuarioid", usr);
 	}	
 	
 	  @Test
 	  public void findSolicitud_byId() {
 		  
 		Solicitud solicitud = new Solicitud();
+		Sala sla =new Sala();
+		sla.setId(205);
+		sla.setEdificioId(453);
 		solicitud.setEstado("A");		
 		solicitud.setId(123);
-		solicitud.setSalaEdificioId(453);
-		solicitud.setSalaId(205);
+		solicitud.setSalaId(sla);
 	    entityManager.persist(solicitud);
 
 	    Solicitud solicitud2 = new Solicitud();
+	    Sala sla2 =new Sala();
+		sla2.setId(205);
+		sla2.setEdificioId(453);
+		solicitud2.setSalaId(sla2);
 		solicitud2.setEstado("A");		
 		solicitud2.setId(124);
-		solicitud2.setSalaEdificioId(453);
-		solicitud2.setSalaId(205);
 	    entityManager.persist(solicitud2);	    
 
 	    Solicitud prueba = solicitudDAO.findById(solicitud2.getID());
