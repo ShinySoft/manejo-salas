@@ -74,6 +74,7 @@ public class UsuarioControlador extends UsuarioServicio{
 		catch(Exception e) {
 			model.addAttribute("perfiles",Perfil.getPerfiles());
 			model.addAttribute("registerErrorMessage",e.getMessage());
+			model.addAttribute("loginTab","desactive");
 			model.addAttribute("registerTab","active");
 		}
 		return "index";
@@ -99,8 +100,8 @@ public class UsuarioControlador extends UsuarioServicio{
 			model.addAttribute("userRegister", new Usuario());
 			model.addAttribute("perfiles",Perfil.getPerfiles());
 			model.addAttribute("userLogin", new Usuario());
-			model.addAttribute("registerErrorMessage",e.getMessage());
-			model.addAttribute("registerTab","active");
+			model.addAttribute("loginErrorMessage",e.getMessage());
+			model.addAttribute("loginTab","active");
 			return "index";
 		}
 		

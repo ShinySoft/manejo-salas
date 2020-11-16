@@ -52,7 +52,7 @@
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
 						<a class="nav-link " th:classappend=" ${loginTab}" id="nav-ingreso-tab" data-toggle="tab" href="#nav-ingreso" role="tab"
-                            aria-controls="nav-ingreso active" aria-selected="true">Ingreso</a>                    
+                            aria-controls="nav-ingreso" aria-selected="true">Ingreso</a>                    
                             <!-- ACTIVE ACTIVADO -->
                         <a class="nav-link " th:classappend=" ${registerTab}" id="nav-registro-tab" data-toggle="tab" href="#nav-registro"
                             role="tab" aria-controls="nav-registro" aria-selected="false">Registro</a>                        
@@ -60,7 +60,7 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                 	<!-- ACTIVE ACTIVADO -->
-                    <div class="tab-pane fade show active" th:classappend=" ${loginTab}" id="nav-ingreso" role="tabpanel" aria-labelledby="nav-ingreso-tab">
+                    <div class="tab-pane fade show" th:classappend=" ${loginTab}" id="nav-ingreso" role="tabpanel" aria-labelledby="nav-ingreso-tab">
                     	<!--  ESTO ES UNA TARJETA  (de login)-->
 						<div th:include="usuarios/login.html" th:remove="tag"></div>                    	
                     </div>                

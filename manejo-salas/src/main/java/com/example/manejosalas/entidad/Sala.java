@@ -1,17 +1,20 @@
 package com.example.manejosalas.entidad;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -37,10 +40,12 @@ public class Sala implements Serializable{
     
 	@Column
 	private int capacidad;
+
+	@JoinColumn(name = "encargado")
+	@ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Usuario encargado;
     
-	@Column
-	private int encargado;
-    
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Caracteristica> caracteristicas;
 
@@ -85,11 +90,11 @@ public class Sala implements Serializable{
 		this.capacidad = capacidad;
 	}
 
-	public int getEncargado() {
+	public Usuario getEncargado() {
 		return encargado;
 	}
 
-	public void setEncargado(int encargado) {
+	public void setEncargado(Usuario encargado) {
 		this.encargado = encargado;
 	}
 
@@ -106,7 +111,6 @@ public class Sala implements Serializable{
 	}
 
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -114,9 +118,9 @@ public class Sala implements Serializable{
 		result = prime * result + capacidad;
 		result = prime * result + ((caracteristicas == null) ? 0 : caracteristicas.hashCode());
 		result = prime * result + edificioId;
-		result = prime * result + encargado;
+		result = prime * result + ((encargado == null) ? 0 : encargado.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());		
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
 		return result;
 	}
@@ -139,7 +143,10 @@ public class Sala implements Serializable{
 			return false;
 		if (edificioId != other.edificioId)
 			return false;
-		if (encargado != other.encargado)
+		if (encargado == null) {
+			if (other.encargado != null)
+				return false;
+		} else if (!encargado.equals(other.encargado))
 			return false;
 		if (id != other.id)
 			return false;
