@@ -103,32 +103,25 @@ public class SalaDAOTest {
 	  public void deleteSala_byId(){
 		  
 		  Sala sla1 = new Sala();
-		  SalaId slaid = new SalaId();
-		  sla1.setEdificioId(453);
 		  sla1.setId(1);
-		  sla1.setId(1);
-		  sla1.setEdificioId(454);		  
+		  sla1.setEdificioId(454);	
 		  entityManager.persist(sla1);
 		  
 		  Sala sla2 = new Sala();
 		  sla2.setId(2);
-		  sla1.setEdificioId(401);
+		  sla2.setEdificioId(401);		  
 		  entityManager.persist(sla2);
 
 		  Sala sla3 = new Sala();
 		  sla3.setId(3);
-		  sla1.setEdificioId(453);
+		  sla3.setEdificioId(453);
 		  entityManager.persist(sla3);
 		  
 		  Sala salaRegistrada = salaDAO.findByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());				  		
 		  salaDAO.delete(salaRegistrada);
-
-//		  Sala prueba=salaDAO.findByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());
-//		  salaDAO.delete(prueba);
-		  //salaDAO.deleteByIdAndEdificioId(sla1.getId(), sla1.getEdificioId());
 		  
-		  Iterable<Sala> salas = salaDAO.findAll();	
-		  
-		  assertThat(salas).hasSize(2).contains(sla2, sla3);			  
+		  Iterable<Sala> salas = salaDAO.findAll();
+		  		  
+		  assertThat(salas).hasSize(2).contains(sla2, sla3);	
 	  }
 }
