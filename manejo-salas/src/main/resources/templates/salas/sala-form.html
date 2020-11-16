@@ -1,0 +1,63 @@
+<form class="form" role="form" autocomplete="off"  th:object="${salaRegistro}" th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
+
+<input class="form-control" type=hidden th:field="${salaRegistro.id}"  th:if="${editMode}">
+<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}"  th:if="${editMode}">
+
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Edificio
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.edificioId} " th:disabled="${disableFields}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Sala
+			</label>
+		<div class="col-lg-9">			
+			<input class="form-control" type="text" th:field="${salaRegistro.id}" th:disabled="${disableFields}"> 
+		</div>
+	</div>	
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.nombre}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Tipo
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.tipo}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.capacidad}">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.encargado}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Caracteristicas
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" type="text" th:field="${salaRegistro.caracteristicas}" >
+		</div>
+	</div>
+	
+	<!-- ESTE DIV SOLO SE MUESTRA SI ESA CONDICI�N SE CUMPLE -->
+	
+	<div class="form-group row">
+		<div class="col-lg-12 text-center">
+			<a type="reset" class="btn btn-secondary"  th:href="@{'/salas/form/cancel'}">Cancel</a>
+			<input type="submit" class="btn btn-primary"
+				value="Save Changes">
+		</div>
+	</div>
+<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}" th:text="${salaFormErrorMessage}">Error Message</div>	
+</form>

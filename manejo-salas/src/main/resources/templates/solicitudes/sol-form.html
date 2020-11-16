@@ -1,0 +1,31 @@
+<form class="form" role="form" autocomplete="off" th:object="" th:action="" method="post">
+    <div class="form-group row">
+        <label class="col-lg-4 col-form-label form-control-label">Nombre del solicitante
+        </label>
+        <div class="col-lg-10">
+            <input class="form-control" type="text" th:field="" th:disabled="">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-4 col-form-label form-control-label">Correo</label>
+        <div class="col-lg-10">
+            <input class="form-control" type="email" th:field="">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-4 col-form-label form-control-label">Descripción</label>
+        <div class="col-lg-10">
+            <textarea class="form-control" th:field=""> </textarea>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-lg-12 text-center">
+            <a type="reset" class="btn btn-secondary" th:href="">Cancel</a>
+            <input type="submit" class="btn btn-primary" value="Solicitar">
+        </div>
+    </div>
+    <div class="alert alert-danger text-center" th:if="" th:text="">Error
+        Message</div>
+</form>

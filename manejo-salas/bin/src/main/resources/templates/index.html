@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNLugar</title>
+    <link rel="icon" type="image/png"
+        href="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png">
+
+    <style>
+        .window {
+            width: 100%;
+            height: -webkit-fill-available;
+            display: flex;
+            background-image: url(https://www.swallowtherapy.com/wp-content/uploads/2016/10/light-grey-abstract-background-hd-pictures-wallpapers-amagico-grey-background-wallpaper-bedroom-for-walls-homebase-designs-living-room-uk-3.jpg);
+        }
+
+        .content {
+            width: 60%;
+            margin: auto;
+            margin-top: 40px;
+        }
+
+        .footer {
+            display: flex;
+            vertical-align: middle;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="window">
+        <div class="flex-container content">
+            <h1 id="message">
+                UNLugar
+            </h1>
+            <div id="formContent">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+						<a class="nav-link " th:classappend=" ${loginTab}" id="nav-ingreso-tab" data-toggle="tab" href="#nav-ingreso" role="tab"
+                            aria-controls="nav-ingreso active" aria-selected="true">Ingreso</a>                    
+                            <!-- ACTIVE ACTIVADO -->
+                        <a class="nav-link " th:classappend=" ${registerTab}" id="nav-registro-tab" data-toggle="tab" href="#nav-registro"
+                            role="tab" aria-controls="nav-registro" aria-selected="false">Registro</a>                        
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                	<!-- ACTIVE ACTIVADO -->
+                    <div class="tab-pane fade show active" th:classappend=" ${loginTab}" id="nav-ingreso" role="tabpanel" aria-labelledby="nav-ingreso-tab">
+                    	<!--  ESTO ES UNA TARJETA  (de login)-->
+						<div th:include="usuarios/login.html" th:remove="tag"></div>                    	
+                    </div>                
+                    <div class="tab-pane fade show" th:classappend=" ${registerTab}" id="nav-registro" role="tabpanel"
+                        aria-labelledby="nav-registro-tab">
+                        <!--  ESTO ES UNA TARJETA  (de registro)-->
+                        <div th:include="usuarios/register.html" th:remove="tag"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="footer">
+                <h3 style="margin: auto;">Salas y Espacios</h3>
+                <img src="https://sandoxcientifica.com/wp-content/uploads/2019/04/uni-naci-colo-1.png" alt="Logo Unal">
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
