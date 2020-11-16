@@ -32,7 +32,7 @@ public class SalaControlador extends SalaServicio {
 	@GetMapping("/")
 	public String showSalasRoot(Model model) {
 		model.addAttribute("salaRegistro", new Sala());
-		model.addAttribute("salaList", salaDAO.findAll());		
+		model.addAttribute("salaList", salaDAO.findAll());	
 		return "view";
 	}
 	
