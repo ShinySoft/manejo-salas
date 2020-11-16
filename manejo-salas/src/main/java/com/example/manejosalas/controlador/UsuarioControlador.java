@@ -77,7 +77,7 @@ public class UsuarioControlador extends UsuarioServicio{
 			model.addAttribute("loginTab","desactive");
 			model.addAttribute("registerTab","active");
 		}
-		return "index";
+		return "redirect:/";
 	}
 	
 	@PostMapping("/login")
@@ -103,20 +103,15 @@ public class UsuarioControlador extends UsuarioServicio{
 			model.addAttribute("loginErrorMessage",e.getMessage());
 			model.addAttribute("loginTab","active");
 			return "index";
-		}
-		
+		}		
 	}	
-	
-
 }
-
 
 
 class Perfil{
 	
 	private String id;
-	private String value;
-	
+	private String value;	
 	
 	public Perfil(String id, String value) {
 		super();

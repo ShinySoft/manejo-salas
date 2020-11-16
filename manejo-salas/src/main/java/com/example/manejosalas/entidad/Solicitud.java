@@ -74,11 +74,13 @@ public class Solicitud{
         this.id = id;
     }
 
+
     public void setUsuario(Usuario usuario){
         this.usuarioid = usuario;
     }
 
     public void setSalaId (Sala salaid){
+
         this.salaid = salaid;
     }
     

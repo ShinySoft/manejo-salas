@@ -59,7 +59,7 @@ public class SalaControlador extends SalaServicio {
 	public String cancelEditSala(ModelMap model) {
 		return "redirect:/salas/view";
 	}		
-			
+				
 	@PostMapping("/add")
 	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
 		salaDAO.save(sala);
