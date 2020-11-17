@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<title>Salas y Espacios</title>
-	
+
 	<!--JQUERY-->
-	<script
- 		src="https://code.jquery.com/jquery-3.3.1.min.js"
- 			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
- 			crossorigin="anonymous"></script>
-	
-	<link rel="stylesheet"
-		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script 
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
 	<!-- Los iconos tipo Solid de Fontawesome-->
-	<link rel="stylesheet"
-		href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
 	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-	
+
 	<!-- Nuestro css
 	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
 		th:href="@{/css/user-form.css}">
@@ -29,53 +26,207 @@
 	<!-- DATA TABLE -->
 	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 
-<!-- SCRIPT QUE CONVIERTE LA TABLA EN DATA TABLE CUANDO CARGA LA PÁGINA -->
+	<!-- SCRIPT QUE CONVIERTE LA TABLA EN DATA TABLE CUANDO CARGA LA Pï¿½GINA -->
 	<script type="text/javascript">
-	    $(document).ready(function() {
-	        //Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
-	        $('#userList').DataTable();
-	    } );
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#userList').DataTable();
+		});
 	</script>
-</head>
-<body>
-	<div class="container">
-	<div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
-		<ul class="nav nav-tabs justify-content-end">
-			<li class="nav-item">
-			<a class="nav-link " th:classappend=" ${listTab}" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">Salas</a>
-			</li>
-			<li class="nav-item">
-			<a class="nav-link" th:classappend=" ${formTab}" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Nueva sala</a>				   	
-			</li>
 
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show " th:classappend=" ${listTab}" id="list" role="tabpanel" aria-labelledby="list-tab">
-				<div class="card">
-					<div class="card-header">
-						<h4>Salas</h4>
-					</div>
-					<div class="card-body">						
-						<div th:include="salas/sala-list.html" th:remove="tag"></div>
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.window {
+			width: 100%;
+			height: 90%;
+			display: flex;
+		}
+
+		.content {
+			width: 60%;
+			margin: auto;
+			margin-top: 40px;
+		}
+
+		.footer {
+			display: flex;
+			vertical-align: middle;
+		}
+
+		.sidebar {
+			width: 250px;
+			bottom: 0;
+			left: 0;
+			height: -webkit-fill-available;
+			transition: all 0.3s;
+			position: fixed !important;
+			padding-top: 60px;
+		}
+
+		.sidenav {
+			height: -webkit-fill-available;
+			width: 0;
+			position: fixed;
+			left: 0;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none !important;
+			font-size: 20px;
+			display: block;
+			transition: 0.3s;
+			color: dimgrey;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		#main {
+			transition: margin-left .5s;
+			padding: 16px;
+			width: -webkit-fill-available;
+		}
+
+		.logoUN {
+			display: flex !important;
+		}
+
+		.logoUN span {
+			margin: auto;
+			font-size: 25px;
+			color: dimgrey;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Barra Superior -->
+	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
+		<button class="navbar-toggler" type="button" onclick="openNav()">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand logoUN" href="#">
+			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
+				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
+			<span>UN Lugar</span>
+		</a>
+		<div class="my-2 my-lg-0">
+			<button class="btn btn-outline-danger my-2 my-sm-0" type="button">Log Out</button>
+		</div>
+	</nav>
+
+	<div class="window">
+		<!-- Barra lateral izquierda test -->
+		<div id="mySidenav" class="sidenav nav bg-white" role="tablist">
+			<a aria-selected="true" role="tab" data-toggle="pill" id="salas-tab" href="#salas" aria-controls="salas"
+				class="nav-link active">Salas</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="solicitudes.tab" href="#solicitudes"
+				aria-controls="solicitudes" class="nav-link">Solicitudes</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="solicitudes-historial-tab"
+				href="#solicitudes-historial" aria-controls="solicitudes-historial" class="nav-link">Historial de
+				solicitudes</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="#informes"
+				aria-controls="informes" class="nav-link">Informes</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
+				aria-controls="caracteristicas" class="nav-link">Nuevas Caracteristicas</a>
+		</div>
+
+		<div id="main" class="bg-light tab-content">
+			<div class="tab-pane fade show active" id="salas" role="tabpanel" aria-labelledby="salas-tab">
+				<div th:include="salas/sala-list.html" th:remove="tag"></div>
+			</div>
+			<div class="tab-pane fade" id="solicitudes" role="tabpanel" aria-labelledby="solicitudes-tab">
+				<div th:include="salas/sala-form.html" th:remove="tag"></div>
+			</div>
+			<div class="tab-pane fade" id="solicitudes-historial" role="tabpanel"
+				aria-labelledby="solicitudes-historial-tab">TEXTO PRUEBA 3</div>
+			<div class="tab-pane fade" id="informes" role="tabpanel" aria-labelledby="informes-tab">TEXTO PRUEBA 4</div>
+			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab">TEXTO
+				PRUEBA 5</div>
+		</div>
+	</div>
+
+
+	<!-- <div class="container">
+		<div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
+			<ul class="nav nav-tabs justify-content-end">
+				<li class="nav-item">
+					<a class="nav-link " th:classappend=" ${listTab}" id="list-tab" data-toggle="tab" href="#list"
+						role="tab" aria-controls="list" aria-selected="false">List</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend=" ${formTab}" id="form-tab" data-toggle="tab" href="#form"
+						role="tab" aria-controls="form" aria-selected="true">Form</a>
+				</li>
+
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show " th:classappend=" ${listTab}" id="list" role="tabpanel"
+					aria-labelledby="list-tab">
+					<div class="card">
+						<div class="card-header">
+							<h4>Salas</h4>
+						</div>
+						<div class="card-body">
+							<div th:include="salas/sala-list.html" th:remove="tag"></div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="tab-pane fade show " th:classappend=" ${formTab}" id="form" role="tabpanel" aria-labelledby="form-tab">
-				<div class="card">
-					<div class="card-header">
-						<h4>Detalles</h4>
-					</div>
-					<div class="card-body">
-						  <div th:include="salas/sala-form.html" th:remove="tag"></div>
+				<div class="tab-pane fade show " th:classappend=" ${formTab}" id="form" role="tabpanel"
+					aria-labelledby="form-tab">
+					<div class="card">
+						<div class="card-header">
+							<h4>Detalles</h4>
+						</div>
+						<div class="card-body">
+							<div th:include="salas/sala-form.html" th:remove="tag"></div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<div th:include="salas/confirm-delete-dialog.html" th:remove="tag"></div>
+	</div> -->
+	<div th:include="salas/confirm-delete-dialog.html" th:remove="tag"></div>
+
+	<script>
+		var opened = true;
+		function openNav() {
+			if (opened) {
+				document.getElementById("mySidenav").style.width = "200px";
+				document.getElementById("main").style.marginLeft = "200px";
+				opened = false;
+			} else {
+				document.getElementById("mySidenav").style.width = "0";
+				document.getElementById("main").style.marginLeft = "0";
+				opened = true;
+			}
+
+		}
+
+	</script>
 </body>
+
 </html>
