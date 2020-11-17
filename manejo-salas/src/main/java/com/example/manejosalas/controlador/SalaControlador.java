@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.SalaDAO;
+import com.example.manejosalas.DAO.UsuarioDAO;
 
 @RestController
 @RequestMapping("salas")
@@ -29,6 +30,9 @@ public class SalaControlador extends SalaServicio {
 	@Autowired
 	SalaDAO salaDAO;
 
+	@Autowired
+	UsuarioDAO usuarioDAO;
+	
 	@GetMapping("/")
 	public String showSalasRoot(Model model) {
 		model.addAttribute("salaRegistro", new Sala());
@@ -36,8 +40,10 @@ public class SalaControlador extends SalaServicio {
 		return "view";
 	}
 	
-	@GetMapping("/view")
-	public ModelAndView showSalas(Model model) {
+	@GetMapping("/view/admin/{id}")
+	public ModelAndView showSalas(Model model, @PathVariable(name = "id") int id) {
+			
+		Usuario encargado = usuarioDAO.findById(id).get();
 		
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAll();
@@ -46,7 +52,9 @@ public class SalaControlador extends SalaServicio {
 		
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
-		model.addAttribute("listTab","active");		
+		model.addAttribute("listTab","active");
+		model.addAttribute("correoEncargado", encargado.getCorreo());
+		
 		return modelAndView;
 	}	
 	
@@ -63,7 +71,7 @@ public class SalaControlador extends SalaServicio {
 	@PostMapping("/add")
 	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
 		salaDAO.save(sala);
-		return showSalas(model);
+		return showSalas(model, 1);
 	}	
 	
 	@GetMapping("/edit-sala/{id}/{edificioId}")
@@ -96,7 +104,7 @@ public class SalaControlador extends SalaServicio {
 		catch (Exception uoin) {
 			model.addAttribute("listErrorMessage",uoin.getMessage());
 		}
-		return showSalas(model);
+		return showSalas(model, 1);
 	}	
 	
 	@PostMapping("/edit")
@@ -112,7 +120,7 @@ public class SalaControlador extends SalaServicio {
 			model.addAttribute("salaFormErrorMessage", "Error al actualizar la información");
 		}
 						
-		return showSalas((Model)model);
+		return showSalas((Model)model, 1);
 	}	
 		
 	@PostMapping("/delete/{id}/{edificioId}")

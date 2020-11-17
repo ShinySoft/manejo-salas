@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Usuario;
+import com.mysql.cj.Session;
 
 @Controller
 @RequestMapping("usuarios")
@@ -89,8 +90,8 @@ public class UsuarioControlador extends UsuarioServicio{
 		
 		try {
 			Usuario usuario_registrado = getUsuarioRegistrado(usuario);
-			if(getAdmin(usuario_registrado)) {				
-				return "redirect:/salas/view";
+			if(getAdmin(usuario_registrado)) {								
+				return String.format("redirect:/salas/view/admin/%o",usuario_registrado.getId());
 			}
 			else {
 				throw new Exception("No cuenta con los permisos");

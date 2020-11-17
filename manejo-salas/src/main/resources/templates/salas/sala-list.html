@@ -17,10 +17,8 @@
 			<td th:text="${sala.id}"></td>
 			<td th:text="${sala.edificioId}"></td>
 			<td th:text="${sala.nombre}"></td>
-			<td th:text="${sala.tipo}"></td>
-			<td th:text="${sala.capacidad}"></td>
-			<!-- <td th:text="${sala.caracteristicas}"></td> -->
-			<td th:text="${sala.encargado.correo}"></td>
+			<td th:text="${sala.tipo}"></td>					
+			<td th:text="${correoEncargado}"></td>
 			<td>	
 					<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
 					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a>					
