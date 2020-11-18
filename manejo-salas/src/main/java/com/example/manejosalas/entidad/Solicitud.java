@@ -6,6 +6,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Timestamp;
 import java.sql.Date;
 import javax.persistence.ManyToOne;
@@ -31,10 +36,11 @@ public class Solicitud{
     
 	//@ManyToOne
 	//private Edificio salaedificioid;
-    
+	
+	
 	@Column
 	private Timestamp fecha_solicitud;
-    
+	
 	@Column
 	private Date fecha_prestamo;
     

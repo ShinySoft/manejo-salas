@@ -119,6 +119,34 @@ public class SalaControlador extends SalaServicio {
 		return modelAndView;
 	}
 	
+	@GetMapping("/admin/solicitar/{id}/{edificioId}")
+	public ModelAndView updateSolicitud(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		Solicitud nuevaSolicitud = new Solicitud();
+		nuevaSolicitud.setSalaId(salaRegistrada);
+		nuevaSolicitud.setUsuario(usuarioDAO.findById(1).get());
+		nuevaSolicitud.setEstado("PENDIENTE");
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("editMode","true");
+		model.addAttribute("solicitud", nuevaSolicitud);
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", salaRegistrada);
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
+		model.addAttribute("formTab","active");
+		model.addAttribute("editMode","true");
+		
+		model.addAttribute("disableFields","true");
+		
+		modelAndView.setViewName ( "solicitud/solicitud-form" );	
+		
+		return modelAndView;
+	}
+	
 	@GetMapping("/delete/{id}/{edificioId}")
 	public ModelAndView deleteUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
 		try {
@@ -130,6 +158,19 @@ public class SalaControlador extends SalaServicio {
 			model.addAttribute("listErrorMessage",uoin.getMessage());
 		}
 		return showSalas(model, 1);
+	}	
+	
+	@PostMapping("/admin/solicitar")
+	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model){
+		
+		try {
+			solicitudDAO.save(solicitud);
+		}
+		catch(Exception e) {
+			model.addAttribute("salaFormErrorMessage", "Error al actualizar la información");
+		}
+						
+		return showSalas((Model)model, 1);
 	}	
 	
 	@PostMapping("/edit")

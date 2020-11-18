@@ -126,9 +126,6 @@
 <body>
 	<!-- Barra Superior -->
 	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
-		<button class="navbar-toggler" type="button" onclick="openNav()">
-			<span class="navbar-toggler-icon"></span>
-		</button>
 		<a class="navbar-brand logoUN" href="#">
 			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
 				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
@@ -226,10 +223,11 @@
 			<div class="form-group row">
 				<div class="col-lg-12 text-center">
 					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
-					<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+					<a class="btn btn-primary" href="#" th:href="@{'/salas/admin/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}">Solicitar</a>
 				</div>
 			</div>
 		</div>
+		
 
 		<script>
 			var opened = true;
@@ -245,13 +243,6 @@
 				}
 
 			}
-			
-			function solicitar(id, edificioId){
-				$('#solicitarModal').modal('show');
-				$("#id").val(id);	
-				$("#edificioId").val(edificioId);
-			}
-			
 			
 
 		</script>
