@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.entidad.Caracteristica;
 import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.SalaId;
 import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.SalaDAO;
@@ -165,19 +166,17 @@ public class SalaControlador extends SalaServicio {
 	@SuppressWarnings("deprecation")
 	@PostMapping("/admin/solicitud")
 	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model){
-		
-		try {
+
 			solicitud.setFecha_prestamo(new Date(2020,11,20));
 			Time sqlTime1 = Time.valueOf("09:00:00");
 			Time sqlTime2 = Time.valueOf("11:00:00");
 			solicitud.setHora_inicio(sqlTime1);
 			solicitud.setHora_fin(sqlTime2);
 			solicitud.setEstado("PENDIENTE");
+			solicitud.setSalaId(salaDAO.findByIdAndEdificioId(102, 4));
+			solicitud.setUsuario(usuarioDAO.findById(1).get());
 			solicitudDAO.save(solicitud);
-		}
-		catch(Exception e) {
-			model.addAttribute("salaFormErrorMessage", "Error al actualizar la información");
-		}
+
 						
 		return showSalas((Model)model, 1);
 	}	
