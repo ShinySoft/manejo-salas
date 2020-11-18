@@ -17,7 +17,7 @@ public class Edificio implements Serializable{
 	private static final long serialVersionUID = 3913449754225950969L;
 	
 	@Id
-	private int ID;
+	private int id;
 	
 	@Column
     private String nombre;
@@ -30,7 +30,7 @@ public class Edificio implements Serializable{
     */
 
     public int getID(){
-        return ID;
+        return id;
     }
 
     public String getNombre(){
@@ -38,7 +38,7 @@ public class Edificio implements Serializable{
     }
 
     public void setID(int ID){
-        this.ID = ID;
+        this.id = ID;
     }
 
     public void setNombre(String nombre){

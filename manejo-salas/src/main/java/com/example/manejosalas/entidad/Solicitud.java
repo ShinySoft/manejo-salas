@@ -3,10 +3,13 @@ package com.example.manejosalas.entidad;
 import javax.persistence.Entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.sql.Date;
 import javax.persistence.ManyToOne;
+import java.sql.Time; 
 
 @Entity
 @Table(name = "solicitud")
@@ -16,8 +19,13 @@ public class Solicitud{
     private int id;
 	
 	@ManyToOne
+	@JoinColumn(name="UsuarioId")
     private Usuario usuarioid;
     
+	@JoinColumns({
+        @JoinColumn(name = "SalaId", referencedColumnName="Id"),
+        @JoinColumn(name = "SalaEdificioId", referencedColumnName="EdificioId")
+    })
 	@ManyToOne
 	private Sala salaid;
     
@@ -32,6 +40,15 @@ public class Solicitud{
     
 	@Column
 	private String estado;
+	
+	@Column
+	private String descripcion;
+	
+	@Column
+	private Time hora_inicio;
+	
+	@Column
+	private Time hora_fin;
 
     /*public Solicitud(int ID, int usuarioID, int salaID, int salaEdificioID, String fechaSolicitud, String fechaPrestamo, String estado){
         this.ID = ID;
@@ -66,6 +83,22 @@ public class Solicitud{
         return estado;
     }
 
+    public String getDescripcion(){
+        return descripcion;
+    }
+    
+    public Time getHora_inicio(){
+        return hora_inicio;
+    }
+    
+    public Time getHora_fin(){
+        return hora_fin;
+    }
+
+    public void setDescripcion (String descripcion){
+        this.descripcion = descripcion;
+    }
+    
     public void setEstado (String estado){
         this.estado = estado;
     }
@@ -94,5 +127,13 @@ public class Solicitud{
 
     public void setFecha_prestamo (Date fecha_prestamo){
         this.fecha_prestamo = fecha_prestamo;
+    }
+    
+    public void setHora_inicio (Time hora_inicio){
+        this.hora_inicio = hora_inicio;
+    }
+    
+    public void setHora_fin (Time hora_fin){
+        this.hora_fin = hora_fin;
     }
 }

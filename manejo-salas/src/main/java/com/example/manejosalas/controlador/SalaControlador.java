@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.SalaDAO;
+import com.example.manejosalas.DAO.SolicitudDAO;
 import com.example.manejosalas.DAO.UsuarioDAO;
 
 @RestController
@@ -33,10 +35,14 @@ public class SalaControlador extends SalaServicio {
 	@Autowired
 	UsuarioDAO usuarioDAO;
 	
+	@Autowired
+	SolicitudDAO solicitudDAO;
+	
 	@GetMapping("/")
 	public String showSalasRoot(Model model) {
 		model.addAttribute("salaRegistro", new Sala());
-		model.addAttribute("salaList", salaDAO.findAll());	
+		model.addAttribute("salaList", salaDAO.findAll());
+		
 		return "view";
 	}
 	
@@ -44,15 +50,23 @@ public class SalaControlador extends SalaServicio {
 	public ModelAndView showSalas(Model model, @PathVariable(name = "id") int id) {
 			
 		Usuario encargado = usuarioDAO.findById(id).get();
-		
+		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(encargado.getCorreo());
+		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
+		for (int i=0;i<solicitudes.size();i++) {
+			//System.out.println(solicitudes.get(i).getEstado() + " 1");
+			if(solicitudes.get(i).getEstado().equals("PENDIENTE")) {
+				solicitudesPendientes.add(solicitudes.get(i));
+				System.out.println(solicitudesPendientes.size());
+			}
+		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAll();
-		
 		model.addAttribute("salaRegistro", new Sala());
-		
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
 		model.addAttribute("listTab","active");
+		model.addAttribute("solicitudList", solicitudes);
+		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", encargado.getCorreo());
 		
 		return modelAndView;
@@ -127,5 +141,23 @@ public class SalaControlador extends SalaServicio {
 	public void delete(int id) {
 		salaDAO.deleteById(id);
 	}
+	
+	@GetMapping("/acept/{id}")
+	public ModelAndView acept(Model model,@PathVariable(name = "id") int id) {
+		Solicitud solicitud = solicitudDAO.findById(id);
+		solicitud.setEstado("APROBADA");
+		solicitudDAO.save(solicitud);
+		return showSalas(model, 1);
+	}
+	
+	@GetMapping("/rehuse/{id}")
+	public ModelAndView rehuse(Model model,@PathVariable(name = "id") int id) {
+		Solicitud solicitud = solicitudDAO.findById(id);
+		solicitud.setEstado("RECHAZADA");
+		solicitudDAO.save(solicitud);
+		return showSalas(model, 1);
+	}
+	
+	
 	
 }
