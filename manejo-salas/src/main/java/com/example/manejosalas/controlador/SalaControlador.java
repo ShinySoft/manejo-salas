@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.manejosalas.entidad.Caracteristica;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
@@ -37,6 +43,7 @@ public class SalaControlador extends SalaServicio {
 	
 	@Autowired
 	SolicitudDAO solicitudDAO;
+
 	
 	@GetMapping("/")
 	public String showSalasRoot(Model model) {
@@ -88,22 +95,26 @@ public class SalaControlador extends SalaServicio {
 		return showSalas(model, 1);
 	}	
 	
-	@GetMapping("/edit-sala/{id}/{edificioId}")
+	@GetMapping("/admin/show-more/{id}/{edificioId}")
 	public ModelAndView update(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
 		
 		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
+		
+		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("editMode","true");
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
 		model.addAttribute("formTab","active");
 		model.addAttribute("editMode","true");
 		
 		model.addAttribute("disableFields","true");
 		
-		modelAndView.setViewName ( "view" );	
+		modelAndView.setViewName ( "salas/sala-form" );	
 		
 		return modelAndView;
 	}

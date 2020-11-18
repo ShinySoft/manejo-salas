@@ -1,63 +1,260 @@
-<form class="form" role="form" autocomplete="off"  th:object="${salaRegistro}" th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<input class="form-control" type=hidden th:field="${salaRegistro.id}"  th:if="${editMode}">
-<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}"  th:if="${editMode}">
+<head>
+	<title>Salas y Espacios</title>
 
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Edificioid
-			</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} " th:disabled="${disableFields}" >
+	<!--JQUERY-->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+	<!-- Nuestro css
+	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
+		th:href="@{/css/user-form.css}">
+-->
+
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+	<!-- SCRIPT QUE CONVIERTE LA TABLA EN DATA TABLE CUANDO CARGA LA P�GINA -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#caracteristicasTable').DataTable();
+		});
+	</script>
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.window {
+			width: 100%;
+			height: 90%;
+			display: flex;
+		}
+
+		.content {
+			width: 60%;
+			margin: auto;
+			margin-top: 40px;
+		}
+
+		.footer {
+			display: flex;
+			vertical-align: middle;
+		}
+
+		.sidebar {
+			width: 250px;
+			bottom: 0;
+			left: 0;
+			height: -webkit-fill-available;
+			transition: all 0.3s;
+			position: fixed !important;
+			padding-top: 60px;
+		}
+
+		.sidenav {
+			height: -webkit-fill-available;
+			width: 0;
+			position: fixed;
+			left: 0;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none !important;
+			font-size: 20px;
+			display: block;
+			transition: 0.3s;
+			color: dimgrey;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		#main {
+			transition: margin-left .5s;
+			padding: 0 10%;
+			margin: 0 auto;
+			width: -webkit-fill-available;
+		}
+
+		.logoUN {
+			display: flex !important;
+		}
+
+		.logoUN span {
+			margin: auto;
+			font-size: 25px;
+			color: dimgrey;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Barra Superior -->
+	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
+		<button class="navbar-toggler" type="button" onclick="openNav()">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand logoUN" href="#">
+			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
+				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
+			<span> Lugar</span>
+		</a>
+		<div class="my-2 my-lg-0">
+			<form th:action="@{/logout}" method="post">
+				<input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Cerrar Sesion" />
+			</form>
 		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">id
-			</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}" th:disabled="${disableFields}">
+	</nav>
+	<div class="window" id="salaEdit">
+		<div id="main">
+			<form class="form" role="form" autocomplete="off" th:object="${salaRegistro}"
+				th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
+
+				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Edificio
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} "
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Sala
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="nombre" type="text" th:field="${salaRegistro.nombre}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Tipo
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="tipo" type="text" th:field="${salaRegistro.tipo}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="capacidad" type="text" th:field="${salaRegistro.capacidad}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
+					<div class="col-lg-9">
+						<select class="form-control" th:field="${salaRegistro.encargado}"
+							th:disabled="${disableFields}">
+							<option value="" disabled>-- Selecciona un encargado --</option>
+							<!-- <option value="tst">Encargado de prueba</option> -->
+							<option th:each="encargado :${encargadoEdit}" th:value="${encargado.id}"
+								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}">
+							</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
+					th:text="${salaFormErrorMessage}">Error Message</div>
+			</form>
+
+			<div class="table-responsive">
+				<table id="caracteristicasTable" class="table table-bordered table-hover table-striped">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">Categoría</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Descripción</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="c: ${caracteristicas}">
+							<td th:text="${c.categoria}"></td>
+							<td th:text="${c.nombre}"></td>
+							<td th:text="${c.descripcion}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="form-group row">
+				<div class="col-lg-12 text-center">
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
+					<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+				</div>
+			</div>
 		</div>
-	</div>	
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="nombre" type="text" th:field="${salaRegistro.nombre}" >
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Tipo
-			</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="tipo" type="text" th:field="${salaRegistro.tipo}" >
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="capacidad" type="text" th:field="${salaRegistro.capacidad}">
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="encargado" type="text" th:field="${salaRegistro.encargado}" >
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Caracteristicas
-			</label>
-		<div class="col-lg-9">
-			<input class="form-control" id="caracteristicas" type="text" th:field="${salaRegistro.caracteristicas}" >
-		</div>
-	</div>
-	
-	<!-- ESTE DIV SOLO SE MUESTRA SI ESA CONDICI�N SE CUMPLE -->
-	
-	<div class="form-group row">
-		<div class="col-lg-12 text-center">
-			<a type="reset" class="btn btn-secondary"  th:href="@{'/salas/form/cancel'}">Cancel</a>
-			<input type="submit" class="btn btn-primary"
-				value="Save Changes">
-		</div>
-	</div>
-<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}" th:text="${salaFormErrorMessage}">Error Message</div>	
-</form>
+
+		<script>
+			var opened = true;
+			function openNav() {
+				if (opened) {
+					document.getElementById("mySidenav").style.width = "200px";
+					document.getElementById("main").style.marginLeft = "200px";
+					opened = false;
+				} else {
+					document.getElementById("mySidenav").style.width = "0";
+					document.getElementById("main").style.marginLeft = "0";
+					opened = true;
+				}
+
+			}
+			
+			function solicitar(id, edificioId){
+				$('#solicitarModal').modal('show');
+				$("#id").val(id);	
+				$("#edificioId").val(edificioId);
+			}
+			
+			
+
+		</script>
+</body>
+
+</html>

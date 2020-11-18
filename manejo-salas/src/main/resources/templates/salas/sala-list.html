@@ -17,11 +17,13 @@
 			<td th:text="${sala.id}"></td>
 			<td th:text="${sala.edificioId}"></td>
 			<td th:text="${sala.nombre}"></td>
-			<td th:text="${sala.tipo}"></td>					
+			<td th:text="${sala.tipo}"></td>
+			<td th:text="${sala.capacidad}"></td>					
 			<td th:text="${correoEncargado}"></td>
 			<td>	
-					<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
-					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a>					
+				<a href="#" th:href="@{'/salas/admin/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-edit"></i></a>
+				<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
+					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
 			</td>
 		</tr>
 		</tbody>
@@ -31,7 +33,7 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
 </button>-->
 
-<!-- Modal -->
+<!-- Modal 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -46,7 +48,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
 	<div class="alert alert-danger text-center" th:if="${salaListErrorMessage}" th:text="${salaListErrorMessage}">Error Message</div>
 </div>
 
