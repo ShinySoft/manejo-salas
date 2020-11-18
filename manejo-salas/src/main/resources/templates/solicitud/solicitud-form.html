@@ -141,7 +141,7 @@
 	<div class="window" id="solicitar">
 		<div id="main">
 			<form class="form" role="form" autocomplete="off" th:object="${solicitud}"
-				th:action="@{/salas/admin/solicitar}" method="post">
+				th:action="@{/salas/admin/solicitud}" method="post">
 
 				<div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Descripción
@@ -150,39 +150,39 @@
 						<input class="form-control" id="descripcion" type="text" th:field="${solicitud.descripcion} ">
 					</div>
 				</div>
-				 <!--<div class="form-group row">
+				 <div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Fecha prestamo
 					</label>
 					<div class="col-lg-9">
-						<input type="datetime-local" class="form-control" th:field="${solicitud.fechaPrestamo}" />
+						<input type="date" class="form-control"  />
 					</div>
 				</div>
 				 <div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Hora de inicio
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="horaInicio" type="time" th:field="${solicitud.horaInicio} ">
+						<input class="form-control" id="horaInicio" type="time">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Hora de fin
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="horaFin" type="time" th:field="${solicitud.horaFin} ">
+						<input class="form-control" id="horaFin" type="time"  >
 					</div>
-				</div> -->
+				</div>
 
 				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
 					th:text="${salaFormErrorMessage}">Error Message</div>
-			</form>
-			
-			<div class="form-group row">
-				<div class="col-lg-12 text-center">
-					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
-					<input class="btn btn-primary" type="submit">
-					<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+					
+				<div class="form-group row">
+					<div class="col-lg-12 text-center">
+						<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
+						<input class="btn btn-primary" type="submit" value="Enviar">
+						<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		
 

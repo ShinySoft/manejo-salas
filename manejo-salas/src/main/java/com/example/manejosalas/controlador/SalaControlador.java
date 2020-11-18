@@ -1,6 +1,8 @@
 package com.example.manejosalas.controlador;
 
 import java.util.ArrayList;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,10 +162,17 @@ public class SalaControlador extends SalaServicio {
 		return showSalas(model, 1);
 	}	
 	
-	@PostMapping("/admin/solicitar")
+	@SuppressWarnings("deprecation")
+	@PostMapping("/admin/solicitud")
 	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model){
 		
 		try {
+			solicitud.setFecha_prestamo(new Date(2020,11,20));
+			Time sqlTime1 = Time.valueOf("09:00:00");
+			Time sqlTime2 = Time.valueOf("11:00:00");
+			solicitud.setHora_inicio(sqlTime1);
+			solicitud.setHora_fin(sqlTime2);
+			solicitud.setEstado("PENDIENTE");
 			solicitudDAO.save(solicitud);
 		}
 		catch(Exception e) {
