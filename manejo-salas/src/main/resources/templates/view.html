@@ -168,8 +168,9 @@
 				aria-labelledby="solicitudes-historial-tab">
 					<div th:include="solicitud/solicitud-list.html" th:remove="tag"></div>
 			<div class="tab-pane fade" id="informes" role="tabpanel" aria-labelledby="informes-tab" th:if="${adminLogin}">TEXTO PRUEBA 4</div>
-			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab" th:if="${adminLogin}">TEXTO
-				PRUEBA 5</div>
+			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab" th:if="${adminLogin}">
+				<div th:include="salas/caracteristica-form.html" th:remove="tag"></div>
+			</div>
 		</div>
 	</div>
 

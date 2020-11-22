@@ -126,6 +126,7 @@
 <body>
 	<!-- Barra Superior -->
 	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
+		
 		<a class="navbar-brand logoUN" href="#">
 			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
 				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
@@ -137,95 +138,51 @@
 			</form>
 		</div>
 	</nav>
-	<div class="window" id="salaEdit">
+	<div class="window" id="solicitar">
 		<div id="main">
-			<form class="form" role="form" autocomplete="off" th:object="${salaRegistro}"
-				th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
-
-				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
-				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+			<form class="form" role="form" autocomplete="off" th:object="${solicitud}"
+				th:action="@{/salas/admin/solicitud}" method="post">
 
 				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Edificio
+					<label class="col-lg-3 col-form-label form-control-label">Descripción
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} "
-							th:disabled="${disableFields}">
+						<input class="form-control" id="descripcion" type="text" th:field="${solicitud.descripcion} ">
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Sala
+				 <div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Fecha prestamo
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}"
-							th:disabled="${disableFields}">
+						<input type="date" class="form-control"  />
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
-					<div class="col-lg-9">
-						<input class="form-control" id="nombre" type="text" th:field="${salaRegistro.nombre}"
-							th:disabled="${disableFields}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Tipo
+				 <div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Hora de inicio
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="tipo" type="text" th:field="${salaRegistro.tipo}"
-							th:disabled="${disableFields}">
+						<input class="form-control" id="horaInicio" type="time">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
+					<label class="col-lg-3 col-form-label form-control-label">Hora de fin
+					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="capacidad" type="text" th:field="${salaRegistro.capacidad}"
-							th:disabled="${disableFields}">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
-					<div class="col-lg-9">
-						<select class="form-control" th:field="${salaRegistro.encargado}"
-							th:disabled="${disableFields}">
-							<option value="" disabled>-- Selecciona un encargado --</option>
-							<!-- <option value="tst">Encargado de prueba</option> -->
-							<option th:each="encargado :${encargadoEdit}" th:value="${encargado.id}"
-								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}">
-							</option>
-						</select>
+						<input class="form-control" id="horaFin" type="time"  >
 					</div>
 				</div>
 
 				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
 					th:text="${salaFormErrorMessage}">Error Message</div>
-			</form>
-
-			<div class="table-responsive">
-				<table id="caracteristicasTable" class="table table-bordered table-hover table-striped">
-					<thead class="thead-light">
-						<tr>
-							<th scope="col">Categoría</th>
-							<th scope="col">Nombre</th>
-							<th scope="col">Descripción</th>							
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="c: ${caracteristicas}">
-							<td th:text="${c.categoria}"></td>
-							<td th:text="${c.nombre}"></td>
-							<td th:text="${c.descripcion}"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			
-			<div class="form-group row">
-				<div class="col-lg-12 text-center">
-					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
-					<a class="btn btn-primary" href="#" th:href="@{'/salas/admin/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}">Solicitar</a>
+					
+				<div class="form-group row">
+					<div class="col-lg-12 text-center">
+						<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
+						<input class="btn btn-primary" type="submit" value="Enviar">
+						<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 		
 
@@ -243,6 +200,13 @@
 				}
 
 			}
+			
+			function solicitar(id, edificioId){
+				$('#solicitarModal').modal('show');
+				$("#id").val(id);	
+				$("#edificioId").val(edificioId);
+			}
+			
 			
 
 		</script>
