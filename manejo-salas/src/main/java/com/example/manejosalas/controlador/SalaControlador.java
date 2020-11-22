@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,10 @@ import com.example.manejosalas.DAO.UsuarioDAO;
 @RestController
 @RequestMapping("salas")
 public class SalaControlador extends SalaServicio {
+	
+	static Sala salaRegistradaSolicitud;
+	static String currentUserMail;
+	
 	@Autowired
 	SalaDAO salaDAO;
 
@@ -49,25 +54,73 @@ public class SalaControlador extends SalaServicio {
 
 	
 	@GetMapping("/")
-	public String showSalasRoot(Model model) {
-		model.addAttribute("salaRegistro", new Sala());
-		model.addAttribute("salaList", salaDAO.findAll());
-		
-		return "view";
-	}
+	public ModelAndView showSalasRoot(Model model) {
+	String rol = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
 	
-	@GetMapping("/view/admin/{id}")
-	public ModelAndView showSalas(Model model, @PathVariable(name = "id") int id) {
-			
-		Usuario encargado = usuarioDAO.findById(id).get();
-		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(encargado.getCorreo());
+	String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+	
+	SalaControlador.currentUserMail = userMail;
+	
+		if(rol.equals("[ROLE_ADMIN]")) {
+			return showSalasAdmin(model);
+		}
+		else if (rol.equals("[ROLE_USER]")) {
+			return showSalasUser(model);
+		}
+		else {
+			return showSalasUser(model); //super
+		}
+	}
+
+
+	@GetMapping("/admin/view/")
+	public ModelAndView showSalasAdmin(Model model) {
+							
+		String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Usuario admin = usuarioDAO.findByCorreo(userMail);
+		
+		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(userMail);
 		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
 		for (int i=0;i<solicitudes.size();i++) {
-			//System.out.println(solicitudes.get(i).getEstado() + " 1");
 			if(solicitudes.get(i).getEstado().equals("PENDIENTE")) {
 				solicitudesPendientes.add(solicitudes.get(i));
 				System.out.println(solicitudesPendientes.size());
 			}
+		}
+		ModelAndView modelAndView = new ModelAndView();
+		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);
+		model.addAttribute("salaRegistro", new Sala());
+		modelAndView.setViewName ( "view" );
+		model.addAttribute("salaList", salas);
+		model.addAttribute("listTab","active");
+		model.addAttribute("solicitudList", solicitudes);
+		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
+		model.addAttribute("correoEncargado", userMail);	
+		
+		model.addAttribute("adminLogin", true);
+		
+		return modelAndView;
+	}	
+	
+	
+	@GetMapping("/user/view")
+	public ModelAndView showSalasUser(Model model){
+		String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+		
+		ArrayList<Solicitud> solicitudesAux = new ArrayList<Solicitud>();
+		
+		List<Solicitud> solicitudes = solicitudDAO.findAllByusuarioid_correo(userMail);
+		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
+		for (int i=0;i<solicitudes.size();i++) {
+			if(solicitudes.get(i).getEstado().equals("PENDIENTE")) {
+				solicitudesPendientes.add(solicitudes.get(i));				
+			}			
+			else {
+				solicitudesAux.add(solicitudes.get(i));
+			}
+			
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAll();
@@ -75,16 +128,12 @@ public class SalaControlador extends SalaServicio {
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
 		model.addAttribute("listTab","active");
-		model.addAttribute("solicitudList", solicitudes);
-		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
-		model.addAttribute("correoEncargado", encargado.getCorreo());
+		model.addAttribute("solicitudList", solicitudesAux);
+		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
+		
+		model.addAttribute("userLogin", true);
 		
 		return modelAndView;
-	}	
-	
-	@GetMapping("/todas")
-	public Iterable<Sala> todas(){
-		return salaDAO.findAll();
 	}
 	
 	@GetMapping("/form/cancel")
@@ -92,10 +141,10 @@ public class SalaControlador extends SalaServicio {
 		return "redirect:/salas/view";
 	}		
 				
-	@PostMapping("/add")
+	@PostMapping("/admin/add")
 	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
 		salaDAO.save(sala);
-		return showSalas(model, 1);
+		return showSalasAdmin(model);
 	}	
 	
 	@GetMapping("/admin/show-more/{id}/{edificioId}")
@@ -122,24 +171,60 @@ public class SalaControlador extends SalaServicio {
 		return modelAndView;
 	}
 	
-	@GetMapping("/admin/solicitar/{id}/{edificioId}")
-	public ModelAndView updateSolicitud(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+	
+	@GetMapping("/user/show-more/{id}/{edificioId}")
+	public ModelAndView showMoreUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
 		
 		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
+		
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("editMode","true");
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", salaRegistrada);
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
+		model.addAttribute("formTab","active");
+		model.addAttribute("editMode","true");
+		
+		model.addAttribute("disableFields","true");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return modelAndView;
+	}	
+	
+	@GetMapping("all/solicitar/{id}/{edificioId}")
+	public ModelAndView updateSolicitud(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Usuario requestUser = usuarioDAO.findByCorreo(SalaControlador.currentUserMail);
+		
+		
+		SalaControlador.salaRegistradaSolicitud = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
 		Solicitud nuevaSolicitud = new Solicitud();
-		nuevaSolicitud.setSalaId(salaRegistrada);
-		nuevaSolicitud.setUsuario(usuarioDAO.findById(1).get());
-		nuevaSolicitud.setEstado("PENDIENTE");
+		
+		nuevaSolicitud.setUsuario(requestUser);
+		
+		//Autocheck for admin request
+		if(requestUser.getPerfil() == "A") {
+			nuevaSolicitud.setEstado("APROBADA");
+		}
+		else {
+			nuevaSolicitud.setEstado("PENDIENTE");
+		}
+		
 		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("editMode","true");
 		model.addAttribute("solicitud", nuevaSolicitud);
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
-		model.addAttribute("salaRegistro", salaRegistrada);
-		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
+		model.addAttribute("salaRegistro", salaRegistradaSolicitud);
+		model.addAttribute("caracteristicas", salaRegistradaSolicitud.getCaracteristicas());
 		model.addAttribute("formTab","active");
 		model.addAttribute("editMode","true");
 		
@@ -149,6 +234,7 @@ public class SalaControlador extends SalaServicio {
 		
 		return modelAndView;
 	}
+		
 	
 	@GetMapping("/delete/{id}/{edificioId}")
 	public ModelAndView deleteUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
@@ -160,25 +246,44 @@ public class SalaControlador extends SalaServicio {
 		catch (Exception uoin) {
 			model.addAttribute("listErrorMessage",uoin.getMessage());
 		}
-		return showSalas(model, 1);
+		return showSalasAdmin(model);
 	}	
 	
 	@SuppressWarnings("deprecation")
-	@PostMapping("/admin/solicitud")
+	@PostMapping("/all/solicitud")
 	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model){
 
-			solicitud.setFecha_prestamo(new Date(2020,11,20));
-			Time sqlTime1 = Time.valueOf("09:00:00");
-			Time sqlTime2 = Time.valueOf("11:00:00");
-			solicitud.setHora_inicio(sqlTime1);
-			solicitud.setHora_fin(sqlTime2);
+		Usuario requestUser = usuarioDAO.findByCorreo(SalaControlador.currentUserMail);
+		
+		//Autocheck for admin request
+		if((requestUser.getPerfil().equals("A")) || (requestUser.getPerfil().equals("A"))) {
+			solicitud.setEstado("APROBADA");
+		}
+		else {
 			solicitud.setEstado("PENDIENTE");
-			solicitud.setSalaId(salaDAO.findByIdAndEdificioId(102, 4));
-			solicitud.setUsuario(usuarioDAO.findById(1).get());
-			solicitudDAO.save(solicitud);
+		}
+		
+		solicitud.setFecha_prestamo(new Date(0167 + 1,11,20));
+		Time sqlTime1 = Time.valueOf("09:00:00");
+		Time sqlTime2 = Time.valueOf("11:00:00");
+		solicitud.setHora_inicio(sqlTime1);
+		solicitud.setHora_fin(sqlTime2);		
+		
+		//HORA: siete_nueve
+		//		nueve_once		
+		//numerado.SIETE_NUEVE -> [07:00][09:00]
+				
+		solicitud.setUsuario(requestUser);
+		
+		Sala salaSolicitada = salaDAO.findByIdAndEdificioId(SalaControlador.salaRegistradaSolicitud.getId(), SalaControlador.salaRegistradaSolicitud.getEdificioId());
+		
+		solicitud.setSalaId(salaSolicitada);
+		
+		solicitudDAO.save(solicitud);
 
 						
-		return showSalas((Model)model, 1);
+		return showSalasRoot((Model)model);
+		
 	}	
 	
 	@PostMapping("/edit")
@@ -194,7 +299,7 @@ public class SalaControlador extends SalaServicio {
 			model.addAttribute("salaFormErrorMessage", "Error al actualizar la información");
 		}
 						
-		return showSalas((Model)model, 1);
+		return showSalasAdmin((Model)model);
 	}	
 		
 	@PostMapping("/delete/{id}/{edificioId}")
@@ -207,7 +312,7 @@ public class SalaControlador extends SalaServicio {
 		Solicitud solicitud = solicitudDAO.findById(id);
 		solicitud.setEstado("APROBADA");
 		solicitudDAO.save(solicitud);
-		return showSalas(model, 1);
+		return showSalasAdmin(model);
 	}
 	
 	@GetMapping("/rehuse/{id}")
@@ -215,7 +320,7 @@ public class SalaControlador extends SalaServicio {
 		Solicitud solicitud = solicitudDAO.findById(id);
 		solicitud.setEstado("RECHAZADA");
 		solicitudDAO.save(solicitud);
-		return showSalas(model, 1);
+		return showSalasAdmin(model);
 	}
 	
 	

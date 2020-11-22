@@ -17,4 +17,5 @@ public interface SolicitudDAO extends JpaRepository<Solicitud, Integer>{
 	
 	public Solicitud findById(int id);
 	public List <Solicitud> findAllBysalaid_encargado_correo(String correo);
+	public List <Solicitud> findAllByusuarioid_correo(String correo);
 }

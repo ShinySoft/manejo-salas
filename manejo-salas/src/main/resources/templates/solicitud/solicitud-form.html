@@ -127,7 +127,7 @@
 	<!-- Barra Superior -->
 	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
 		
-		<a class="navbar-brand logoUN" href="#">
+		<a class="navbar-brand logoUN" href="/salas/">
 			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
 				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
 			<span> Lugar</span>
@@ -141,7 +141,7 @@
 	<div class="window" id="solicitar">
 		<div id="main">
 			<form class="form" role="form" autocomplete="off" th:object="${solicitud}"
-				th:action="@{/salas/admin/solicitud}" method="post">
+				th:action="@{/salas/all/solicitud}" method="post">
 
 				<div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Descripción
@@ -161,7 +161,7 @@
 					<label class="col-lg-3 col-form-label form-control-label">Hora de inicio
 					</label>
 					<div class="col-lg-9">
-						<input class="form-control" id="horaInicio" type="time">
+						<input th:object="${horaInicio}" class="form-control" id="horaInicio" type="time">
 					</div>
 				</div>
 				<div class="form-group row">

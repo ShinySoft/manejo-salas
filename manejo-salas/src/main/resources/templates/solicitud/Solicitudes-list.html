@@ -2,26 +2,26 @@
 	<table id="solicitudesPendientesList" class="table table-bordered table-hover table-striped">
 		<thead class="thead-light">
 		<tr>			
-			<th scope="col">Solicitante</th>
+			<th scope="col" th:if="${adminLogin}">Solicitante</th>
 			<th scope="col">Edificio</th>
 			<th scope="col">Sala</th>
 			<th scope="col">Fecha Prestamo</th>
 			<th scope="col">Hora inicio</th>
 			<th scope="col">Hora fin</th>
 			<th scope="col">Estado</th>
-			<th></th>
+			<th th:if="${adminLogin}"></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="solicitud: ${solicitudesPendientesList}">
-			<td th:text="${solicitud.getUsuarioID().getCorreo()}">
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}">
 			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
 			<td th:text="${solicitud.getSalaID().getId()}"></td>
 			<td th:text="${solicitud.fecha_prestamo}"></td>
 			<td th:text="${solicitud.hora_inicio}"></td>	
 			<td th:text="${solicitud.hora_fin}"></td>	
 			<td th:text="${solicitud.estado}"></td>	
-			<td>	
+			<td th:if="${adminLogin}" >	
 					<a href="#" th:href="@{'/salas/acept/'+ ${solicitud.getID()}}"><i class="fas fa-check"></i></a>																			
 					<a href="#" th:href="@{'/salas/rehuse/'+ ${solicitud.getID()}}"><i class="fas fa-times"></i></a>					
 			</td>
