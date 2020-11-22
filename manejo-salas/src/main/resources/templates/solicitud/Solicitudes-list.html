@@ -14,7 +14,7 @@
 		</thead>
 		<tbody>
 		<tr th:each="solicitud: ${solicitudesPendientesList}">
-			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}">
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}"></td>
 			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
 			<td th:text="${solicitud.getSalaID().getId()}"></td>
 			<td th:text="${solicitud.fecha_prestamo}"></td>
@@ -28,7 +28,7 @@
 		</tr>
 		</tbody>
 	</table>
-	
+</div>
 	<!-- Button trigger modal 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
 </button>-->

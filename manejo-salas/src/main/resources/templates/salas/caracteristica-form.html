@@ -17,7 +17,7 @@
 		<label class="col-lg-3 col-form-label form-control-label">Categoria</label>
 		<div class="col-lg-9">
 			<select class="form-control" th:field="${caracteristica.categoria}" th:disabled="${disableFields}">
-				<option value="" disabled>-- Selecciona una categoria --</option>
+				<option value="" disabled>-- Seleccione una categoria --</option>
 				<option th:each="caracteristica :${categCaracteristica}" th:value="${caracteristica.categoria}" th:text="${caracteristica.categoria}">
 				</option>
 			</select>			
