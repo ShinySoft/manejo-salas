@@ -1,23 +1,26 @@
-<form class="form" role="form" autocomplete="off" th:object="${salaRegistro}" th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
-	<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
-	<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+<form class="form" role="form" autocomplete="off" th:object="${caracteristica}" method="post">
+	
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} " th:disabled="${disableFields}" >
+			<input class="form-control" id="nombre" type="text" th:field="${caracteristica.nombre} " th:disabled="${disableFields}" >
 		</div>
 	</div>
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Descripción
 			</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}" th:disabled="${disableFields}">
+			<input class="form-control" id="descripcion" type="text" th:field="${caracteristica.descripcion}" th:disabled="${disableFields}">
 		</div>
 	</div>	
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Categoria</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="nombre" type="text" th:field="${salaRegistro.nombre}" >
+			<select class="form-control" th:field="${caracteristica.categoria}" th:disabled="${disableFields}">
+				<option value="" disabled>-- Selecciona una categoria --</option>
+				<option th:each="caracteristica :${categCaracteristica}" th:value="${caracteristica.categoria}" th:text="${caracteristica.categoria}">
+				</option>
+			</select>			
 		</div>
 	</div>
 	<div class="form-group row">

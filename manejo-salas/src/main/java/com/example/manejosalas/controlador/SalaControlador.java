@@ -32,6 +32,7 @@ import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.SalaId;
 import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
+import com.example.manejosalas.DAO.CaracteristicaDAO;
 import com.example.manejosalas.DAO.SalaDAO;
 import com.example.manejosalas.DAO.SolicitudDAO;
 import com.example.manejosalas.DAO.UsuarioDAO;
@@ -51,7 +52,9 @@ public class SalaControlador extends SalaServicio {
 	
 	@Autowired
 	SolicitudDAO solicitudDAO;
-
+	
+	@Autowired
+	CaracteristicaDAO caracteristicaDAO;
 	
 	@GetMapping("/")
 	public ModelAndView showSalasRoot(Model model) {
@@ -90,13 +93,16 @@ public class SalaControlador extends SalaServicio {
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);
+		Iterable<Caracteristica> caracteristicas = caracteristicaDAO.findAll();
 		model.addAttribute("salaRegistro", new Sala());
+		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
 		model.addAttribute("listTab","active");
 		model.addAttribute("solicitudList", solicitudes);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
+		model.addAttribute("categCaracteristica", caracteristicas);
 		
 		model.addAttribute("adminLogin", true);
 		
