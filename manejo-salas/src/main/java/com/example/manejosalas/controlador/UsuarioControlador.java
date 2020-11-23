@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Usuario;
+import com.mysql.cj.Session;
 
 @Controller
 @RequestMapping("usuarios")
@@ -69,6 +71,8 @@ public class UsuarioControlador extends UsuarioServicio{
 		
 		try {
 			verifyUsuarioEncontrado(usuario);
+			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+			usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
 			usuarioDAO.save(usuario);
 		}
 		catch(Exception e) {
@@ -79,32 +83,7 @@ public class UsuarioControlador extends UsuarioServicio{
 		}
 		return "redirect:/";
 	}
-	
-	@PostMapping("/login")
-	public String loginAction(@ModelAttribute("userLogin")Usuario usuario, BindingResult result, Model model) {
-		model.addAttribute("userLogin", new Usuario());
-		model.addAttribute("perfiles",Perfil.getPerfiles());
-		model.addAttribute("userLogin", new Usuario());					
-		model.addAttribute("loginTab","active");
 		
-		try {
-			Usuario usuario_registrado = getUsuarioRegistrado(usuario);
-			if(getAdmin(usuario_registrado)) {				
-				return "redirect:/salas/view";
-			}
-			else {
-				throw new Exception("No cuenta con los permisos");
-			}
-		}
-		catch(Exception e) {
-			model.addAttribute("userRegister", new Usuario());
-			model.addAttribute("perfiles",Perfil.getPerfiles());
-			model.addAttribute("userLogin", new Usuario());
-			model.addAttribute("loginErrorMessage",e.getMessage());
-			model.addAttribute("loginTab","active");
-			return "index";
-		}		
-	}	
 }
 
 

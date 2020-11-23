@@ -46,6 +46,12 @@ public class Sala implements Serializable{
 	private Usuario encargado;
     
 	
+	 @JoinTable(
+        name = "sala_caracteristica",
+        joinColumns = {@JoinColumn(name = "sala_id",referencedColumnName="id"),@JoinColumn(name = 	"sala_edificio_id",referencedColumnName="edificioId")},
+        inverseJoinColumns = {@JoinColumn(name="caracteristica_id",referencedColumnName="id"),}
+    )
+	
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Caracteristica> caracteristicas;
 

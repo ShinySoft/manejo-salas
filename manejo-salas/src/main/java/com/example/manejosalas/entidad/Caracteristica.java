@@ -1,10 +1,14 @@
 package com.example.manejosalas.entidad;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,16 +26,18 @@ public class Caracteristica implements Serializable{
     private String descripcion;
     
     @Column
-	private boolean categoria;
+	private String categoria;
 
     /*public Caracteristica (int IDCaracteristica, String nombre, String descripcion){
         this.IDCaracteristica = IDCaracteristica;
         this.nombre = nombre;
         this.descripcion = descripcion;
     }*/
-	
-
-    public int getID(){
+    
+    @ManyToMany(mappedBy = "caracteristicas")
+	private List<Sala> salas;
+    
+    public int getId(){
         return id;
     }
 
@@ -43,11 +49,11 @@ public class Caracteristica implements Serializable{
         return descripcion;
     }
 
-    public boolean getCategoria(){
+    public String getCategoria(){
         return categoria;
     }
 
-    public void setID(int id){
+    public void setId(int id){
         this.id = id;
     }
 
@@ -59,7 +65,7 @@ public class Caracteristica implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public void setCategoria(boolean categoria){
+    public void setCategoria(String categoria){
         this.categoria = categoria;
     }
 }

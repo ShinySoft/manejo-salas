@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.Usuario;
 
 @Repository
 public interface SalaDAO extends JpaRepository<Sala, Integer>{
@@ -17,5 +18,6 @@ public interface SalaDAO extends JpaRepository<Sala, Integer>{
 	
 	public Sala findByIdAndEdificioId(int id, int edificioId);
 	public Sala findByedificioId(int id);
+	public List <Sala> findAllByencargado(Usuario encargado);
 			
 }

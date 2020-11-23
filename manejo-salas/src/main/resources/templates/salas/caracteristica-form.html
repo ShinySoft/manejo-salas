@@ -1,0 +1,31 @@
+<form class="form" role="form" autocomplete="off" th:object="${caracteristica}" method="post">
+	
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
+		<div class="col-lg-9">
+			<input class="form-control" id="nombre" type="text" th:field="${caracteristica.nombre} " th:disabled="${disableFields}" >
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Descripción
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" id="descripcion" type="text" th:field="${caracteristica.descripcion}" th:disabled="${disableFields}">
+		</div>
+	</div>	
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Categoria</label>
+		<div class="col-lg-9">
+			<select class="form-control" th:field="${caracteristica.categoria}" th:disabled="${disableFields}">
+				<option value="" disabled>-- Seleccione una categoria --</option>
+				<option th:each="caracteristica :${categCaracteristica}" th:value="${caracteristica.categoria}" th:text="${caracteristica.categoria}">
+				</option>
+			</select>			
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-lg-12 text-center">			
+			<!-- <a class="btn btn-primary" href="#" th:href="@{'/salas/all/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}">Agregar</a> -->
+		</div>
+	</div>
+</form>
