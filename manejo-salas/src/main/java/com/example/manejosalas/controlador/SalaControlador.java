@@ -93,7 +93,23 @@ public class SalaControlador extends SalaServicio {
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);
-		Iterable<Caracteristica> caracteristicas = caracteristicaDAO.findAll();
+		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();
+		ArrayList<Caracteristica> caracteristicadef = new ArrayList<Caracteristica>();
+		for (int i=0;i<caracteristicas.size();i++) 
+		{
+			boolean estado=true;
+			for (int j=0; j<caracteristicadef.size();j++)
+			{
+				if(caracteristicas.get(i).getCategoria().equals(caracteristicadef.get(j).getCategoria())) 
+				{
+					estado=false;									
+				}
+			}
+			if (estado)
+			{
+				caracteristicadef.add(caracteristicas.get(i));
+			}
+		}		
 		model.addAttribute("salaRegistro", new Sala());
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
@@ -102,7 +118,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudes);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
-		model.addAttribute("categCaracteristica", caracteristicas);
+		model.addAttribute("categCaracteristica", caracteristicadef);
 		
 		model.addAttribute("adminLogin", true);
 		
