@@ -8,6 +8,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,11 @@ import java.sql.Time;
 @Entity
 @Table(name = "solicitud")
 public class Solicitud{
+	
+	@Transient
+	private String hora_inicio_temp;
+	@Transient
+	private String hora_fin_temp;
 	
 	@Id
     private int id;
@@ -67,7 +73,23 @@ public class Solicitud{
     }*/
 
 
-    public int getID(){
+	public String getHora_fin_temp() {
+		return hora_fin_temp;
+	}
+	
+	public String getHora_inicio_temp() {
+		return hora_inicio_temp;
+	}
+	
+	public void setHora_fin_temp(String hora_fin_temp) {
+		this.hora_fin_temp = hora_fin_temp;
+	}
+	
+	public void setHora_inicio_temp(String hora_inicio_temp) {
+		this.hora_inicio_temp = hora_inicio_temp;
+	}
+	
+	public int getID(){
         return id;
     }
     public Usuario getUsuarioID(){

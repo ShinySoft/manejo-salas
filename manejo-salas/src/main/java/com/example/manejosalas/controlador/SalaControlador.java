@@ -285,15 +285,12 @@ public class SalaControlador extends SalaServicio {
 			solicitud.setEstado("PENDIENTE");
 		}
 		
-		solicitud.setFecha_prestamo(new Date(0167 + 1,11,20));
-		Time sqlTime1 = Time.valueOf("09:00:00");
-		Time sqlTime2 = Time.valueOf("11:00:00");
-		solicitud.setHora_inicio(sqlTime1);
-		solicitud.setHora_fin(sqlTime2);		
-		
-		//HORA: siete_nueve
-		//		nueve_once		
-		//numerado.SIETE_NUEVE -> [07:00][09:00]
+		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
+		  sqlTime1.setHours(sqlTime1.getHours()-5);
+		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
+		  sqlTime2.setHours(sqlTime2.getHours()-5);
+		  solicitud.setHora_inicio(sqlTime1);
+		  solicitud.setHora_fin(sqlTime2); 		
 				
 		solicitud.setUsuario(requestUser);
 		
