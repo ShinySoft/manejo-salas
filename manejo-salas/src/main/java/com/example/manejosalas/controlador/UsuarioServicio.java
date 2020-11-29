@@ -90,6 +90,7 @@ public class UsuarioServicio{
 		
 		javaMailSender.send((SimpleMailMessage) simpleMessage);
 	}
+		
 	
 	protected void sendVerificationToken(Usuario usuario){
 		String validationMessage = "Bienvenido a UNLugar, con el siguiente link podrá activar su cuenta:\n";
