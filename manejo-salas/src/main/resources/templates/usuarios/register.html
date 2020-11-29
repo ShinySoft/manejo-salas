@@ -10,8 +10,8 @@
             required>
     </div>
     <div class ="form-group">
-        <label class="col-lg-3 col-form-label form-control-label">Perfil</label>
-		<div class="col-lg-9">
+        <label class="col-form-label form-control-label">Perfil</label>
+		<div class="">
 			<select class="form-control" th:field="${userRegister.perfil}" >
 				<option th:each="perfil :${perfiles}" th:value="${perfil.id}" th:text="${perfil.value}">
 				</option>
@@ -22,8 +22,13 @@
 
     <div class="form-group">
         <label for="nombreRegistro">Correo de usuario</label>
-        <input type="text" class="form-control" th:field="${userRegister.correo}" id="nombreRegistro" minlength="1" maxlength="25"
-            required>
+        <div class="input-group">
+        	<input type="text" class="form-control" placeholder="Correo" aria-label="Correo" aria-describedby="correo-addon" 
+        		th:field="${userRegister.correo}" id="correo" minlength="1" maxlength="25" required>
+		  	<div class="input-group-append">
+		    	<span class="input-group-text" id="correo-addon">@unal.edu.co</span>
+		  	</div>
+        </div>        
     </div>
     <div class="form-group">
         <label for="passwordRegistro">Clave</label>
@@ -34,7 +39,29 @@
         <label for="exampleInputPassword1">Confirma tu Clave</label>
         <input type="password" class="form-control" id="confirmPwd" minlength="3" maxlength="25"
             required>
-		<input type="submit" id="registro" value="Registrarme" class="btn btn-primary">            
+		   
+	</div>  
+	<div class="form-group">  
+		<input type="submit" id="registro" value="Registrarme" class="btn btn-primary">       
     </div>    
-    	<div class="alert alert-danger text-center" th:if="${registerErrorMessage}" th:text="${registerErrorMessage}">Error Message</div>
+   	<div class="alert alert-danger text-center" th:if="${registerErrorMessage}" th:text="${registerErrorMessage}">Error Message</div>
 </form>
+
+<script>
+
+$("#registro")[0].onclick = function () {
+    if ($("#confirmPwd")[0].value != "" && $("#passwordRegistro")[0].value != "") {
+        if ($("#passwordRegistro")[0].value != $("#confirmPwd")[0].value) {
+            $("#confirmPwd")[0].setCustomValidity("Las contraseñas no coinciden");
+            $("#confirmPwd")[0].reportValidity();
+        } else {
+        	// Add unal to email
+        	if ($("#correo")[0].checkValidity){
+        		$("#correo")[0].value = $("#correo")[0].value + "@unal.edu.co";
+        	}
+            $("#confirmPwd")[0].setCustomValidity("");
+        }
+    }
+}
+
+</script>
