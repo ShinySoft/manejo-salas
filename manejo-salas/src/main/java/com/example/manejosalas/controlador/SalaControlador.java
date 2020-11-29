@@ -62,7 +62,9 @@ public class SalaControlador extends SalaServicio {
 	
 	String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
 	
-	SalaControlador.currentUserMail = userMail;
+	
+		
+	SalaControlador.currentUserMail = userMail;		
 	
 		if(rol.equals("[ROLE_ADMIN]")) {
 			return showSalasAdmin(model);
@@ -73,6 +75,7 @@ public class SalaControlador extends SalaServicio {
 		else {
 			return showSalasUser(model); //super
 		}
+	
 	}
 
 
