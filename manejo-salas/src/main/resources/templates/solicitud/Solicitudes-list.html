@@ -10,7 +10,7 @@
 			<th scope="col">Hora fin</th>
 			<th scope="col">Detalle</th>
 			<th scope="col">Estado</th>
-			<th th:if="${adminLogin}"></th>
+			<th ></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -26,6 +26,9 @@
 			<td th:if="${adminLogin}" >	
 					<a href="#" th:href="@{'/salas/acept/'+ ${solicitud.getID()}}"><i class="fas fa-check"></i></a>																			
 					<a href="#" th:href="@{'/salas/rehuse/'+ ${solicitud.getID()}}"><i class="fas fa-times"></i></a>					
+			</td>
+			<td th:if="${userLogin}" >	
+					<a href="#" th:href="@{'/salas/cancel/'+ ${solicitud.getID()}}"><i class="fas fa-times"></i></a>					
 			</td>
 		</tr>
 		</tbody>

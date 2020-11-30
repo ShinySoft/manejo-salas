@@ -11,6 +11,7 @@
 			<th scope="col">Hora fin</th>
 			<th scope="col">Detalle</th>
 			<th scope="col">Estado</th>
+			<th ></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -24,6 +25,9 @@
 			<td th:text="${solicitud.hora_fin}"></td>	
 			<td th:text="${solicitud.descripcion}"></td>
 			<td th:text="${solicitud.estado}"></td>	
+			<td th:if="${adminLogin}" >	
+					<a href="#" th:href="@{'/salas/reverse/'+ ${solicitud.getID()}}"><i class="fas fa-undo"></i></a>					
+			</td>
 		</tr>
 		</tbody>
 	</table>

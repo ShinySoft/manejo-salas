@@ -330,6 +330,56 @@ public class SalaControlador extends SalaServicio {
 		solicitudDAO.save(solicitud);		
 		return showSalasAdmin(model);
 	}
+
+	@GetMapping("/reverse/{id}")
+	public ModelAndView reverse(Model model,@PathVariable(name = "id") int id) {
+		Solicitud solicitud = solicitudDAO.findById(id);
+		if(!solicitud.getEstado().equals("CANCELADA")) {
+			java.sql.Date fecha_prestamo= solicitud.getFecha_prestamo();
+			long millis = System.currentTimeMillis();  
+			java.sql.Date fecha_actual=new java.sql.Date(millis);
+			int status=fecha_prestamo.compareTo(fecha_actual);
+			if (status==0) {
+				Time hora_prestamo = solicitud.getHora_inicio();
+		        Time hora_actual = new Time(millis);
+				int status_hora = hora_prestamo.compareTo(hora_actual);
+				if(status_hora>0) {
+					solicitud.setEstado("PENDIENTE");
+					solicitudDAO.save(solicitud);	
+				}
+			}else {
+				if(status>0) {
+					solicitud.setEstado("PENDIENTE");
+					solicitudDAO.save(solicitud);
+				}
+			}
+		}
+		return showSalasAdmin(model);
+	}
+	
+	@GetMapping("/cancel/{id}")
+	public ModelAndView cancel(Model model,@PathVariable(name = "id") int id) {
+		Solicitud solicitud = solicitudDAO.findById(id);
+		java.sql.Date fecha_prestamo= solicitud.getFecha_prestamo();
+		long millis = System.currentTimeMillis();  
+		java.sql.Date fecha_actual=new java.sql.Date(millis);
+		int status=fecha_prestamo.compareTo(fecha_actual);
+		if (status==0) {
+			Time hora_prestamo = solicitud.getHora_inicio();
+	        Time hora_actual = new Time(millis);
+			int status_hora = hora_prestamo.compareTo(hora_actual);
+			if(status_hora>0) {
+				solicitud.setEstado("CANCELADA");
+				solicitudDAO.save(solicitud);	
+			}
+		}else {
+			if(status>0) {
+				solicitud.setEstado("CANCELADA");
+				solicitudDAO.save(solicitud);
+			}
+		}		
+		return showSalasUser(model);
+	}
 	
 	@PostMapping("/admin/add-caracteristica")
 	public ModelAndView addCaracteristica(Model model1, @ModelAttribute("caracteristica")Caracteristica caracteristica, BindingResult result, ModelMap model){
