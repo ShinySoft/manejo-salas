@@ -8,7 +8,6 @@
 			<th scope="col">Fecha Prestamo</th>
 			<th scope="col">Hora inicio</th>
 			<th scope="col">Hora fin</th>
-			<th scope="col">Detalle</th>
 			<th scope="col">Estado</th>
 			<th th:if="${adminLogin}"></th>
 		</tr>
@@ -21,7 +20,6 @@
 			<td th:text="${solicitud.fecha_prestamo}"></td>
 			<td th:text="${solicitud.hora_inicio}"></td>	
 			<td th:text="${solicitud.hora_fin}"></td>	
-			<td th:text="${solicitud.descripcion}"></td>
 			<td th:text="${solicitud.estado}"></td>	
 			<td th:if="${adminLogin}" >	
 					<a href="#" th:href="@{'/salas/acept/'+ ${solicitud.getID()}}"><i class="fas fa-check"></i></a>																			

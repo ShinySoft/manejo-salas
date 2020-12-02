@@ -62,9 +62,7 @@ public class SalaControlador extends SalaServicio {
 	
 	String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
 	
-	
-		
-	SalaControlador.currentUserMail = userMail;		
+	SalaControlador.currentUserMail = userMail;
 	
 		if(rol.equals("[ROLE_ADMIN]")) {
 			return showSalasAdmin(model);
@@ -75,7 +73,6 @@ public class SalaControlador extends SalaServicio {
 		else {
 			return showSalasUser(model); //super
 		}
-	
 	}
 
 
@@ -96,12 +93,23 @@ public class SalaControlador extends SalaServicio {
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);
-		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();		
-		
-		
-		
-		
-		
+		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();
+		ArrayList<Caracteristica> caracteristicadef = new ArrayList<Caracteristica>();
+		for (int i=0;i<caracteristicas.size();i++) 
+		{
+			boolean estado=true;
+			for (int j=0; j<caracteristicadef.size();j++)
+			{
+				if(caracteristicas.get(i).getCategoria().equals(caracteristicadef.get(j).getCategoria())) 
+				{
+					estado=false;									
+				}
+			}
+			if (estado)
+			{
+				caracteristicadef.add(caracteristicas.get(i));
+			}
+		}		
 		model.addAttribute("salaRegistro", new Sala());
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
@@ -110,7 +118,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudes);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
-		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
+		model.addAttribute("categCaracteristica", caracteristicadef);
 		
 		model.addAttribute("adminLogin", true);
 		
@@ -173,7 +181,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("editMode","true");
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
-		model.addAttribute("salaRegistro", salaRegistrada);		
+		model.addAttribute("salaRegistro", salaRegistrada);
 		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
 		model.addAttribute("formTab","active");
 		model.addAttribute("editMode","true");
@@ -277,7 +285,6 @@ public class SalaControlador extends SalaServicio {
 			solicitud.setEstado("PENDIENTE");
 		}
 		
-		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
 		  sqlTime1.setHours(sqlTime1.getHours()-5);
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
@@ -293,9 +300,6 @@ public class SalaControlador extends SalaServicio {
 		
 		solicitudDAO.save(solicitud);
 
-		//Notificate the user and the admin
-		sendSalaRequestMade(solicitud);	//User notification
-		sendSalaRequestConfirmation(solicitud); //Admin notification
 						
 		return showSalasRoot((Model)model);
 		
@@ -322,16 +326,11 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.deleteById(id);
 	}
 	
-	//En este método deberiamos tomar un comentario del admin
 	@GetMapping("/acept/{id}")
 	public ModelAndView acept(Model model,@PathVariable(name = "id") int id) {
 		Solicitud solicitud = solicitudDAO.findById(id);
-		solicitud.setEstado("APROBADA");		
+		solicitud.setEstado("APROBADA");
 		solicitudDAO.save(solicitud);
-		
-		//Notificate the user
-		sendApprovalConfirmation(solicitud, "Mensaje del admin");
-		
 		return showSalasAdmin(model);
 	}
 	
@@ -339,57 +338,10 @@ public class SalaControlador extends SalaServicio {
 	public ModelAndView rehuse(Model model,@PathVariable(name = "id") int id) {
 		Solicitud solicitud = solicitudDAO.findById(id);
 		solicitud.setEstado("RECHAZADA");
-		solicitudDAO.save(solicitud);		
-		
-		//Notificate the user
-		sendRejectConfirmation(solicitud, "Mensaje del admin");
-		
+		solicitudDAO.save(solicitud);
 		return showSalasAdmin(model);
 	}
 	
-	@PostMapping("/admin/add-caracteristica")
-	public ModelAndView addCaracteristica(Model model1, @ModelAttribute("caracteristica")Caracteristica caracteristica, BindingResult result, ModelMap model){
-		caracteristicaDAO.save(caracteristica);
-		return showSalasAdmin(model1);
-	} 
 	
 	
 }
-
-
-class CategoriaCaracteristica{
-	public String key;
-	public String value;
-	
-	public CategoriaCaracteristica(String key, String value) {
-		super();
-		this.key = key;
-		this.value = value;
-	}
-	
-	
-}
-
-class CategoriaSetUp{
-	
-	public static String[] caracteristicas = {"S", "E", "I"};
-	
-	public static CategoriaCaracteristica[] getCategorias(){
-
-		CategoriaCaracteristica[] crs = new CategoriaCaracteristica[caracteristicas.length];
-				
-			crs[0] = new CategoriaCaracteristica("E", "Equipo");
-			crs[1] = new CategoriaCaracteristica("S", "Software");
-			crs[2] = new CategoriaCaracteristica("I", "Instalación");
-			
-			return crs;
-		}
-		
-	}
-
-	
-
-
-
-
-

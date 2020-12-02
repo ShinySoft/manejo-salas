@@ -70,38 +70,11 @@ public class UsuarioControlador extends UsuarioServicio{
 		model.addAttribute("loginTab","active");	
 		
 		try {
-			if(verifyUsuarioEncontrado(usuario)){
-				
-				usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
-				
-				if(usuario.getPerfil().equals("U")){
-					sendVerificationToken(usuario);
-				}
-				else {
-					sendWaitingAutorization(usuario.getCorreo());
-				}
-				throw new Exception("El usuario ya existe o no ha sido activado");
-			}
-			else {
-				BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
-				usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
-				
-				//Disable user account until the code is verified
-				usuario.setEstado(false);
-							
-				//Then we store the user with disable state
-				usuarioDAO.save(usuario);
-							
-				if(usuario.getPerfil().equals("U")){
-					sendVerificationToken(usuario);
-				}
-				else {
-					sendWaitingAutorization(usuario.getCorreo());
-				}
-			}
-			
-			
-		}		
+			verifyUsuarioEncontrado(usuario);
+			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+			usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
+			usuarioDAO.save(usuario);
+		}
 		catch(Exception e) {
 			model.addAttribute("perfiles",Perfil.getPerfiles());
 			model.addAttribute("registerErrorMessage",e.getMessage());
@@ -111,23 +84,6 @@ public class UsuarioControlador extends UsuarioServicio{
 		return "redirect:/";
 	}
 		
-	
-	@GetMapping("/activate-user/{id}/{hashCreated}")
-	public String activarUsuario(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "hashCreated") int hashCreated){		
-				
-		Usuario usuario = usuarioDAO.findById(id).get();
-		
-		int registeredHash = usuario.hashCode();
-		if(registeredHash == hashCreated){
-			usuario.setEstado(true);
-			usuarioDAO.save(usuario);
-		}
-		else {
-			return "redirect:/"; //activate-user/error
-		}
-		
-		return "redirect:/"; ///activate-user/success
-	}
 }
 
 
