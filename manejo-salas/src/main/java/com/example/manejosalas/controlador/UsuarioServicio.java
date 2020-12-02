@@ -23,7 +23,7 @@ import com.example.manejosalas.entidad.Usuario;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
 
-public class UsuarioServicio{
+public class UsuarioServicio extends CorreoServicio{
 	
 	@Autowired
 	UsuarioDAO usuarioDAO;
@@ -76,39 +76,5 @@ public class UsuarioServicio{
 		//PODRIAMOS INCLUIR MÁS CAMPOS A MAPEAR
 	}
 
-	protected void sendEmail(String to, String body, String topic){
-		
-		SimpleMailMessage simpleMessage = new SimpleMailMessage();
-		
-		simpleMessage.setFrom("snal99525@gmail.com");
-		
-		simpleMessage.setTo(to);
-		
-		simpleMessage.setSubject(topic);
-		
-		simpleMessage.setText(body);
-		
-		javaMailSender.send((SimpleMailMessage) simpleMessage);
-	}
-		
-	
-	protected void sendVerificationToken(Usuario usuario){
-		String validationMessage = "Bienvenido a UNLugar, con el siguiente link podrá activar su cuenta:\n";
-		
-		usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
-		
-		//Gotta change for the URL where the server is hosted
-		validationMessage += String.format("localhost:8080/usuarios/activate-user/%d/%d", usuario.getId(), usuario.hashCode()); 
-		
-		//Here is where we send the code via email
-		sendEmail(usuario.getCorreo(), validationMessage, "Activación cuenta UNLugar");			
-	}
-	
-	protected void sendWaitingAutorization(String correo){
-		String message = "Querido usuario de UNLugar, su solicitud de registro está en espera de ser aprobada.";
-				
-		//Here is where we send the code via email
-		sendEmail(correo, message, "Activación pendiente cuenta UNLugar");			
-	}	
 	
 }

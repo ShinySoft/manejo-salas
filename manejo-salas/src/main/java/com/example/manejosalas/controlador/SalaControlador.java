@@ -171,14 +171,14 @@ public class SalaControlador extends SalaServicio {
 		
 		
 		model.addAttribute("salaList", salaDAO.findAll());
-		model.addAttribute("editMode","true");
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);		
-		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
-		model.addAttribute("formTab","active");
-		model.addAttribute("editMode","true");
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
 		
-		model.addAttribute("disableFields","true");
+		
+		model.addAttribute("editMode","true");		
+		model.addAttribute("disableFields","false");
+		model.addAttribute("disableCriticFields","true");
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		
@@ -199,11 +199,10 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("editMode","true");
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);
-		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
-		model.addAttribute("formTab","active");
-		model.addAttribute("editMode","true");
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());			
 		
 		model.addAttribute("disableFields","true");
+		model.addAttribute("disableCriticFields","true");
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		

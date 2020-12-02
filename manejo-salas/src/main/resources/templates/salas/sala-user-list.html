@@ -22,6 +22,7 @@
 			<td th:text="${sala.getEncargado().getCorreo()}"></td>
 			<td>	
 				<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
+				<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>
 				<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
 					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
 			</td>

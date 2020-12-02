@@ -1,0 +1,26 @@
+	<table id="userList" class="table table-bordered table-hover table-striped">
+		<thead class="thead-light">
+		<tr>			
+			<th scope="col">Sala</th>
+			<th scope="col">Edificio</th>
+			<th scope="col">Nombre</th>
+			<th scope="col">Tipo</th>
+			<th scope="col">Capacidad</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="sala: ${salaList}">			
+			<td th:text="${sala.id}"></td>
+			<td th:text="${sala.edificioId}"></td>
+			<td th:text="${sala.nombre}"></td>
+			<td th:text="${sala.tipo}"></td>
+			<td th:text="${sala.capacidad}"></td>							
+			<td>	
+				<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-edit"></i></a>
+				<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
+					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
+			</td>
+		</tr>
+		</tbody>
+	</table>
