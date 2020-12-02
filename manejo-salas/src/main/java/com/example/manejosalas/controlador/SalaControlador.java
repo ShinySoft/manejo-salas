@@ -62,7 +62,9 @@ public class SalaControlador extends SalaServicio {
 	
 	String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
 	
-	SalaControlador.currentUserMail = userMail;
+	
+		
+	SalaControlador.currentUserMail = userMail;		
 	
 		if(rol.equals("[ROLE_ADMIN]")) {
 			return showSalasAdmin(model);
@@ -73,6 +75,7 @@ public class SalaControlador extends SalaServicio {
 		else {
 			return showSalasUser(model); //super
 		}
+	
 	}
 
 
@@ -274,6 +277,7 @@ public class SalaControlador extends SalaServicio {
 			solicitud.setEstado("PENDIENTE");
 		}
 		
+		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
 		  sqlTime1.setHours(sqlTime1.getHours()-5);
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
@@ -289,6 +293,9 @@ public class SalaControlador extends SalaServicio {
 		
 		solicitudDAO.save(solicitud);
 
+		//Notificate the user and the admin
+		sendSalaRequestMade(solicitud);	//User notification
+		sendSalaRequestConfirmation(solicitud); //Admin notification
 						
 		return showSalasRoot((Model)model);
 		
@@ -315,11 +322,16 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.deleteById(id);
 	}
 	
+	//En este método deberiamos tomar un comentario del admin
 	@GetMapping("/acept/{id}")
 	public ModelAndView acept(Model model,@PathVariable(name = "id") int id) {
 		Solicitud solicitud = solicitudDAO.findById(id);
-		solicitud.setEstado("APROBADA");
+		solicitud.setEstado("APROBADA");		
 		solicitudDAO.save(solicitud);
+		
+		//Notificate the user
+		sendApprovalConfirmation(solicitud, "Mensaje del admin");
+		
 		return showSalasAdmin(model);
 	}
 	
@@ -328,6 +340,10 @@ public class SalaControlador extends SalaServicio {
 		Solicitud solicitud = solicitudDAO.findById(id);
 		solicitud.setEstado("RECHAZADA");
 		solicitudDAO.save(solicitud);		
+		
+		//Notificate the user
+		sendRejectConfirmation(solicitud, "Mensaje del admin");
+		
 		return showSalasAdmin(model);
 	}
 
