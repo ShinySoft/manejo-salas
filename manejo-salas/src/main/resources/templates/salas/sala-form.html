@@ -34,6 +34,7 @@
 		$(document).ready(function () {
 			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
 			$('#caracteristicasTable').DataTable();
+			$('#caracteristicasAllButSala').DataTable();
 		});
 	</script>
 
@@ -139,11 +140,12 @@
 	</nav>
 	<div class="window" id="salaEdit">
 		<div id="main">
-			<form class="form" role="form" autocomplete="off" th:object="${salaRegistro}"
+			<form class="form" role="form" id="salaForm" autocomplete="off" th:object="${salaRegistro}"
 				th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
 
 				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
 				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.encargado}" th:if="${editMode}">
 
 				<div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Edificio
@@ -188,10 +190,8 @@
 					<div class="col-lg-9">
 						<select class="form-control" th:field="${salaRegistro.encargado}"
 							th:disabled="${disableCriticFields}">
-							<option value="" disabled>-- Selecciona un encargado --</option>
-							<!-- <option value="tst">Encargado de prueba</option> -->
 							<option th:each="encargado :${encargadoEdit}" th:value="${encargado.id}"
-								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}">
+								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}" th:disabled="${disableCriticFields}">
 							</option>
 						</select>
 					</div>
@@ -199,7 +199,7 @@
 
 				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
 					th:text="${salaFormErrorMessage}">Error Message</div>
-			</form>
+			
 
 			<div class="table-responsive">
 				<table id="caracteristicasTable" class="table table-bordered table-hover table-striped">
@@ -220,12 +220,33 @@
 				</table>
 			</div>
 			
+			<div class="table-responsive">
+				<table id="caracteristicasAllButSalaTable" class="table table-bordered table-hover table-striped">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">Categoría</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Descripción</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="c: ${caracteristicasAllButSala}">
+							<td th:text="${c.categoria}"></td> <!--  -->
+							<td th:text="${c.nombre}"></td>
+							<td th:text="${c.descripcion}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
 			<div class="form-group row">
 				<div class="col-lg-12 text-center">
-					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
-					<a class="btn btn-primary" href="#" th:disabled="${disableFields}" th:hidden="${disableFields}">Guardar</a>
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/'}">Cancel</a>
+					<input class="btn btn-primary" type="submit" value="Guardar">
 				</div>
 			</div>
+			
+			</form>
 		</div>
 		
 

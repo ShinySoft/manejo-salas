@@ -14,5 +14,7 @@ public interface CaracteristicaDAO extends JpaRepository<Caracteristica, Integer
 	public List<Caracteristica> findAll();
 	
 	public Caracteristica findById(int id);
+	
+	public List<Caracteristica> findDistinctByIdNotIn(List<Integer> carcs);
 		
 }
