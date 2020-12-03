@@ -44,7 +44,7 @@
 	<div class="form-group">  
 		<input type="submit" id="registro" value="Registrarme" class="btn btn-primary">       
     </div>    
-   	<div class="alert alert-danger text-center" th:if="${registerErrorMessage}" th:text="${registerErrorMessage}">Error Message</div>
+   	<div class="alert alert-danger text-center" th:if="${registerError}" th:text="${registerErrorMessage}">Error Message</div>
 </form>
 
 <script>
@@ -52,7 +52,7 @@
 $("#registro")[0].onclick = function () {
     if ($("#confirmPwd")[0].value != "" && $("#passwordRegistro")[0].value != "") {
         if ($("#passwordRegistro")[0].value != $("#confirmPwd")[0].value) {
-            $("#confirmPwd")[0].setCustomValidity("Las contraseñas no coinciden");
+            $("#confirmPwd")[0].setCustomValidity("Las contraseï¿½as no coinciden");
             $("#confirmPwd")[0].reportValidity();
         } else {
         	// Add unal to email

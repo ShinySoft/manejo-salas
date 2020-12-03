@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Usuario;
@@ -69,7 +70,12 @@ public class UsuarioControlador extends UsuarioServicio{
 		model.addAttribute("userLogin", new Usuario());			
 		model.addAttribute("loginTab","active");	
 		
+		
+		
 		try {
+			
+			
+			
 			if(verifyUsuarioEncontrado(usuario)){
 				
 				usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
@@ -100,15 +106,21 @@ public class UsuarioControlador extends UsuarioServicio{
 				}
 			}
 			
+			return "redirect:/";
 			
 		}		
-		catch(Exception e) {
+		catch(Exception e) {						
+						
 			model.addAttribute("perfiles",Perfil.getPerfiles());
+			model.addAttribute("registerError", "true");
 			model.addAttribute("registerErrorMessage",e.getMessage());
 			model.addAttribute("loginTab","desactive");
 			model.addAttribute("registerTab","active");
+						
+			
+			return "redirect:/";
 		}
-		return "redirect:/";
+		
 	}
 		
 	

@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -173,20 +174,14 @@ public class SalaControlador extends SalaServicio {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		ArrayList<Integer> salaCaracIds = new ArrayList<>();
-		
-		for(Caracteristica c: salaRegistrada.getCaracteristicas()){
-			salaCaracIds.add(c.getId());
-		}
-		
-		List<Caracteristica> allButSalaCarac = caracteristicaDAO.findDistinctByIdNotIn(salaCaracIds);
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
 		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);		
 		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
-		model.addAttribute("caracteristicasAllButSala", allButSalaCarac);
-		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);		
 		
 		model.addAttribute("editMode","true");				
 		model.addAttribute("disableCriticFields","true");
@@ -196,6 +191,64 @@ public class SalaControlador extends SalaServicio {
 		return modelAndView;
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @param id
+	 * @param edificioId
+	 * @return
+	 */
+	@GetMapping("/admin/edit-caracteristicas/{tipo-edit}/{edificioId}/{salaId}/{caracteristicaId}")				
+	public ModelAndView updateCaracteristica(Model model, @PathVariable(name = "tipo-edit") int tipo_edit, @PathVariable(name = "edificioId") int edificioId, @PathVariable(name = "salaId") int salaId, @PathVariable(name = "caracteristicaId") int caracteristicaId) {
+		
+		
+		Caracteristica nuevaCaracteristica = caracteristicaDAO.findById(caracteristicaId);			
+		
+		Sala sala = salaDAO.findByIdAndEdificioId(salaId, edificioId);
+		
+		List<Caracteristica> caracteristicas = sala.getCaracteristicas();
+ 		
+		
+		
+		//Edit parameter given in the url lets us know if we will add or delete
+		if(tipo_edit == 1) {
+			//Checks if the caracteristicas has already been added
+			if(!caracteristicas.contains(nuevaCaracteristica)){
+				caracteristicas.add(nuevaCaracteristica);
+			}			
+		}
+		else {
+			caracteristicas.remove(nuevaCaracteristica);
+		}
+		
+		sala.setCaracteristicas(caracteristicas);
+		
+		
+		
+		
+		salaDAO.save(sala);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", sala);		
+		model.addAttribute("caracteristicas", sala.getCaracteristicas());		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);
+		
+		
+		model.addAttribute("editMode","true");				
+		model.addAttribute("disableCriticFields","true");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return modelAndView;
+		
+	}	
 	
 	@GetMapping("/test-caracs-sala/{id}/{edificioId}")
 	public List<Caracteristica> testCaracs(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
@@ -203,14 +256,6 @@ public class SalaControlador extends SalaServicio {
 		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
 		
 		ModelAndView modelAndView = new ModelAndView();
-		
-		ArrayList<Integer> salaCaracIds = new ArrayList<>();
-		
-		for(Caracteristica c: salaRegistrada.getCaracteristicas()){
-			salaCaracIds.add(c.getId());
-		}
-		
-		List<Caracteristica> allButSalaCarac = caracteristicaDAO.findDistinctByIdNotIn(salaCaracIds);
 		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
@@ -224,7 +269,7 @@ public class SalaControlador extends SalaServicio {
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		
-		return allButSalaCarac;
+		return salaRegistrada.getCaracteristicas();
 	}	
 	
 	@GetMapping("/user/show-more/{id}/{edificioId}")
@@ -236,12 +281,12 @@ public class SalaControlador extends SalaServicio {
 		
 		
 		
-		model.addAttribute("salaList", salaDAO.findAll());
-		model.addAttribute("editMode","true");
+		model.addAttribute("salaList", salaDAO.findAll());		
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);
 		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());			
 		
+		model.addAttribute("userLogin", "true");
 		model.addAttribute("disableFields","true");
 		model.addAttribute("disableCriticFields","true");
 		
@@ -340,12 +385,13 @@ public class SalaControlador extends SalaServicio {
 		
 	}	
 	
-	@PostMapping("/edit")
+	@PostMapping("admin/edit")
 	public ModelAndView edit(@ModelAttribute("salaRegistro")Sala sala, BindingResult result, ModelMap model){
+	
 		
 		Sala salaRegistrada = salaDAO.findByIdAndEdificioId((int)sala.getId(), (int)sala.getEdificioId());
 		
-
+	
 		try {
 			mapSala(salaRegistrada, sala);			
 			salaDAO.save(salaRegistrada);
@@ -355,6 +401,7 @@ public class SalaControlador extends SalaServicio {
 		}
 						
 		return showSalasAdmin((Model)model);
+
 	}	
 		
 	@PostMapping("/delete/{id}/{edificioId}")
