@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.entidad.Caracteristica;
+import com.example.manejosalas.entidad.Ocupacion;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.SalaId;
 import com.example.manejosalas.entidad.Solicitud;
@@ -333,6 +334,31 @@ public class SalaControlador extends SalaServicio {
 		return modelAndView;
 	}
 		
+	@GetMapping("admin/ocupacion/{id}/{edificioId}")
+	public ModelAndView ocupacionSala(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {					
+		
+		SalaControlador.salaRegistradaSolicitud = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		Ocupacion nuevaOcupacion = new Ocupacion();
+						
+		nuevaOcupacion.setSalaEdificioId(edificioId);
+		nuevaOcupacion.setSalaId(id);
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("editMode","true");
+		model.addAttribute("ocupacion", nuevaOcupacion);
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));		
+		model.addAttribute("caracteristicas", salaRegistradaSolicitud.getCaracteristicas());		
+		
+		
+		model.addAttribute("disableFields","true");
+		
+		modelAndView.setViewName ( "solicitud/ocupacion-form" );	
+		
+		return modelAndView;
+	}	
 	
 	@GetMapping("/delete/{id}/{edificioId}")
 	public ModelAndView deleteUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
