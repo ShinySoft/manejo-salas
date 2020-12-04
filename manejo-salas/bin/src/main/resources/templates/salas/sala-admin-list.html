@@ -2,13 +2,11 @@
 	<table id="userList" class="table table-bordered table-hover table-striped">
 		<thead class="thead-light">
 		<tr>			
-			<th scope="col">Id</th>
-			<th scope="col">Edificio Id</th>
+			<th scope="col">Sala</th>
+			<th scope="col">Edificio</th>
 			<th scope="col">Nombre</th>
 			<th scope="col">Tipo</th>
 			<th scope="col">Capacidad</th>
-			<!-- <th scope="col">Caracteristicas</th> -->
-			<th scope="col">Encargado</th>
 			<th></th>
 		</tr>
 		</thead>
@@ -18,10 +16,12 @@
 			<td th:text="${sala.edificioId}"></td>
 			<td th:text="${sala.nombre}"></td>
 			<td th:text="${sala.tipo}"></td>
-			<td th:text="${sala.capacidad}"></td>					
-			<td th:text="${correoEncargado}"></td>
+			<td th:text="${sala.capacidad}"></td>							
 			<td>	
 				<a href="#" th:href="@{'/salas/admin/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-edit"></i></a>
+				<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>
+				<a href="#" th:href="@{'/salas/admin/ocupacion/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-tasks"></i></a>
+
 				<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
 					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
 			</td>

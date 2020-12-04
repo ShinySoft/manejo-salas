@@ -2,30 +2,38 @@
 	<table id="solicitudList" class="table table-bordered table-hover table-striped">
 		<thead class="thead-light">
 		<tr>			
-			<th scope="col">Solicitante</th>
-			<th scope="col">Edificio</th>
-			<th scope="col">Sala</th>
 			<th scope="col">Fecha Solicitud</th>
+			<th scope="col" th:if="${adminLogin}">Solicitante</th>
+			<th scope="col" th:if="${superLogin}">Solicitante</th>
+			<th scope="col">Edificio</th>
+			<th scope="col">Sala</th>			
 			<th scope="col">Fecha Prestamo</th>
 			<th scope="col">Hora inicio</th>
 			<th scope="col">Hora fin</th>
+			<th scope="col">Detalle</th>
 			<th scope="col">Estado</th>
+			<th th:if="${adminLogin}"></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="solicitud: ${solicitudList}">
-			<td th:text="${solicitud.getUsuarioID().getCorreo()}">
-			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
-			<td th:text="${solicitud.getSalaID().getId()}"></td>
 			<td th:text="${solicitud.fecha_solicitud}"></td>
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}"></td>
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${superLogin}"></td>
+			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
+			<td th:text="${solicitud.getSalaID().getId()}"></td>			
 			<td th:text="${solicitud.fecha_prestamo}"></td>
 			<td th:text="${solicitud.hora_inicio}"></td>	
 			<td th:text="${solicitud.hora_fin}"></td>	
+			<td th:text="${solicitud.descripcion}"></td>
 			<td th:text="${solicitud.estado}"></td>	
+			<td th:if="${adminLogin}" >	
+					<a href="#" th:href="@{'/salas/reverse/'+ ${solicitud.getID()}}"><i class="fas fa-undo"></i></a>					
+			</td>
 		</tr>
 		</tbody>
 	</table>
-	
+</div>
 	<!-- Button trigger modal 
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
 </button>-->
@@ -68,3 +76,9 @@ function confirmEdit(id, edificioId){
 }
 </script>
 
+	<script type="text/javascript">
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#solicitudList').DataTable();			
+		});
+	</script>

@@ -109,6 +109,9 @@
 			font-size: 25px;
 			color: dimgrey;
 		}
+		.tab-pane {
+			padding: 20px;
+		}
 
 		@media screen and (max-height: 450px) {
 			.sidenav {
@@ -128,19 +131,21 @@
 		<button class="navbar-toggler" type="button" onclick="openNav()">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand logoUN" href="#">
+		<a class="navbar-brand logoUN" href="/salas/">
 			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
 				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
-			<span>UN Lugar</span>
+			<span> Lugar</span>
 		</a>
 		<div class="my-2 my-lg-0">
-			<button class="btn btn-outline-danger my-2 my-sm-0" type="button">Log Out</button>
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Cerrar sesión" class="btn btn-outline-danger my-2 my-sm-0">
+			</form>
 		</div>
 	</nav>
 
 	<div class="window">
-		<!-- Barra lateral izquierda test -->
-		<div id="mySidenav" class="sidenav nav bg-white" role="tablist">
+		<!-- Barra lateral izquierda -->
+		<div id="mySidenav" class="sidenav nav bg-white" role="tablist" style="display: block;">
 			<a aria-selected="true" role="tab" data-toggle="pill" id="salas-tab" href="#salas" aria-controls="salas"
 				class="nav-link active">Salas</a>
 			<a aria-selected="false" role="tab" data-toggle="pill" id="solicitudes.tab" href="#solicitudes"
@@ -149,24 +154,47 @@
 				href="#solicitudes-historial" aria-controls="solicitudes-historial" class="nav-link">Historial de
 				solicitudes</a>
 			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="#informes"
-				aria-controls="informes" class="nav-link">Informes</a>
+				aria-controls="informes" class="nav-link" th:if="${adminLogin}">Informes</a>
 			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
-				aria-controls="caracteristicas" class="nav-link">Nuevas Caracteristicas</a>
+				aria-controls="caracteristicas" class="nav-link" th:if="${adminLogin}">Nueva Caracteristica</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
+				aria-controls="caracteristicas" class="nav-link" th:if="${superLogin}">Nueva Caracteristica</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="edificio-reg-tab" href="#edificio-reg"
+				aria-controls="edificio-reg" class="nav-link" th:if="${superLogin}">Registrar edificio</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="sala-reg-tab" href="#sala-reg"
+				aria-controls="sala-reg" class="nav-link" th:if="${superLogin}" >Registrar sala</a> 
+
 		</div>
 
 		<div id="main" class="bg-light tab-content">
 			<div class="tab-pane fade show active" id="salas" role="tabpanel" aria-labelledby="salas-tab">
-				<div th:include="salas/sala-list.html" th:remove="tag"></div>
-			</div>
+ 				<div th:include="salas/sala-admin-list.html" th:remove="tag" th:if="${adminLogin}"></div> 
+				<div th:include="salas/sala-user-list.html" th:remove="tag" th:if="${userLogin}"></div>
+ 				<div th:include="salas/sala-admin-list.html" th:remove="tag" th:if="${superLogin}"></div> 
+			</div>					
 			<div class="tab-pane fade" id="solicitudes" role="tabpanel" aria-labelledby="solicitudes-tab">
-				<div th:include="solicitud/Solicitudes-list.html" th:remove="tag"></div>
+				<div th:include="solicitud/solicitudes-list.html" th:remove="tag" th:if="${userLogin}"></div>
+				<div th:include="solicitud/solicitudes-list.html" th:remove="tag" th:if="${adminLogin}"></div>
+				<div th:include="solicitud/solicitud-admin-list.html" th:remove="tag" th:if="${superLogin}"></div>
+			</div>		
+			<div class="tab-pane fade" id="solicitudes-historial" role="tabpanel"aria-labelledby="solicitudes-historial-tab">
+				<div th:include="solicitud/solicitud-list.html" th:remove="tag"></div>
+			</div>			
+			<div class="tab-pane fade" id="informes" role="tabpanel" aria-labelledby="informes-tab" >TEXTO PRUEBA 4</div><!-- th:if="${superLogin}" -->
+			
+			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab">
+				<div th:include="salas/caracteristica-form.html" th:remove="tag" th:if="${adminLogin}"></div>
+				<div th:include="salas/caracteristica-form.html" th:remove="tag" th:if="${superLogin}"></div>
 			</div>
-			<div class="tab-pane fade" id="solicitudes-historial" role="tabpanel"
-				aria-labelledby="solicitudes-historial-tab">
-					<div th:include="solicitud/solicitud-list.html" th:remove="tag"></div>
-			<div class="tab-pane fade" id="informes" role="tabpanel" aria-labelledby="informes-tab">TEXTO PRUEBA 4</div>
-			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab">TEXTO
-				PRUEBA 5</div>
+			
+
+			<div class="tab-pane fade" id="edificio-reg" role="tabpanel" aria-labelledby="edificio-reg-tab"> <!-- th:if="${superLogin}" -->
+				<div th:include="salas/edificio-reg-form.html" th:remove="tag" th:if="${superLogin}"></div>
+			</div>
+			<div class="tab-pane fade" id="sala-reg" role="tabpanel" aria-labelledby="sala-reg-tab"> <!-- th:if="${superLogin}" -->
+				<!--  --><div th:include="salas/sala-reg-form.html" th:remove="tag" th:if="${superLogin}"></div>
+			</div>
+			
 		</div>
 	</div>
 
