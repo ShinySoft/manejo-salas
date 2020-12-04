@@ -29,7 +29,7 @@ public class Edificio implements Serializable{
     }
     */
 
-    public int getID(){
+    public int getId(){
         return id;
     }
 
@@ -37,7 +37,7 @@ public class Edificio implements Serializable{
         return nombre;
     }
 
-    public void setID(int ID){
+    public void setId(int ID){
         this.id = ID;
     }
 

@@ -1,10 +1,17 @@
-<form class="form" role="form" autocomplete="off" th:object="${sala}" method="post">
+<form class="form" role="form" autocomplete="off" th:object="${sala}"  th:action="@{/salas/super/sala-register}"  method="post">
 	
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Identificación
 			</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="id" type="text" th:field="${sala.id}" > <!-- th:disabled="${disableFields}" --> 
+			<input class="form-control" id="id" type="text" th:field="${sala.id}"> <!--  --> 
+		</div>
+	</div>	
+	<div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Edificio
+			</label>
+		<div class="col-lg-9">
+			<input class="form-control" id="id" type="text" th:field="${sala.edificioId}"> <!--  --> 
 		</div>
 	</div>	
 	<div class="form-group row">
@@ -16,13 +23,13 @@
 	<div class="form-group row">
 		<label class="col-lg-3 col-form-label form-control-label">Tipo</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="tipo" type="text" th:field="${sala.tipo}" > <!-- th:disabled="${disableFields}" --> 
+			<input class="form-control" id="tipo" type="text" th:field="${sala.tipo}"> <!-- th:disabled="${disableFields}" --> 
 		</div>
 	</div>
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
+		<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
 		<div class="col-lg-9">
-			<input class="form-control" id="capacidad" type="number" th:field="${sala.capacidad}" > <!-- th:disabled="${disableFields}" --> 
+			<input class="form-control" id="capacidad" type="number" th:field="${sala.capacidad}"> <!-- th:disabled="${disableFields}" --> 
 		</div>
 	</div>
 	<div class="form-group row">
@@ -37,9 +44,7 @@
 			</select>
 		</div>
 	</div>
-	<div class="form-group row">
-		<div class="col-lg-12 text-center">			
-			<!-- <a class="btn btn-primary" href="#" th:href="@{'/salas/new/sala/'}">Agregar sala</a> -->
-		</div>
-	</div>
+	<div class="form-group">  
+		<input type="submit" id="registro" value="Guardar" class="btn btn-primary">       
+    </div>
 </form>

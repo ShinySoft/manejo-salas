@@ -3,6 +3,7 @@
 		<thead class="thead-light">
 		<tr>			
 			<th scope="col" th:if="${adminLogin}">Solicitante</th>
+			<th scope="col" th:if="${superLogin}">Solicitante</th>
 			<th scope="col">Edificio</th>
 			<th scope="col">Sala</th>
 			<th scope="col">Fecha Solicitud</th>
@@ -11,12 +12,13 @@
 			<th scope="col">Hora fin</th>
 			<th scope="col">Detalle</th>
 			<th scope="col">Estado</th>
-			<th ></th>
+			<th th:if="${adminLogin}"></th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="solicitud: ${solicitudList}">
 			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}"></td>
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${superLogin}"></td>
 			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
 			<td th:text="${solicitud.getSalaID().getId()}"></td>
 			<td th:text="${solicitud.fecha_solicitud}"></td>
