@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.entidad.Caracteristica;
+
+import com.example.manejosalas.entidad.Ocupacion;
 import com.example.manejosalas.entidad.Edificio;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.SalaId;
@@ -67,7 +70,9 @@ public class SalaControlador extends SalaServicio {
 	
 	String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
 	
-	SalaControlador.currentUserMail = userMail;
+	
+		
+	SalaControlador.currentUserMail = userMail;		
 	
 		if(rol.equals("[ROLE_ADMIN]")) {
 			return showSalasAdmin(model);
@@ -78,10 +83,11 @@ public class SalaControlador extends SalaServicio {
 		else {
 			return showSalasSuper(model); //super
 		}
+	
 	}
 
 
-	@GetMapping("/admin/view/")
+	@GetMapping("/admin/view")
 	public ModelAndView showSalasAdmin(Model model) {
 							
 		String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -90,27 +96,30 @@ public class SalaControlador extends SalaServicio {
 		
 		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(userMail);
 		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
+		ArrayList<Solicitud> solicitudesAux = new ArrayList<Solicitud>();
+		
 		for (int i=0;i<solicitudes.size();i++) {
 			if(solicitudes.get(i).getEstado().equals("PENDIENTE")) {
-				solicitudesPendientes.add(solicitudes.get(i));
-				System.out.println(solicitudesPendientes.size());
+				solicitudesPendientes.add(solicitudes.get(i));				
+			}
+			else{
+				solicitudesAux.add(solicitudes.get(i));
 			}
 		}
 		ModelAndView modelAndView = new ModelAndView();
-		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);
-		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();		
+		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);			
 		
 		model.addAttribute("salaRegistro", new Sala());
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
 		model.addAttribute("listTab","active");
-		model.addAttribute("solicitudList", solicitudes);
+		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
 		
 		model.addAttribute("adminLogin", "true");
-		
+
 		return modelAndView;
 	}	
 	
@@ -143,7 +152,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
 		
 		model.addAttribute("userLogin", "true");
-		
+
 		return modelAndView;
 	}
 	
@@ -177,6 +186,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
 		
 		model.addAttribute("superLogin", "true");
+
 		
 		return modelAndView;
 	}
@@ -199,23 +209,103 @@ public class SalaControlador extends SalaServicio {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
 		
 		model.addAttribute("salaList", salaDAO.findAll());
-		model.addAttribute("editMode","true");
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);		
-		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
-		model.addAttribute("formTab","active");
-		model.addAttribute("editMode","true");
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);		
 		
-		model.addAttribute("disableFields","true");
+		model.addAttribute("editMode","true");				
+		model.addAttribute("disableCriticFields","true");
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		
 		return modelAndView;
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @param id
+	 * @param edificioId
+	 * @return
+	 */
+	@GetMapping("/admin/edit-caracteristicas/{tipo-edit}/{edificioId}/{salaId}/{caracteristicaId}")				
+	public ModelAndView updateCaracteristica(Model model, @PathVariable(name = "tipo-edit") int tipo_edit, @PathVariable(name = "edificioId") int edificioId, @PathVariable(name = "salaId") int salaId, @PathVariable(name = "caracteristicaId") int caracteristicaId) {
+		
+		
+		Caracteristica nuevaCaracteristica = caracteristicaDAO.findById(caracteristicaId);			
+		
+		Sala sala = salaDAO.findByIdAndEdificioId(salaId, edificioId);
+		
+		List<Caracteristica> caracteristicas = sala.getCaracteristicas();
+ 		
+		
+		
+		//Edit parameter given in the url lets us know if we will add or delete
+		if(tipo_edit == 1) {
+			//Checks if the caracteristicas has already been added
+			if(!caracteristicas.contains(nuevaCaracteristica)){
+				caracteristicas.add(nuevaCaracteristica);
+			}			
+		}
+		else {
+			caracteristicas.remove(nuevaCaracteristica);
+		}
+		
+		sala.setCaracteristicas(caracteristicas);
+		
+		
+		
+		
+		salaDAO.save(sala);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", sala);		
+		model.addAttribute("caracteristicas", sala.getCaracteristicas());		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);
+		
+		
+		model.addAttribute("editMode","true");				
+		model.addAttribute("disableCriticFields","true");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return modelAndView;
+		
+	}	
+	
+	@GetMapping("/test-caracs-sala/{id}/{edificioId}")
+	public List<Caracteristica> testCaracs(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", salaRegistrada);		
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
+		
+		
+		
+		model.addAttribute("editMode","true");				
+		model.addAttribute("disableCriticFields","true");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return salaRegistrada.getCaracteristicas();
+	}	
 	
 	@GetMapping("/user/show-more/{id}/{edificioId}")
 	public ModelAndView showMoreUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
@@ -226,15 +316,14 @@ public class SalaControlador extends SalaServicio {
 		
 		
 		
-		model.addAttribute("salaList", salaDAO.findAll());
-		model.addAttribute("editMode","true");
+		model.addAttribute("salaList", salaDAO.findAll());		
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistrada);
-		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());
-		model.addAttribute("formTab","active");
-		model.addAttribute("editMode","true");
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());			
 		
+		model.addAttribute("userLogin", "true");
 		model.addAttribute("disableFields","true");
+		model.addAttribute("disableCriticFields","true");
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		
@@ -256,22 +345,27 @@ public class SalaControlador extends SalaServicio {
 		nuevaSolicitud.setUsuario(requestUser);
 		
 		//Autocheck for admin request
-		if(requestUser.getPerfil() == "A") {
+		if(requestUser.getPerfil().equals("A")) {
 			nuevaSolicitud.setEstado("APROBADA");
 		}
 		else {
 			nuevaSolicitud.setEstado("PENDIENTE");
 		}
 		
+		if(requestUser.getPerfil().equals("A")) {
+			model.addAttribute("adminLogin2","true");
+		}
+		else {
+			model.addAttribute("userLogin2","true");
+		}
 		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("editMode","true");
 		model.addAttribute("solicitud", nuevaSolicitud);
 		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
 		model.addAttribute("salaRegistro", salaRegistradaSolicitud);
-		model.addAttribute("caracteristicas", salaRegistradaSolicitud.getCaracteristicas());
-		model.addAttribute("formTab","active");
-		model.addAttribute("editMode","true");
+		model.addAttribute("caracteristicas", salaRegistradaSolicitud.getCaracteristicas());		
+		
 		
 		model.addAttribute("disableFields","true");
 		
@@ -280,6 +374,31 @@ public class SalaControlador extends SalaServicio {
 		return modelAndView;
 	}
 		
+	@GetMapping("admin/ocupacion/{id}/{edificioId}")
+	public ModelAndView ocupacionSala(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {					
+		
+		SalaControlador.salaRegistradaSolicitud = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		Ocupacion nuevaOcupacion = new Ocupacion();
+						
+		nuevaOcupacion.setSalaEdificioId(edificioId);
+		nuevaOcupacion.setSalaId(id);
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("editMode","true");
+		model.addAttribute("ocupacion", nuevaOcupacion);
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));		
+		model.addAttribute("caracteristicas", salaRegistradaSolicitud.getCaracteristicas());		
+		
+		
+		model.addAttribute("disableFields","true");
+		
+		modelAndView.setViewName ( "solicitud/ocupacion-form" );	
+		
+		return modelAndView;
+	}	
 	
 	@GetMapping("/delete/{id}/{edificioId}")
 	public ModelAndView deleteUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
@@ -308,6 +427,7 @@ public class SalaControlador extends SalaServicio {
 			solicitud.setEstado("PENDIENTE");
 		}
 		
+		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
 		  sqlTime1.setHours(sqlTime1.getHours()-5);
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
@@ -323,18 +443,23 @@ public class SalaControlador extends SalaServicio {
 		
 		solicitudDAO.save(solicitud);
 
+		//Notificate the user and the admin
+		sendSalaRequestMade(solicitud);	//User notification
+		sendSalaRequestConfirmation(solicitud); //Admin notification
 						
 		return showSalasRoot((Model)model);
 		
 	}	
 	
-	@PostMapping("/edit")
-	public ModelAndView edit(@ModelAttribute("salaForm")Sala sala, BindingResult result, ModelMap model){
+	@PostMapping("admin/edit")
+	public ModelAndView edit(@ModelAttribute("salaRegistro")Sala sala, BindingResult result, ModelMap model){
+	
 		
-		Sala salaRegistrada = salaDAO.findByIdAndEdificioId((int)sala.getId(), (int)sala.getEdificioId());			
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId((int)sala.getId(), (int)sala.getEdificioId());
 		
+	
 		try {
-			mapSala(salaRegistrada, sala);
+			mapSala(salaRegistrada, sala);			
 			salaDAO.save(salaRegistrada);
 		}
 		catch(Exception e) {
@@ -342,6 +467,7 @@ public class SalaControlador extends SalaServicio {
 		}
 						
 		return showSalasAdmin((Model)model);
+
 	}	
 		
 	@PostMapping("/delete/{id}/{edificioId}")
@@ -349,11 +475,16 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.deleteById(id);
 	}
 	
+	//En este método deberiamos tomar un comentario del admin
 	@GetMapping("/acept/{id}")
 	public ModelAndView acept(Model model,@PathVariable(name = "id") int id) {
 		Solicitud solicitud = solicitudDAO.findById(id);
-		solicitud.setEstado("APROBADA");
+		solicitud.setEstado("APROBADA");		
 		solicitudDAO.save(solicitud);
+		
+		//Notificate the user
+		sendApprovalConfirmation(solicitud, "Mensaje del admin");
+		
 		return showSalasAdmin(model);
 	}
 	
@@ -362,6 +493,10 @@ public class SalaControlador extends SalaServicio {
 		Solicitud solicitud = solicitudDAO.findById(id);
 		solicitud.setEstado("RECHAZADA");
 		solicitudDAO.save(solicitud);		
+		
+		//Notificate the user
+		sendRejectConfirmation(solicitud, "Mensaje del admin");
+		
 		return showSalasAdmin(model);
 	}
 

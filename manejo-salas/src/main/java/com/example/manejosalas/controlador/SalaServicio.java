@@ -1,20 +1,36 @@
 package com.example.manejosalas.controlador;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 
 import com.example.manejosalas.DAO.SalaDAO;
+import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Sala;
-
+import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.Usuario;
 
-public class SalaServicio {
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.SimpleMailMessage;
+
+public class SalaServicio extends CorreoServicio {
 	
+	
+
 	@Autowired
 	SalaDAO SalaDAO;
+	
+	@Autowired
+	UsuarioDAO usuarioDAO;	
+	
+
 	
 	public Sala buscarSala (Sala sala) throws Exception {
 		Sala salaEncontrada = SalaDAO.findByIdAndEdificioId(sala.getId(), sala.getEdificioId());
@@ -38,5 +54,5 @@ public class SalaServicio {
 			salaAModificar.setTipo(sala2.getTipo());
 		}	
 		
-		
+	
 }

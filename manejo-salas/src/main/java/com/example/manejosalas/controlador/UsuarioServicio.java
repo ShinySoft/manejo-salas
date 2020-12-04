@@ -20,19 +20,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.manejosalas.DAO.UsuarioDAO;
 import com.example.manejosalas.entidad.Usuario;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.SimpleMailMessage;
 
-
-public class UsuarioServicio{
+public class UsuarioServicio extends CorreoServicio{
 	
 	@Autowired
-	UsuarioDAO usuarioDAO;	
+	UsuarioDAO usuarioDAO;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
 	
 	public boolean verifyUsuarioEncontrado(Usuario usuario) throws Exception {
 		Usuario usuarioEncontrado = usuarioDAO.findByCorreo(usuario.getCorreo());
 		if(usuarioEncontrado == null) {
-			return true;
+			return false;
 		}
-		throw new Exception("El usuario ya existe");
+		
+		return true;
 	}
 	
 	public Usuario getUsuarioRegistrado(Usuario usuario) throws Exception {
@@ -59,7 +64,7 @@ public class UsuarioServicio{
 	}
 	
 	/**
-	 * Map everythin but the password.
+	 * Map everything but the password.
 	 * @param from
 	 * @param to
 	 */

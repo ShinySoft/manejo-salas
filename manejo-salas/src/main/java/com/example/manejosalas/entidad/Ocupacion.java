@@ -20,11 +20,24 @@ public class Ocupacion implements Serializable {
 	private int id;
 	
 	@Column
-	private int salaedificioid;
+	private int salaEdificioId;
 	
 	@Column
-	private int salaid;
+	private int salaId;
 	
+	public int getSalaEdificioId() {
+		return salaEdificioId;
+	}
+	public void setSalaEdificioId(int salaedificioid) {
+		this.salaEdificioId = salaedificioid;
+	}
+	public int getSalaId() {
+		return salaId;
+	}
+	public void setSalaId(int salaid) {
+		this.salaId = salaid;
+	}
+
 	@Column
     private boolean lunes = false;
 
