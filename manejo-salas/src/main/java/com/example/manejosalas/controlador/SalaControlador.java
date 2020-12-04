@@ -81,7 +81,7 @@ public class SalaControlador extends SalaServicio {
 	}
 
 
-	@GetMapping("/admin/view/")
+	@GetMapping("/admin/view")
 	public ModelAndView showSalasAdmin(Model model) {
 							
 		String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -311,13 +311,19 @@ public class SalaControlador extends SalaServicio {
 		nuevaSolicitud.setUsuario(requestUser);
 		
 		//Autocheck for admin request
-		if(requestUser.getPerfil() == "A") {
+		if(requestUser.getPerfil().equals("A")) {
 			nuevaSolicitud.setEstado("APROBADA");
 		}
 		else {
 			nuevaSolicitud.setEstado("PENDIENTE");
 		}
 		
+		if(requestUser.getPerfil().equals("A")) {
+			model.addAttribute("adminLogin2","true");
+		}
+		else {
+			model.addAttribute("userLogin2","true");
+		}
 		
 		model.addAttribute("salaList", salaDAO.findAll());
 		model.addAttribute("editMode","true");

@@ -178,7 +178,8 @@
 					
 				<div class="form-group row">
 					<div class="col-lg-12 text-center">
-						<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
+						<a type="reset" class="btn btn-secondary" th:if="${adminLogin2}" th:href="@{'/salas/admin/view'}">Volver</a>
+						<a type="reset" class="btn btn-secondary" th:if="${userLogin2}" th:href="@{'/salas/user/view'}">Volver</a>
 						<input class="btn btn-primary" type="submit" value="Enviar">
 						<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
 					</div>
