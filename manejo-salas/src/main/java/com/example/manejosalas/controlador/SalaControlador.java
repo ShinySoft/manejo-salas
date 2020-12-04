@@ -117,6 +117,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
+		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
 		
 		model.addAttribute("adminLogin", "true");
 
@@ -150,6 +151,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("listTab","active");
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
+		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
 		
 		model.addAttribute("userLogin", "true");
 
@@ -429,9 +431,9 @@ public class SalaControlador extends SalaServicio {
 		
 		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
-		  sqlTime1.setHours(sqlTime1.getHours()-5);
+		  sqlTime1.setHours(sqlTime1.getHours());
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
-		  sqlTime2.setHours(sqlTime2.getHours()-5);
+		  sqlTime2.setHours(sqlTime2.getHours());
 		  solicitud.setHora_inicio(sqlTime1);
 		  solicitud.setHora_fin(sqlTime2); 		
 				

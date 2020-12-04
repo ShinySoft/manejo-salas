@@ -127,7 +127,7 @@ public class UsuarioControlador extends UsuarioServicio{
 	@GetMapping("/activate-user/{id}/{hashCreated}")
 	public String activarUsuario(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "hashCreated") int hashCreated){		
 				
-		Usuario usuario = usuarioDAO.findById(id).get();
+		Usuario usuario = usuarioDAO.findById(id);
 		
 		int registeredHash = usuario.hashCode();
 		if(registeredHash == hashCreated){

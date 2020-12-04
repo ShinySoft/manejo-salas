@@ -42,8 +42,8 @@ public class CorreoServicio {
 
 	protected void sendApprovalConfirmation(Solicitud solicitud, String adminMessage){
 		
-		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId()).get();			
-		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId()).get();
+		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId());			
+		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId());
 		
 		
 		String message = String.format("UNLugar, %s %s su solicitud para la sala ha sido aprobada por ", user.getNombre(), user.getApellido());
@@ -67,8 +67,8 @@ public class CorreoServicio {
 	
 	protected void sendRejectConfirmation(Solicitud solicitud, String adminMessage){
 		
-		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId()).get();
-		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId()).get();
+		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId());
+		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId());
 		
 		String message = String.format("%s %s su solicitud para la sala ha sido rechazada:\n \n", user.getNombre(), user.getApellido());
 		message += String.format("Encargado: %s\n", admin.getCorreo());
@@ -85,7 +85,7 @@ public class CorreoServicio {
 	 */
 	protected void sendSalaRequestMade(Solicitud solicitud){
 		
-		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId()).get();					
+		Usuario user = (Usuario) usuarioDAO.findById(solicitud.getUsuarioID().getId());					
 		
 		
 		String message = String.format("%s %s su solicitud para la sala realizada", user.getNombre(), user.getApellido());
@@ -112,7 +112,7 @@ public class CorreoServicio {
 	 */
 	protected void sendSalaRequestConfirmation(Solicitud solicitud){
 		
-		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId()).get();
+		Usuario admin = (Usuario) usuarioDAO.findById(solicitud.getSalaID().getEncargado().getId());
 		
 		String message = "Una nueva solicitud realizada";		
 		LocalDate localDate = LocalDate.now();//For reference
