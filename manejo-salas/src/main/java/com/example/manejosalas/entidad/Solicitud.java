@@ -43,7 +43,6 @@ public class Solicitud{
 	//@ManyToOne
 	//private Edificio salaedificioid;
 	
-	
 	@Column
 	private Timestamp fecha_solicitud;
 	

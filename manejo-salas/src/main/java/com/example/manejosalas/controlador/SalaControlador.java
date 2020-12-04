@@ -29,12 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.manejosalas.entidad.Caracteristica;
+
 import com.example.manejosalas.entidad.Ocupacion;
+import com.example.manejosalas.entidad.Edificio;
 import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.SalaId;
 import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
 import com.example.manejosalas.DAO.CaracteristicaDAO;
+import com.example.manejosalas.DAO.EdificioDAO;
 import com.example.manejosalas.DAO.SalaDAO;
 import com.example.manejosalas.DAO.SolicitudDAO;
 import com.example.manejosalas.DAO.UsuarioDAO;
@@ -57,6 +60,9 @@ public class SalaControlador extends SalaServicio {
 	
 	@Autowired
 	CaracteristicaDAO caracteristicaDAO;
+
+	@Autowired
+	EdificioDAO edificioDAO;
 	
 	@GetMapping("/")
 	public ModelAndView showSalasRoot(Model model) {
@@ -75,7 +81,7 @@ public class SalaControlador extends SalaServicio {
 			return showSalasUser(model);
 		}
 		else {
-			return showSalasUser(model); //super
+			return showSalasSuper(model); //super
 		}
 	
 	}
@@ -103,10 +109,6 @@ public class SalaControlador extends SalaServicio {
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);			
 		
-		
-		
-		
-		
 		model.addAttribute("salaRegistro", new Sala());
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
@@ -115,12 +117,9 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
-		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
-		
 		
 		model.addAttribute("adminLogin", "true");
-				
-		
+
 		return modelAndView;
 	}	
 	
@@ -153,6 +152,41 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
 		
 		model.addAttribute("userLogin", "true");
+
+		return modelAndView;
+	}
+	
+	@GetMapping("/super/view")
+	public ModelAndView showSalasSuper(Model model){
+		String userMail = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		List<Solicitud> solicitudes = solicitudDAO.findAll();
+		List<Usuario> Admin = usuarioDAO.findAllByPerfil("A");
+		ArrayList<Usuario>solicitudesAdmin = new ArrayList<Usuario>();
+		
+		for (int i=0;i<Admin.size();i++) {
+			if(!Admin.get(i).getEstado()) {
+				solicitudesAdmin.add(Admin.get(i));				
+			}	
+		}
+		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();		
+		
+		ModelAndView modelAndView = new ModelAndView();
+		Iterable<Sala> salas = salaDAO.findAll();
+		model.addAttribute("salaRegistro", new Sala());
+		modelAndView.setViewName ( "view" );
+		model.addAttribute("caracteristica", new Caracteristica());
+		model.addAttribute("edificio", new Edificio());
+		model.addAttribute("sala", new Sala());
+		model.addAttribute("salaList", salas);
+		model.addAttribute("listTab","active");
+		model.addAttribute("encargadosLista",Admin);
+		model.addAttribute("solicitudList", solicitudes);	
+		model.addAttribute("solicitudesAdminList2", solicitudesAdmin);
+		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
+		
+		model.addAttribute("superLogin", "true");
+
 		
 		return modelAndView;
 	}
@@ -466,6 +500,22 @@ public class SalaControlador extends SalaServicio {
 		return showSalasAdmin(model);
 	}
 
+
+	@GetMapping("solicitud/accept/{id}")
+	public ModelAndView solicitudAccept(Model model,@PathVariable(name = "id") int id) {
+		Usuario solicitante = usuarioDAO.findById(id);
+		solicitante.setEstado(true);
+		usuarioDAO.save(solicitante);
+		return showSalasSuper(model);
+	}
+	
+	@GetMapping("solicitud/rehuse/{id}")
+	public ModelAndView solicitudRehuse(Model model,@PathVariable(name = "id") int id) {
+		Usuario solicitante = usuarioDAO.findById(id);
+		usuarioDAO.delete(solicitante);
+		return showSalasSuper(model);
+	}
+	
 	@GetMapping("/reverse/{id}")
 	public ModelAndView reverse(Model model,@PathVariable(name = "id") int id) {
 		Solicitud solicitud = solicitudDAO.findById(id);
@@ -522,7 +572,18 @@ public class SalaControlador extends SalaServicio {
 		return showSalasAdmin(model1);
 	} 
 	
+	@PostMapping("/super/edificio-register")
+	public ModelAndView addEdificio(Model model1, @ModelAttribute("edificio")Edificio edificio, BindingResult result, ModelMap model){
+		edificioDAO.save(edificio);
+		return showSalasSuper(model1);
+	} 
 	
+
+	@PostMapping("/super/sala-register")
+	public ModelAndView addSala(Model model1, @ModelAttribute("sala")Sala sala, BindingResult result, ModelMap model){
+		salaDAO.save(sala);
+		return showSalasSuper(model1);
+	} 
 }
 
 

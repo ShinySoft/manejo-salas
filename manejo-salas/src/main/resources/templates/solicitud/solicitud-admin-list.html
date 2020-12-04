@@ -2,22 +2,20 @@
 	<table id="solicitudesAdminList" class="table table-bordered table-hover table-striped">
 		<thead class="thead-light">
 		<tr>			
-			<th scope="col" >Solicitante Id</th> <!-- th:if="${superLogin}" -->
 			<th scope="col">Nombre</th>
 			<th scope="col">Apellido</th>
 			<th scope="col">Correo</th>
-			<th th:if="${adminLogin}"></th>
+			<th ></th>
 		</tr>
 		</thead>
 		<tbody>
-		<tr th:each="solicitud: ${solicitudesAdminList}">
-			<td th:text="${solicitud.getUsuarioID()}"></td> <!-- th:if="${superLogin}" -->
-			<td th:text="${solicitud.getUsuarioID().getNombre()}"></td>
-			<td th:text="${solicitud.getUsuarioID().getApellido()}"></td>
-			<td th:text="${solicitud.getUsuarioID().getCorreo()}"></td>
+		<tr th:each="solicitante: ${solicitudesAdminList2}">
+			<td th:text="${solicitante.getNombre()}"></td>
+			<td th:text="${solicitante.getApellido()}"></td>
+			<td th:text="${solicitante.getCorreo()}"></td>
 			<td>	 <!-- th:if="${superLogin}" -->
-					<a href="#" th:href="@{'/solicitud/accept/'}"><i class="fas fa-check"></i></a>																			
-					<a href="#" th:href="@{'/solicitud/rehuse/'}"><i class="fas fa-times"></i></a>					
+					<a href="#" th:href="@{'/salas/solicitud/accept/'+${solicitante.getId()}}"><i class="fas fa-check"></i></a>																			
+					<a href="#" th:href="@{'/salas/solicitud/rehuse/'+${solicitante.getId()}}"><i class="fas fa-times"></i></a>					
 			</td>
 		</tr>
 		</tbody>

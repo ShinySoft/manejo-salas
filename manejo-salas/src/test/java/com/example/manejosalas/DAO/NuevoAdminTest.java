@@ -45,11 +45,11 @@ public class NuevoAdminTest {
 	    newadmin.setId(2);
 	    newadmin.setEstado(true);
 
-	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario usr = usuarioDAO.findById(usr2.getId());
 	    usr.setEstado(newadmin.getEstado());
 	    usuarioDAO.save(usr);
 
-	    Usuario prueba = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario prueba = usuarioDAO.findById(usr2.getId());
 	    
 	    assertThat(prueba.getId()).isEqualTo(usr2.getId());
 	    assertThat(prueba.getEstado()).isEqualTo(newadmin.getEstado());	    
@@ -79,12 +79,12 @@ public class NuevoAdminTest {
 	    newadmin.setPerfil("U");
 	    newadmin.setEstado(true);
 
-	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario usr = usuarioDAO.findById(usr2.getId());
 	    usr.setPerfil(newadmin.getPerfil());
 	    usr.setEstado(true);
 	    usuarioDAO.save(usr);
 
-	    Usuario prueba = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario prueba = usuarioDAO.findById(usr2.getId());
 	    
 	    assertThat(prueba.getId()).isEqualTo(usr2.getId());
 	    assertThat(prueba.getEstado()).isEqualTo(newadmin.getEstado());

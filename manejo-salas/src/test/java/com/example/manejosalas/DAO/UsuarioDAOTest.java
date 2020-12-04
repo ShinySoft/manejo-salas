@@ -74,7 +74,7 @@ public class UsuarioDAOTest {
 	    usr2.setPassword("kkk");
 	    entityManager.persist(usr2);
 
-	    Usuario foundTutorial = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario foundTutorial = usuarioDAO.findById(usr2.getId());
 
 	    assertThat(foundTutorial).isEqualTo(usr2);
 	  }
@@ -97,11 +97,11 @@ public class UsuarioDAOTest {
 	    updatedUsr2.setId(2);
 	    updatedUsr2.setPassword("macarena");
 
-	    Usuario usr = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario usr = usuarioDAO.findById(usr2.getId());
 	    usr.setPassword(updatedUsr2.getPassword());
 	    usuarioDAO.save(usr);
 
-	    Usuario checkTut = usuarioDAO.findById(usr2.getId()).get();
+	    Usuario checkTut = usuarioDAO.findById(usr2.getId());
 	    
 	    assertThat(checkTut.getId()).isEqualTo(usr2.getId());
 	    assertThat(checkTut.getPassword()).isEqualTo(updatedUsr2.getPassword());	    
