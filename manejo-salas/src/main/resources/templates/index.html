@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNLugar</title>
     <link rel="icon" type="image/png"
-        href="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png">
-
+        href="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png">        
+	
     <style>
         .window {
             width: 100%;
@@ -60,7 +60,7 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                 	<!-- ACTIVE ACTIVADO -->
-                    <div class="tab-pane fade show active" th:classappend=" ${loginTab}" id="nav-ingreso" role="tabpanel" aria-labelledby="nav-ingreso-tab">
+                    <div class="tab-pane fade show " th:classappend=" ${loginTab}" id="nav-ingreso" role="tabpanel" aria-labelledby="nav-ingreso-tab">
                     	<!--  ESTO ES UNA TARJETA  (de login)-->
 						<div th:include="usuarios/login.html" th:remove="tag"></div>                    	
                     </div>                
