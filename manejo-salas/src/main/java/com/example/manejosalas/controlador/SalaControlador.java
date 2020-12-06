@@ -624,6 +624,7 @@ public class SalaControlador extends SalaServicio {
 	public ModelAndView solicitudAccept(Model model,@PathVariable(name = "id") int id) {
 		Usuario solicitante = usuarioDAO.findById(id);
 		solicitante.setEstado(true);
+		sendApprovedAutorization(solicitante.getCorreo());
 		usuarioDAO.save(solicitante);
 		return showSalasSuper(model);
 	}
@@ -631,6 +632,7 @@ public class SalaControlador extends SalaServicio {
 	@GetMapping("solicitud/rehuse/{id}")
 	public ModelAndView solicitudRehuse(Model model,@PathVariable(name = "id") int id) {
 		Usuario solicitante = usuarioDAO.findById(id);
+		sendRejectAutorization(solicitante.getCorreo());
 		usuarioDAO.delete(solicitante);
 		return showSalasSuper(model);
 	}
