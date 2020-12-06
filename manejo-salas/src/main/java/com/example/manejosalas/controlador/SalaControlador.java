@@ -177,6 +177,7 @@ public class SalaControlador extends SalaServicio {
 		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();		
 		
 		ModelAndView modelAndView = new ModelAndView();
+		model.addAttribute("caracteristicaList", caracteristicas);
 		Iterable<Sala> salas = salaDAO.findAll();
 		model.addAttribute("salaRegistro", new Sala());
 		modelAndView.setViewName ( "view" );
