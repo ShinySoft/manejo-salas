@@ -716,6 +716,15 @@ public class SalaControlador extends SalaServicio {
 		return showSalasSuper(model1);
 	} 
 	
+	/**
+	 * Se generan archivos vacios con los reportes (Bug)
+	 * @param format
+	 * @param response
+	 * @throws JRException
+	 * @throws SQLException
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
 	@GetMapping("/super/generar-reporte/{format}")
 	@ResponseBody
 	public void generateReport(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
@@ -724,8 +733,7 @@ public class SalaControlador extends SalaServicio {
 		
 		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
 		
-	    String[] pathBroken = ubicacionReporte.split("/");    
-
+	    String[] pathBroken = ubicacionReporte.split("/");   
 	    
 //	    String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
 	    
@@ -753,9 +761,7 @@ public class SalaControlador extends SalaServicio {
 	      }		
 		
 		reporteServicio.deleteDocument(ubicacionReporte);
-		
-
-			    
+		System.out.println(ubicacionReporte);			    
 						
 	}
 	

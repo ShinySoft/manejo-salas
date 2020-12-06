@@ -86,7 +86,6 @@ public class ReporteServicio {
             
             String currentDate = ( new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" ) ).format( Calendar.getInstance().getTime() );            
             //            nombreReporte = String.valueOf(id) + "_" +  Calendar.getInstance().getTime().toString();          
-            System.out.println(Calendar.getInstance().getTime().toString());
             String auxDate = String.valueOf(id)+String.valueOf(Math.abs(currentDate.hashCode()));           
             
             finalPath = exportReport(auxDate, "pdf", jasperPrint);
@@ -106,10 +105,9 @@ public class ReporteServicio {
 	    BufferedWriter bw = new BufferedWriter(new FileWriter(fileExist));
 
 	    fileExist.delete();
-    	bw.flush();
-	    
+//    	bw.flush();	    
     	
-	    bw.close();
+	    bw.close();	    	    
     }
     
     @SuppressWarnings("deprecation")
