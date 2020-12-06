@@ -52,11 +52,23 @@ public class UsuarioControlador extends UsuarioServicio{
 		model.addAttribute("userLogin", new Usuario());
 		model.addAttribute("userRegister", new Usuario());
 		model.addAttribute("perfiles",Perfil.getPerfiles());				
-		model.addAttribute("loginTab","active");
+		model.addAttribute("loginTab","active");		
 		
 		return "index";
 			
 	}	
+	
+	@GetMapping("/login/error=true")
+	public String errorLogin(Model model)
+	{
+		model.addAttribute("userLogin", new Usuario());
+		model.addAttribute("userRegister", new Usuario());
+		model.addAttribute("perfiles",Perfil.getPerfiles());						
+		model.addAttribute("loginTab","active");	
+		model.addAttribute("loginError", "true");
+		model.addAttribute("loginErrorMessage","Usuario o clave incorrecto");
+		return "index";	
+	}
 		
 	@GetMapping("/register/cancel")
 	public String cancelRegisterUsuario(ModelMap model) {
@@ -105,20 +117,22 @@ public class UsuarioControlador extends UsuarioServicio{
 					sendWaitingAutorization(usuario.getCorreo());
 				}
 			}
-			
-			return "redirect:/";
+			model.addAttribute("registerSuccess", "true");
+			model.addAttribute("registerSuccessMessage","Registro exitoso");
+			model.addAttribute("loginTab","desactive");
+			model.addAttribute("registerTab","active");
+			return "index";
 			
 		}		
 		catch(Exception e) {						
 						
 			model.addAttribute("perfiles",Perfil.getPerfiles());
 			model.addAttribute("registerError", "true");
-			model.addAttribute("registerErrorMessage",e.getMessage());
+			model.addAttribute("registerErrorMessage","El usuario ya existe o no ha sido activado");
 			model.addAttribute("loginTab","desactive");
-			model.addAttribute("registerTab","active");
-						
+			model.addAttribute("registerTab","active");						
 			
-			return "redirect:/";
+			return "index";
 		}
 		
 	}
@@ -138,7 +152,7 @@ public class UsuarioControlador extends UsuarioServicio{
 			return "redirect:/"; //activate-user/error
 		}
 		
-		return "redirect:/"; ///activate-user/success
+		return "redirect:/"; //activate-user/success
 	}
 	
 	@GetMapping("/send-mail/forget-password")

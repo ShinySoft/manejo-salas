@@ -161,15 +161,16 @@
 				 <div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Hora de inicio
 					</label>
-					<div class="col-lg-9">
-						<input class="form-control" id="hora_inicio" type="time" th:field="${solicitud.hora_inicio_temp} ">
+					<div class="col-lg-9">						
+						<input class="form-control" id="hora_inicio" onchange='addHours(this.value);' type="time" max="20:00" min="07:00" list="listahorasinicio"
+						step="3600" th:field="${solicitud.hora_inicio_temp} ">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Hora de fin
+					<label class="col-lg-3 col-form-label form-control-label">Hora fin
 					</label>
-					<div class="col-lg-9">
-						<input class="form-control" id="hora_fin" type="time" th:field="${solicitud.hora_fin_temp} ">
+					<div class="col-lg-9">						
+						<input id="hora_fin" type="time" class="form-control" list="listahorasfin" th:field="${solicitud.hora_fin_temp}" >
 					</div>
 				</div>
 
@@ -185,6 +186,26 @@
 					</div>
 				</div>
 			</form>
+			
+			<datalist id="listahorasinicio">
+			  <option value="07:00">						
+			  <option value="09:00">						
+			  <option value="11:00">						
+			  <option value="14:00">
+			  <option value="16:00">
+			  <option value="18:00">
+			  <option value="20:00">						
+			</datalist>
+			
+			<datalist id="listahorasfin">			  					
+			  <option value="09:00">						
+			  <option value="11:00">						
+			  <option value="13:00">
+			  <option value="16:00">
+			  <option value="18:00">
+			  <option value="20:00">
+			  <option value="21:00">				
+			</datalist>
 		</div>
 		
 
@@ -209,8 +230,53 @@
 				$("#edificioId").val(edificioId);
 			}
 			
-			
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; 
+			var yyyy = today.getFullYear();
+			 if(dd<10){
+			        dd='0'+dd
+			    } 
+			    if(mm<10){
+			        mm='0'+mm
+			    } 
 
+			today = yyyy+'-'+mm+'-'+dd;
+			document.getElementById("fecha_prestamo").setAttribute("min", today);
+			
+			function addHours(inicio)
+			{ 	
+				if(inicio!="20:00")
+					time = "02:00";
+				else
+					time="1:00";
+				
+				inicio = formatTime(timestrToSec(inicio) + timestrToSec(time));	
+
+				document.getElementById("hora_fin").setAttribute("max", inicio);
+				document.getElementById("hora_fin").setAttribute("min", inicio);
+			}
+			
+			function timestrToSec(timestr) {
+				  var parts = timestr.split(":");
+				  return (parts[0] * 3600) + (parts[1] * 60);
+				}
+
+			function pad(num) {
+				  if(num < 10) {
+				    return "0" + num;
+				  } else {
+				    return "" + num;
+				  }
+				}
+
+			function formatTime(seconds) {
+				  return [pad(Math.floor(seconds/3600)),
+				          pad(Math.floor(seconds/60)%60),				          
+				          ].join(":");
+				}
+				
+						
 		</script>
 </body>
 

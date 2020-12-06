@@ -45,6 +45,7 @@
 		<input type="submit" id="registro" value="Registrarme" class="btn btn-primary">       
     </div>    
    	<div class="alert alert-danger text-center" th:if="${registerError}" th:text="${registerErrorMessage}">Error Message</div>
+   	<div class="alert alert-success text-center" th:if="${registerSuccess}" th:text="${registerSuccessMessage}">Success Message</div>
 </form>
 
 <script>

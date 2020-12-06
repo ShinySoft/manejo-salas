@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .loginPage("/usuarios/login")
                 .permitAll()
                 .defaultSuccessUrl("/salas/")
-                .failureUrl("/usuarios/login?error=true")
+                .failureUrl("/usuarios/login/error=true")
                 .usernameParameter("correo")
                 .passwordParameter("password")
                 .and()

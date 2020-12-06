@@ -31,7 +31,7 @@ public class UsuarioServicio extends CorreoServicio{
 	@Autowired
 	JavaMailSender javaMailSender;
 	
-	public boolean verifyUsuarioEncontrado(Usuario usuario) throws Exception {
+	public boolean verifyUsuarioEncontrado(Usuario usuario) {
 		Usuario usuarioEncontrado = usuarioDAO.findByCorreo(usuario.getCorreo());
 		if(usuarioEncontrado == null) {
 			return false;

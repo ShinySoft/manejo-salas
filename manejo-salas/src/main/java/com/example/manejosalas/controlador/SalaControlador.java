@@ -534,7 +534,7 @@ public class SalaControlador extends SalaServicio {
 	
 	@SuppressWarnings("deprecation")
 	@PostMapping("/all/solicitud")
-	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model){
+	public ModelAndView solicitar(@ModelAttribute("solicitud")Solicitud solicitud, BindingResult result, ModelMap model) throws Exception{
 
 		Usuario requestUser = usuarioDAO.findByCorreo(SalaControlador.currentUserMail);
 		
@@ -548,9 +548,9 @@ public class SalaControlador extends SalaServicio {
 		
 		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
-		  sqlTime1.setHours(sqlTime1.getHours());
+		  sqlTime1.setHours(sqlTime1.getHours()-5);
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
-		  sqlTime2.setHours(sqlTime2.getHours());
+		  sqlTime2.setHours(sqlTime2.getHours()-5);
 		  solicitud.setHora_inicio(sqlTime1);
 		  solicitud.setHora_fin(sqlTime2); 		
 				
@@ -560,7 +560,11 @@ public class SalaControlador extends SalaServicio {
 		
 		solicitud.setSalaId(salaSolicitada);
 		
-		solicitudDAO.save(solicitud);
+		if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
+			solicitudDAO.save(solicitud);
+		}else {
+			throw new Exception("La sala esta ocupada en esta franja horaria");
+		}
 
 		//Notificate the user and the admin
 		sendSalaRequestMade(solicitud);	//User notification
@@ -697,7 +701,13 @@ public class SalaControlador extends SalaServicio {
 	public ModelAndView addEdificio(Model model1, @ModelAttribute("edificio")Edificio edificio, BindingResult result, ModelMap model){
 		edificioDAO.save(edificio);
 		return showSalasSuper(model1);
-	} 
+	}
+	
+	@PostMapping("admin/ocupacion")
+	public ModelAndView ocupacioSala(@ModelAttribute("ocupacion")Ocupacion ocupacion, BindingResult result, ModelMap model) throws Exception{
+		ocupacionDAO.save(ocupacion);
+		return showSalasRoot((Model)model);
+	}
 	
 
 	@PostMapping("/super/sala-register")
