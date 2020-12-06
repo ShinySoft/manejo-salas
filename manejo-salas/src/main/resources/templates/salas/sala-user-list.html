@@ -1,4 +1,5 @@
 <meta charset="UTF-8">
+
 <ul class="nav nav-tabs" id="salasTab" role="tablist">
   <li class="nav-item" role="presentation">
     <a class="nav-link" id="horario-tab" data-toggle="tab" href="#horario" role="tab" aria-controls="horario" aria-selected="false">Horario</a>
@@ -33,9 +34,9 @@
 						<td th:text="${caracteristica.nombre}"></td>
 						<td th:text="${caracteristica.descripcion}"></td>
 						<td th:text="${caracteristica.categoria}"></td>
-						<td><a class="btn btn-primary" data-toggle="collapse" th:href="@{'#'+${caracteristica.id}}" role="button" aria-expanded="false" th:aria-controls="${caracteristica.id}">Salas</a></td>
+						<td><a class="btn btn-primary" data-toggle="collapse" th:data-target="@{'.'+${caracteristica.id}}" role="button" aria-expanded="false" th:aria-controls="${caracteristica.id}" style="color:white;">Salas</a></td>
 					</tr>
-					<tr th:each="sala: ${caracteristica.salas}" class="collapse multi-collapse" th:id="${caracteristica.id}">
+					<tr th:each="sala: ${caracteristica.salas}" th:class="@{${caracteristica.id} + ' collapse multi-collapse'}" th:id="${caracteristica.id}">
 						<td th:text="@{'Sala: '+${sala.id}}" colspan="2"></td>
 						<td th:text="@{'Edificio: '+${sala.edificioId}}"></td>
 						<td>	
