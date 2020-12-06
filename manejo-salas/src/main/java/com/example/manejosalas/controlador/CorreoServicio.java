@@ -151,4 +151,31 @@ public class CorreoServicio {
 		sendEmail(correo, message, "Activación pendiente cuenta UNLugar");			
 	}	
 	
+	protected void sendApprovedAutorization(String correo){
+		String message = "Querido usuario de UNLugar, su solicitud de registro ha sido aprobada.";
+				
+		//Here is where we send the code via email
+		sendEmail(correo, message, "cuenta activada UNLugar");			
+	}	
+	
+	protected void sendRejectAutorization(String correo){
+		String message = "Querido usuario de UNLugar, su solicitud de registro como administrador ha sido rechazada.";
+				
+		//Here is where we send the code via email
+		sendEmail(correo, message, "solicitud de cuenta rechazada UNLugar");			
+	}		
+	
+	
+	protected void sendForgetLink(Usuario usuario){
+		String validationMessage = "Bienvenido a UNLugar, con el siguiente link podrá cambiar su clave:\n";
+		
+		usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
+		
+		//Gotta change for the URL where the server is hosted (in our case the ipv4 of the EC2 instance)
+		validationMessage += String.format("localhost:8080/usuarios/forget-password/%d/%d", usuario.getId(), usuario.hashCode()); 
+		
+		//Here is where we send the code via email
+		sendEmail(usuario.getCorreo(), validationMessage, "Restaurar contraseña UNLugar");			
+	}
+	
 }
