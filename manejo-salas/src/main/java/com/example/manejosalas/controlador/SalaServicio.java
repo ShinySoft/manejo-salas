@@ -111,12 +111,16 @@ public class SalaServicio extends CorreoServicio {
 			if(!((hora_inicio < 16 && hora_fin < 16)||(hora_inicio > 18 && hora_fin > 18))){
 			ocupacion.setCuatro_seis(true);
 			}
-			if(!((hora_inicio < 18 && hora_fin < 18)||(hora_inicio > 21 && hora_fin > 21))){
-			ocupacion.setSeis_nueve(true);
+			if(!((hora_inicio < 18 && hora_fin < 18)||(hora_inicio > 20 && hora_fin > 20))){
+			ocupacion.setSeis_ocho(true);
 			}
-			if(ocupacionDAO.findOcupacion(edificio_id, sala_id, ocupacion.getDomingo(), ocupacion.getLunes(), ocupacion.getMartes(), ocupacion.getMiercoles(), ocupacion.getJueves(), ocupacion.getViernes(), ocupacion.getSabado(), ocupacion.getSiete_nueve(), ocupacion.getNueve_once(), ocupacion.getOnce_una(), ocupacion.getDos_cuatro(), ocupacion.getCuatro_seis(), ocupacion.getSeis_nueve()).isEmpty()) {
-			return true;
-			}
+			if(!((hora_inicio < 20 && hora_fin < 20)||(hora_inicio > 21 && hora_fin > 21))){
+				ocupacion.setOcho_nueve(true);
+				}
+				if(ocupacionDAO.findOcupacion(edificio_id, sala_id, ocupacion.getDomingo(), ocupacion.getLunes(), ocupacion.getMartes(), ocupacion.getMiercoles(), ocupacion.getJueves(), ocupacion.getViernes(), ocupacion.getSabado(), ocupacion.getSiete_nueve(), ocupacion.getNueve_once(), ocupacion.getOnce_una(), ocupacion.getDos_cuatro(), ocupacion.getCuatro_seis(), ocupacion.getSeis_ocho(), ocupacion.getOcho_nueve()).isEmpty()) {
+				return true;
+				}
+
 
 			return false;
 			}

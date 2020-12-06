@@ -724,16 +724,12 @@ public class SalaControlador extends SalaServicio {
 		
 		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
 		
-	    String[] pathBroken = ubicacionReporte.split("/");
+	    String[] pathBroken = ubicacionReporte.split("/");    
+
 	    
-	    String pathFolder = "";
+//	    String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
 	    
-	    for(int i = 0; i < pathBroken.length - 1; i++){
-	    	pathFolder += pathBroken[i] + "/";
-	    }
-	   	    
-				
-		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
+	    String nombreDocumento = pathBroken[pathBroken.length-1];
 		
 	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
 	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
@@ -762,6 +758,51 @@ public class SalaControlador extends SalaServicio {
 			    
 						
 	}
+	
+//	@GetMapping("/super/generar-reporte/{format}")	
+//	public String generateReport(@PathVariable String format) throws JRException, SQLException, IOException, DocumentException{
+//			
+//		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
+//		
+//		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
+//		
+//	    String[] pathBroken = ubicacionReporte.split("/");
+//	    
+//	    String pathFolder = "";
+//	    
+//	    for(int i = 0; i < pathBroken.length - 1; i++){
+//	    	pathFolder += pathBroken[i] + "/";
+//	    }
+//	   	    
+//				
+//		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
+//		
+//	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
+//	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
+//	      
+//	      response.setHeader("Content-Disposition", "attachment; filename=" +nombreDocumento);
+//	      response.setHeader("Content-Transfer-Encoding", "binary");
+//	      try {
+//	    	  BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+//	    	  FileInputStream fis = new FileInputStream(ubicacionReporte);
+//	    	  int len;
+//	    	  byte[] buf = new byte[1024];
+//	    	  while((len = fis.read(buf)) > 0) {
+//	    		  bos.write(buf,0,len);
+//	    	  }
+//	    	  bos.close();
+//	    	  response.flushBuffer();
+//	      }
+//	      catch(IOException e) {
+//	    	  e.printStackTrace();
+//	    	  
+//	      }		
+//		
+//		reporteServicio.deleteDocument(ubicacionReporte);
+//		return ubicacionReporte;
+//		return reporteServicio.getPagePdf(ubicacionReporte, 3);
+//}
+
 	
 
 	
