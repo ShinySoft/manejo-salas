@@ -245,8 +245,11 @@
 			document.getElementById("fecha_prestamo").setAttribute("min", today);
 			
 			function addHours(inicio)
-			{ 				
-				time = "02:00";
+			{ 	
+				if(inicio!="20:00")
+					time = "02:00";
+				else
+					time="1:00";
 				
 				inicio = formatTime(timestrToSec(inicio) + timestrToSec(time));	
 
