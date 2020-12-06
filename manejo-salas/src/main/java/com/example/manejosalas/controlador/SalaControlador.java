@@ -559,19 +559,30 @@ public class SalaControlador extends SalaServicio {
 		Sala salaSolicitada = salaDAO.findByIdAndEdificioId(SalaControlador.salaRegistradaSolicitud.getId(), SalaControlador.salaRegistradaSolicitud.getEdificioId());
 		
 		solicitud.setSalaId(salaSolicitada);
-		
-		if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
-			solicitudDAO.save(solicitud);
-		}else {
-			throw new Exception("La sala esta ocupada en esta franja horaria");
+		try
+		{
+			if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
+				solicitudDAO.save(solicitud);
+			}else {
+				throw new Exception("La sala esta ocupada en esta franja horaria");
+			}
 		}
-
+		catch (Exception e) {							
+			
+			model.addAttribute("solicitudError", "true");
+			model.addAttribute("solicitudErrorMessage","La sala esta ocupada en esta franja horaria");								
+			
+			return showSalasRoot((Model)model);
+		}	
+		
 		//Notificate the user and the admin
 		sendSalaRequestMade(solicitud);	//User notification
 		sendSalaRequestConfirmation(solicitud); //Admin notification
-						
-		return showSalasRoot((Model)model);
 		
+		model.addAttribute("solicitudSuccess", "true");
+		model.addAttribute("solicitudSuccessMessage","Solicitud egistrada");
+						
+		return showSalasRoot((Model)model);		
 	}	
 	
 	@PostMapping("admin/edit")
