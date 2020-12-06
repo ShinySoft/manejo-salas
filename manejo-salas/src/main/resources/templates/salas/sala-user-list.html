@@ -1,56 +1,109 @@
-<div class="table-responsive">
-	<table id="userList" class="table table-bordered table-hover table-striped">
-		<thead class="thead-light">
-		<tr>			
-			<th scope="col">Sala</th>
-			<th scope="col">Edificio</th>
-			<th scope="col">Nombre</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">Capacidad</th>
-			<!-- <th scope="col">Caracteristicas</th> -->
-			<th scope="col">Encargado</th>
-			<th></th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr th:each="sala: ${salaList}">			
-			<td th:text="${sala.id}"></td>
-			<td th:text="${sala.edificioId}"></td>
-			<td th:text="${sala.nombre}"></td>
-			<td th:text="${sala.tipo}"></td>
-			<td th:text="${sala.capacidad}"></td>					
-			<td th:text="${sala.getEncargado().getCorreo()}"></td>
-			<td>	
-				<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
-				<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>
-				<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
-					<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
-			</td>
-		</tr>
-		</tbody>
-	</table>
-	
-	<!-- Button trigger modal 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-</button>-->
-
-<!-- Modal 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sala</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div th:include="salas/sala-form.html" th:remove="tag"></div>
-      </div>
-    </div>
+<meta charset="UTF-8">
+<ul class="nav nav-tabs" id="salasTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="horario-tab" data-toggle="tab" href="#horario" role="tab" aria-controls="horario" aria-selected="false">Horario</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="caracteristicas-tab" data-toggle="tab" href="#caracteristicas" role="tab" aria-controls="caracteristicas" aria-selected="false">Caracteristicas</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="todas-tab" data-toggle="tab" href="#todas" role="tab" aria-controls="todas" aria-selected="true">Todas</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade" id="horario" role="tabpanel" aria-labelledby="horario-tab">...1</div>
+  <div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab">
+  	<div class="table-responsive">
+		<table id="userList" class="table table-bordered table-hover table-striped">
+			<thead class="thead-light">
+			<tr>			
+				<!-- <th scope="col">Sala</th>
+				<th scope="col">Edificio</th>-->
+				<th scope="col">Caracteristica</th>
+				<th scope="col">Descripción</th>
+				<th scope="col">Categoría</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+				<div th:each="caracteristica: ${caracteristicaList}">			
+					<!--  <td th:text="${caracteristica.salas}"></td>
+					<td th:text="${caracteristica.edificio}"></td>-->
+					<tr>
+						<td th:text="${caracteristica.nombre}"></td>
+						<td th:text="${caracteristica.descripcion}"></td>
+						<td th:text="${caracteristica.categoria}"></td>
+						<td><a class="btn btn-primary" data-toggle="collapse" th:href="@{'#'+${caracteristica.id}}" role="button" aria-expanded="false" th:aria-controls="${caracteristica.id}">Salas</a></td>
+					</tr>
+					<tr th:each="sala: ${caracteristica.salas}" class="collapse multi-collapse" th:id="${caracteristica.id}">
+						<td th:text="@{'Sala: '+${sala.id}}" colspan="2"></td>
+						<td th:text="@{'Edificio: '+${sala.edificioId}}"></td>
+						<td>	
+							<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
+							<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>				
+						</td>
+					</tr>
+				</div>
+			</tbody>
+		</table>
+	</div>
   </div>
-</div>-->
-	<div class="alert alert-danger text-center" th:if="${salaListErrorMessage}" th:text="${salaListErrorMessage}">Error Message</div>
+  <div class="tab-pane fade show active" id="todas" role="tabpanel" aria-labelledby="todas-tab">
+  	<div class="table-responsive">
+		<table id="userList" class="table table-bordered table-hover table-striped">
+			<thead class="thead-light">
+			<tr>			
+				<th scope="col">Sala</th>
+				<th scope="col">Edificio</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Tipo</th>
+				<th scope="col">Capacidad</th>
+				<!-- <th scope="col">Caracteristicas</th> -->
+				<th scope="col">Encargado</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="sala: ${salaList}">			
+				<td th:text="${sala.id}"></td>
+				<td th:text="${sala.edificioId}"></td>
+				<td th:text="${sala.nombre}"></td>
+				<td th:text="${sala.tipo}"></td>
+				<td th:text="${sala.capacidad}"></td>					
+				<td th:text="${sala.getEncargado().getCorreo()}"></td>
+				<td>	
+					<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
+					<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>
+					<!--  	<a href="#" th:onclick="'javascript:confirmEdit(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'" ><i class="fas fa-edit"></i></a>																			
+						<a href="#" th:onclick="'javascript:confirmDelete(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'"><i class="fas fa-trash"></i></a> -->					
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		
+				<!-- Button trigger modal 
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+			</button>-->
+			
+			<!-- Modal 
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Sala</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <div th:include="salas/sala-form.html" th:remove="tag"></div>
+			      </div>
+			    </div>
+			  </div>
+			</div>-->
+		<div class="alert alert-danger text-center" th:if="${salaListErrorMessage}" th:text="${salaListErrorMessage}">Error Message</div>
+	</div>
+  </div>
 </div>
 
 <script type="text/javascript">

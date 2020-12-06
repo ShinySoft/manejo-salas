@@ -52,6 +52,10 @@ public class Caracteristica implements Serializable{
     public String getCategoria(){
         return categoria;
     }
+    
+    public List<Sala> getSalas(){
+        return salas;
+    }
 
     public void setId(int id){
         this.id = id;
@@ -67,5 +71,9 @@ public class Caracteristica implements Serializable{
 
     public void setCategoria(String categoria){
         this.categoria = categoria;
+    }
+    
+    public void setSalas(List<Sala> salas){
+        this.salas = salas;
     }
 }

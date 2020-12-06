@@ -34,6 +34,7 @@
 		$(document).ready(function () {
 			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
 			$('#caracteristicasTable').DataTable();
+			$('#caracteristicasAllButSalaTable').DataTable();
 		});
 	</script>
 
@@ -126,7 +127,7 @@
 <body>
 	<!-- Barra Superior -->
 	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
-		<a class="navbar-brand logoUN" href="#">
+		<a class="navbar-brand logoUN" href="/salas/">
 			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
 				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
 			<span> Lugar</span>
@@ -139,18 +140,23 @@
 	</nav>
 	<div class="window" id="salaEdit">
 		<div id="main">
-			<form class="form" role="form" autocomplete="off" th:object="${salaRegistro}"
-				th:action="${editMode}?@{/salas/edit}: @{/salas/add}" method="post">
+			<form class="form" role="form" id="salaForm" autocomplete="off" th:object="${salaRegistro}"
+				th:action="${editMode}?@{/salas/admin/edit}: @{/salas/admin/add}" method="post">
 
 				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
 				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.encargado}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${userLogin}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${userLogin}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.encargado}" th:if="${userLogin}">
+			<!-- <input class="form-control" type=hidden th:field="${salaRegistro.caracteristicas}" th:if="${editMode}"> -->
 
 				<div class="form-group row">
 					<label class="col-lg-3 col-form-label form-control-label">Edificio
 					</label>
 					<div class="col-lg-9">
 						<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} "
-							th:disabled="${disableFields}">
+							th:disabled="${disableCriticFields}">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -158,7 +164,7 @@
 					</label>
 					<div class="col-lg-9">
 						<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}"
-							th:disabled="${disableFields}">
+							th:disabled="${disableCriticFields}">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -169,8 +175,7 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-lg-3 col-form-label form-control-label">Tipo
-					</label>
+					<label class="col-lg-3 col-form-label form-control-label">Tipo</label>
 					<div class="col-lg-9">
 						<input class="form-control" id="tipo" type="text" th:field="${salaRegistro.tipo}"
 							th:disabled="${disableFields}">
@@ -187,45 +192,139 @@
 					<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
 					<div class="col-lg-9">
 						<select class="form-control" th:field="${salaRegistro.encargado}"
-							th:disabled="${disableFields}">
-							<option value="" disabled>-- Selecciona un encargado --</option>
-							<!-- <option value="tst">Encargado de prueba</option> -->
+							th:disabled="${disableCriticFields}">
 							<option th:each="encargado :${encargadoEdit}" th:value="${encargado.id}"
-								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}">
+								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}" th:disabled="${disableCriticFields}">
 							</option>
 						</select>
-					</div>
-				</div>
-
-				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
-					th:text="${salaFormErrorMessage}">Error Message</div>
-			</form>
-
-			<div class="table-responsive">
+					</div>		
+					
+					<!-- Este input le coloca las caracteristicas al objeto sala -->
+					<input class="form-control" id="capacidad" th:field="${salaRegistro.caracteristicas}"
+						th:value="${caracteristicas}" hidden>
+											
+					<label class="col-lg-3 col-form-label form-control-label">Caracteristicas:</label>
+				</div>			
+						
+			<!-- Esta es la tabla de las caracteristicas con las que cuenta la sala -->				
+			<div class="table-responsive">				
 				<table id="caracteristicasTable" class="table table-bordered table-hover table-striped">
 					<thead class="thead-light">
 						<tr>
 							<th scope="col">Categoría</th>
 							<th scope="col">Nombre</th>
 							<th scope="col">Descripción</th>							
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="c: ${caracteristicas}">
-							<td th:text="${c.categoria}"></td>
+							<td th:text="${c.categoria}"></td> <!--  -->
 							<td th:text="${c.nombre}"></td>
 							<td th:text="${c.descripcion}"></td>
+							<td>
+							<a th:if="${editMode}" href="#" th:href="@{'/salas/admin/edit-caracteristicas/0/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-times"></i></a>
+							<a th:if="${superMode}" href="#" th:href="@{'/salas/super/edit-caracteristicas/0/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-times"></i></a>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+			</form>
 			
-			<div class="form-group row">
+			<!-- Esta es la tabla de todas las caracteristicas registradas en el sistema -->
+			<div class="d-flex justify-content-center" th:if="${editMode}">
+				<p>			
+				  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				    Agregar caracteristicas
+				  </button>
+				</p>
+			</div>
+			<div class="collapse" id="collapseExample" th:if="${editMode}">
+			  <div class="card card-body">			  
+	   			<div class="table-responsive">
+					<table id="caracteristicasAllButSalaTable" class="table table-bordered table-hover table-striped">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Categoría</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Descripción</th>
+								<th scope="col"></th>							
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="c: ${caracteristicasAllButSala}">
+								<td th:text="${c.categoria}"></td> <!--  -->
+								<td th:text="${c.nombre}"></td>
+								<td th:text="${c.descripcion}"></td>
+								<td>
+								<a href="#" th:href="@{'/salas/admin/edit-caracteristicas/1/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-check"></i></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			  </div>
+			</div>			
+			<div class="d-flex justify-content-center" th:if="${superMode}">
+				<p>			
+				  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				    Agregar caracteristicas
+				  </button>
+				</p>
+			</div>
+			<div class="collapse" id="collapseExample" th:if="${superMode}">
+			  <div class="card card-body">			  
+	   			<div class="table-responsive">
+					<table id="caracteristicasAllButSalaTable" class="table table-bordered table-hover table-striped">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Categoría</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Descripción</th>
+								<th scope="col"></th>							
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="c: ${caracteristicasAllButSala}">
+								<td th:text="${c.categoria}"></td> <!--  -->
+								<td th:text="${c.nombre}"></td>
+								<td th:text="${c.descripcion}"></td>
+								<td>
+								<a href="#" th:href="@{'/salas/super/edit-caracteristicas/1/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-check"></i></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			  </div>
+			</div>	
+
+			<div class="form-group row" th:if="${userLogin}">
 				<div class="col-lg-12 text-center">
-					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/form/cancel'}">Cancel</a>
-					<a class="btn btn-primary" href="#" th:href="@{'/salas/admin/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}">Solicitar</a>
+					<a href="#" th:href="@{'/salas/all/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}" class="btn btn-primary">Solicitar</a>
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/user/view'}">Volver</a>															
 				</div>
 			</div>
+			
+			<div class="form-group row" th:if="${editMode}">
+				<div class="col-lg-12 text-center">
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/admin/view'}">Volver</a>
+					<input class="btn btn-primary" form="salaForm" type="submit" value="Guardar">
+				</div>
+			</div>
+			
+			<div class="form-group row" th:if="${superMode}">
+				<div class="col-lg-12 text-center">
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/super/view'}">Volver</a>
+					<input class="btn btn-primary" form="salaForm" type="submit" value="Guardar">
+				</div>
+			</div>
+			
+			<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
+					th:text="${salaFormErrorMessage}">Error Message</div>
+					
+			
 		</div>
 		
 

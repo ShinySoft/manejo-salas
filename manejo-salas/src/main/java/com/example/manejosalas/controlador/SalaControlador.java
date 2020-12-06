@@ -97,7 +97,7 @@ public class SalaControlador extends SalaServicio {
 		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(userMail);
 		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
 		ArrayList<Solicitud> solicitudesAux = new ArrayList<Solicitud>();
-		
+		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();
 		for (int i=0;i<solicitudes.size();i++) {
 			if(solicitudes.get(i).getEstado().equals("PENDIENTE")) {
 				solicitudesPendientes.add(solicitudes.get(i));				
@@ -113,6 +113,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
+		model.addAttribute("caracteristicaList", caracteristicas);	
 		model.addAttribute("listTab","active");
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
@@ -143,11 +144,13 @@ public class SalaControlador extends SalaServicio {
 			}
 			
 		}
+		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();	
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAll();
 		model.addAttribute("salaRegistro", new Sala());
 		modelAndView.setViewName ( "view" );
 		model.addAttribute("salaList", salas);
+		model.addAttribute("caracteristicaList", caracteristicas);		
 		model.addAttribute("listTab","active");
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
@@ -165,7 +168,7 @@ public class SalaControlador extends SalaServicio {
 		List<Solicitud> solicitudes = solicitudDAO.findAll();
 		List<Usuario> Admin = usuarioDAO.findAllByPerfil("A");
 		ArrayList<Usuario>solicitudesAdmin = new ArrayList<Usuario>();
-		
+		List<Edificio> edificios = edificioDAO.findAll();
 		for (int i=0;i<Admin.size();i++) {
 			if(!Admin.get(i).getEstado()) {
 				solicitudesAdmin.add(Admin.get(i));				
@@ -174,6 +177,7 @@ public class SalaControlador extends SalaServicio {
 		List<Caracteristica> caracteristicas = caracteristicaDAO.findAll();		
 		
 		ModelAndView modelAndView = new ModelAndView();
+		model.addAttribute("caracteristicaList", caracteristicas);
 		Iterable<Sala> salas = salaDAO.findAll();
 		model.addAttribute("salaRegistro", new Sala());
 		modelAndView.setViewName ( "view" );
@@ -183,6 +187,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("salaList", salas);
 		model.addAttribute("listTab","active");
 		model.addAttribute("encargadosLista",Admin);
+		model.addAttribute("edificiosLista",edificios);
 		model.addAttribute("solicitudList", solicitudes);	
 		model.addAttribute("solicitudesAdminList2", solicitudesAdmin);
 		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
@@ -199,9 +204,9 @@ public class SalaControlador extends SalaServicio {
 	}		
 				
 	@PostMapping("/admin/add")
-	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model) {		
+	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model, boolean superEdit) {		
 		salaDAO.save(sala);
-		return showSalasAdmin(model);
+		return showSalasRoot(model);
 	}	
 	
 	@GetMapping("/admin/show-more/{id}/{edificioId}")
@@ -222,6 +227,30 @@ public class SalaControlador extends SalaServicio {
 		
 		model.addAttribute("editMode","true");				
 		model.addAttribute("disableCriticFields","true");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return modelAndView;
+	}
+	
+	@GetMapping("/super/show-more/{id}/{edificioId}")
+	public ModelAndView updateSuper(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", salaRegistrada);		
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);		
+		
+		model.addAttribute("superMode","true");				
+		model.addAttribute("disableCriticFields","false");
 		
 		modelAndView.setViewName ( "salas/sala-form" );	
 		
@@ -308,6 +337,80 @@ public class SalaControlador extends SalaServicio {
 		
 		return salaRegistrada.getCaracteristicas();
 	}	
+	
+	@GetMapping("/super/edit-caracteristicas/{tipo-edit}/{edificioId}/{salaId}/{caracteristicaId}")				
+	public ModelAndView superupdateCaracteristica(Model model, @PathVariable(name = "tipo-edit") int tipo_edit, @PathVariable(name = "edificioId") int edificioId, @PathVariable(name = "salaId") int salaId, @PathVariable(name = "caracteristicaId") int caracteristicaId) {
+		
+		
+		Caracteristica nuevaCaracteristica = caracteristicaDAO.findById(caracteristicaId);			
+		
+		Sala sala = salaDAO.findByIdAndEdificioId(salaId, edificioId);
+		
+		List<Caracteristica> caracteristicas = sala.getCaracteristicas();
+ 		
+		
+		
+		//Edit parameter given in the url lets us know if we will add or delete
+		if(tipo_edit == 1) {
+			//Checks if the caracteristicas has already been added
+			if(!caracteristicas.contains(nuevaCaracteristica)){
+				caracteristicas.add(nuevaCaracteristica);
+			}			
+		}
+		else {
+			caracteristicas.remove(nuevaCaracteristica);
+		}
+		
+		sala.setCaracteristicas(caracteristicas);
+		
+		
+		
+		
+		salaDAO.save(sala);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		
+
+		List<Caracteristica> allCaracteristicas = caracteristicaDAO.findAll();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", sala);		
+		model.addAttribute("caracteristicas", sala.getCaracteristicas());		
+		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);
+		
+		
+		model.addAttribute("superMode","true");				
+		model.addAttribute("disableCriticFields","false");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return modelAndView;
+		
+	}	
+	
+	@GetMapping("/super-test-caracs-sala/{id}/{edificioId}")
+	public List<Caracteristica> supertestCaracs(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
+		
+		Sala salaRegistrada = salaDAO.findByIdAndEdificioId(id, edificioId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		model.addAttribute("salaList", salaDAO.findAll());
+		model.addAttribute("encargadoEdit", usuarioDAO.findAllByPerfil("A"));
+		model.addAttribute("salaRegistro", salaRegistrada);		
+		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
+		
+		
+		
+		model.addAttribute("superMode","true");				
+		model.addAttribute("disableCriticFields","false");
+		
+		modelAndView.setViewName ( "salas/sala-form" );	
+		
+		return salaRegistrada.getCaracteristicas();
+	}
 	
 	@GetMapping("/user/show-more/{id}/{edificioId}")
 	public ModelAndView showMoreUser(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "edificioId") int edificioId) {
