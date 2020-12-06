@@ -74,7 +74,8 @@ public class ReporteServicio {
     	
     	//Determine the kind of report
     	if(TipoReporte.SUPER_SALAS.compareTo(tipoReporte) == 0){
-    		 //load file and compile it
+    		
+    		//load file and compile it
             File file = ResourceUtils.getFile("classpath:super_salas.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             
@@ -93,7 +94,7 @@ public class ReporteServicio {
     	else if(TipoReporte.ADMIN_SALAS.compareTo(tipoReporte) == 0){
     		finalPath = "";
     	}
-    	
+    	    	
     	return finalPath;
     }
     

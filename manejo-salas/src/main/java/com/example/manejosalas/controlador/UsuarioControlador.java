@@ -140,6 +140,58 @@ public class UsuarioControlador extends UsuarioServicio{
 		
 		return "redirect:/"; ///activate-user/success
 	}
+	
+	@GetMapping("/send-mail/forget-password")
+	public String correoClaveOlvidada(Model model){
+		
+		return "usuarios/send-mail-forget-password";
+		
+	}
+	
+	@GetMapping("/send-mail/forget-password/{correo}")
+	public String correoClaveOlvidadaSender(Model model, @PathVariable(name = "correo") String correo){
+		
+		Usuario user = usuarioDAO.findByCorreo(correo);
+		
+		sendForgetLink(user);
+		
+		return "redirect:/";
+		
+	}	
+	
+	@GetMapping("/forget-password/{id}/{hashCreated}")
+	public String claveOlvidadaUsuario(Model model, @PathVariable(name = "id") int id,  @PathVariable(name = "hashCreated") int hashCreated){		
+				
+		Usuario usuario = usuarioDAO.findById(id);
+		
+		int registeredHash = usuario.hashCode();
+		if(registeredHash == hashCreated){
+			model.addAttribute("userRegister", usuario);
+			model.addAttribute("forgetMode", "true");
+			return "/usuarios/forget-password";
+		}
+		else {
+			return "redirect:/"; //activate-user/error
+		}
+		
+		
+	}	
+	
+	@PostMapping("/forget-password")
+	public String claveOlvidadaUsuario(@ModelAttribute("userRegister")Usuario usuario, BindingResult result, Model model){
+		
+		Usuario usuarioAux = usuarioDAO.findById(usuario.getId());		
+		
+		mapUsuario(usuario, usuarioAux);
+		
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+		usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));		
+		
+		usuarioDAO.save(usuario);
+		
+		return "redirect:/";
+		
+	}
 }
 
 
