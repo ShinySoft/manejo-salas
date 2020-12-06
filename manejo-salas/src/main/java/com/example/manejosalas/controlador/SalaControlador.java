@@ -1,7 +1,12 @@
 package com.example.manejosalas.controlador;
 
 import java.util.ArrayList;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -25,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +43,10 @@ import com.example.manejosalas.entidad.Sala;
 import com.example.manejosalas.entidad.SalaId;
 import com.example.manejosalas.entidad.Solicitud;
 import com.example.manejosalas.entidad.Usuario;
+import com.lowagie.text.DocumentException;
+
+import net.sf.jasperreports.engine.JRException;
+
 import com.example.manejosalas.DAO.CaracteristicaDAO;
 import com.example.manejosalas.DAO.EdificioDAO;
 import com.example.manejosalas.DAO.SalaDAO;
@@ -48,6 +59,9 @@ public class SalaControlador extends SalaServicio {
 	
 	static Sala salaRegistradaSolicitud;
 	static String currentUserMail;
+	
+	@Autowired
+	ReporteServicio reporteServicio;
 	
 	@Autowired
 	SalaDAO salaDAO;
@@ -586,7 +600,58 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.save(sala);
 		return showSalasSuper(model1);
 	} 
+	
+	@GetMapping("/super/generar-reporte/{format}")
+	@ResponseBody
+	public void generateReport(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
+			
+		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
+		
+		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
+		
+	    String[] pathBroken = ubicacionReporte.split("/");
+	    
+	    String pathFolder = "";
+	    
+	    for(int i = 0; i < pathBroken.length - 1; i++){
+	    	pathFolder += pathBroken[i] + "/";
+	    }
+	   	    
+				
+		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
+		
+	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
+	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
+	      
+	      response.setHeader("Content-Disposition", "attachment; filename=" +nombreDocumento);
+	      response.setHeader("Content-Transfer-Encoding", "binary");
+	      try {
+	    	  BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+	    	  FileInputStream fis = new FileInputStream(ubicacionReporte);
+	    	  int len;
+	    	  byte[] buf = new byte[1024];
+	    	  while((len = fis.read(buf)) > 0) {
+	    		  bos.write(buf,0,len);
+	    	  }
+	    	  bos.close();
+	    	  response.flushBuffer();
+	      }
+	      catch(IOException e) {
+	    	  e.printStackTrace();
+	    	  
+	      }		
+		
+		reporteServicio.deleteDocument(ubicacionReporte);
+		
+
+			    
+						
+	}
+	
+
+	
 }
+
 
 
 class CategoriaCaracteristica{
