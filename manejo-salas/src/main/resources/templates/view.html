@@ -154,13 +154,13 @@
 			<a aria-selected="false" role="tab" data-toggle="pill" id="solicitudes-historial-tab"
 				href="#solicitudes-historial" aria-controls="solicitudes-historial" class="nav-link">Historial de
 				solicitudes</a>
-<!-- 			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="/admin/generar-informes/pdf" -->
-<!-- 				aria-controls="informes" class="nav-link" th:if="${adminLogin}">Generar Informes</a> -->
-<!-- 			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="/super/generar-informes/pdf" -->
-<!-- 				aria-controls="informes" class="nav-link" th:if="${superLogin}">Generar Informes</a> -->
-			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
+			<a aria-selected="false" role="tab" id="informes-tab" href="/salas/admin/generar-reporte/pdf"
+				aria-controls="informes" class="nav-link" th:if="${adminLogin}">Generar Informes</a>
+			<a aria-selected="false" role="tab" id="informes-tab" href="/salas/super/generar-reporte/pdf"
+				aria-controls="informes" class="nav-link" th:if="${superLogin}">Generar Informes</a>
+			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#NuevaCaracteristica1"
 				aria-controls="caracteristicas" class="nav-link" th:if="${adminLogin}">Nueva Caracteristica</a>
-			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
+			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#NuevaCaracteristica1"
 				aria-controls="caracteristicas" class="nav-link" th:if="${superLogin}">Nueva Caracteristica</a>
 			<a aria-selected="false" role="tab" data-toggle="pill" id="ocupacion-delete-tab" href="#ocupacion-delete"
 				aria-controls="ocupacion-delete" class="nav-link" th:if="${adminLogin}" >Eliminar ocupacion</a> 
@@ -187,7 +187,7 @@
 			</div>			
 			<div class="tab-pane fade" id="informes" role="tabpanel" aria-labelledby="informes-tab" >TEXTO PRUEBA 4</div><!-- th:if="${superLogin}" -->
 			
-			<div class="tab-pane fade" id="caracteristicas" role="tabpanel" aria-labelledby="caracteristicas-tab">
+			<div class="tab-pane fade" id="NuevaCaracteristica1" role="tabpanel" aria-labelledby="caracteristicas-tab">
 				<div th:include="salas/caracteristica-form.html" th:remove="tag" th:if="${adminLogin}"></div>
 				<div th:include="salas/caracteristica-form.html" th:remove="tag" th:if="${superLogin}"></div>
 			</div>

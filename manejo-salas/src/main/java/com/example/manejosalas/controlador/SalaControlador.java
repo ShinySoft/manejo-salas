@@ -253,12 +253,12 @@ public class SalaControlador extends SalaServicio {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		model.addAttribute("lunes", mymatriz[0]);
-		model.addAttribute("martes", mymatriz[1]);
-		model.addAttribute("miercoles", mymatriz[2]);
-		model.addAttribute("jueves", mymatriz[3]);
-		model.addAttribute("viernes", mymatriz[4]);
-		model.addAttribute("sabado", mymatriz[5]);
+		model.addAttribute("lunes", mymatriz[1]);
+		model.addAttribute("martes", mymatriz[2]);
+		model.addAttribute("miercoles", mymatriz[3]);
+		model.addAttribute("jueves", mymatriz[4]);
+		model.addAttribute("viernes", mymatriz[5]);
+		model.addAttribute("sabado", mymatriz[6]);
 		
 		modelAndView.setViewName ( "salas/horario" );	
 		
@@ -584,9 +584,9 @@ public class SalaControlador extends SalaServicio {
 		
 		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
-		  sqlTime1.setHours(sqlTime1.getHours());
+		  sqlTime1.setHours(sqlTime1.getHours() - 5);
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
-		  sqlTime2.setHours(sqlTime2.getHours());
+		  sqlTime2.setHours(sqlTime2.getHours() - 5);
 		  solicitud.setHora_inicio(sqlTime1);
 		  solicitud.setHora_fin(sqlTime2); 		
 				
