@@ -45,3 +45,7 @@ public List <Ocupacion> findOcupacionSabado();
 @Query(value = "SELECT * FROM ocupacion WHERE domingo = 1 ", nativeQuery = true)
 public List <Ocupacion> findOcupacionDomingo();
 }
+
+//@Query(value = "SELECT * FROM ocupacion WHERE sala_edificio_id = ?1 && sala_id = ?2 && (Domingo = ?3 || Lunes = ?4 || Martes = ?5 || Miercoles = ?6 || Jueves = ?7 || Viernes = ?8 || Sabado = ?9)", nativeQuery = true)
+//public List <Ocupacion> findOcupacionDia(int sala_edificio_id, int sala_id,Boolean domingo ,Boolean lunes ,Boolean martes ,Boolean miercoles ,Boolean jueves ,Boolean viernes ,Boolean sabado);}
+
