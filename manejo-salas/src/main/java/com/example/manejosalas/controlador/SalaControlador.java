@@ -122,7 +122,8 @@ public class SalaControlador extends SalaServicio {
 		}
 		ModelAndView modelAndView = new ModelAndView();
 		Iterable<Sala> salas = salaDAO.findAllByencargado(admin);			
-		
+
+		model.addAttribute("ocupacion", new Ocupacion());
 		model.addAttribute("salaRegistro", new Sala());
 		model.addAttribute("caracteristica", new Caracteristica());
 		modelAndView.setViewName ( "view" );
@@ -238,7 +239,7 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("salaRegistro", salaRegistrada);		
 		model.addAttribute("caracteristicas", salaRegistrada.getCaracteristicas());		
 		model.addAttribute("caracteristicasAllButSala", allCaracteristicas);		
-		
+		model.addAttribute("ocupacion", new Ocupacion());
 		model.addAttribute("editMode","true");				
 		model.addAttribute("disableCriticFields","true");
 		
@@ -706,7 +707,14 @@ public class SalaControlador extends SalaServicio {
 		ocupacionDAO.save(ocupacion);
 		return showSalasRoot((Model)model);
 	}
-	
+
+	@PostMapping("/admin/delete-ocupacion")
+	public ModelAndView deleteOcupacion(@ModelAttribute("ocupacion")Ocupacion ocupacion, BindingResult result, ModelMap model) throws Exception{
+		
+		Ocupacion dOcupacion = ocupacionDAO.findOcupacionIgual(ocupacion.getSalaEdificioId(), ocupacion.getSalaId(), ocupacion.getDomingo(), ocupacion.getLunes(), ocupacion.getMartes(),ocupacion.getMiercoles(), ocupacion.getJueves(), ocupacion.getViernes(), ocupacion.getSabado(), ocupacion.getSiete_nueve(), ocupacion.getNueve_once(), ocupacion.getOnce_una(), ocupacion.getDos_cuatro(), ocupacion.getCuatro_seis(), ocupacion.getSeis_ocho(), ocupacion.getOcho_nueve());
+		ocupacionDAO.delete(dOcupacion);
+		return showSalasRoot((Model)model);
+	}
 
 	@PostMapping("/super/sala-register")
 	public ModelAndView addSala(Model model1, @ModelAttribute("sala")Sala sala, BindingResult result, ModelMap model){
