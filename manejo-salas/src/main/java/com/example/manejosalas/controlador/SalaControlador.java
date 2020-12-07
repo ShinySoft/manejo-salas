@@ -553,23 +553,34 @@ public class SalaControlador extends SalaServicio {
 		
 		Sala salaSolicitada = salaDAO.findByIdAndEdificioId(SalaControlador.salaRegistradaSolicitud.getId(), SalaControlador.salaRegistradaSolicitud.getEdificioId());
 		solicitud.setSalaId(salaSolicitada);
-		
-		if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
 
-			if((requestUser.getPerfil().equals("A")) || (requestUser.getPerfil().equals("A"))) {
-				solicitud.setEstado("APROBADA");
+		try
+		{
+			if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
+        if((requestUser.getPerfil().equals("A")) || (requestUser.getPerfil().equals("A"))) {
+          solicitud.setEstado("APROBADA");
+        }
+				solicitudDAO.save(solicitud);
+			}else {
+				throw new Exception("La sala esta ocupada en esta franja horaria");
 			}
-			solicitudDAO.save(solicitud);
-		}else {
-			throw new Exception("La sala esta ocupada en esta franja horaria");
 		}
-
+		catch (Exception e) {							
+			
+			model.addAttribute("solicitudError", "true");
+			model.addAttribute("solicitudErrorMessage","La sala esta ocupada en esta franja horaria");								
+			
+			return showSalasRoot((Model)model);
+		}	
+		
 		//Notificate the user and the admin
 		sendSalaRequestMade(solicitud);	//User notification
 		sendSalaRequestConfirmation(solicitud); //Admin notification
-						
-		return showSalasRoot((Model)model);
 		
+		model.addAttribute("solicitudSuccess", "true");
+		model.addAttribute("solicitudSuccessMessage","Solicitud egistrada");
+						
+		return showSalasRoot((Model)model);		
 	}	
 	
 	@PostMapping("admin/edit")
@@ -713,13 +724,22 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.save(sala);
 		return showSalasSuper(model1);
 	} 
-	
+
 	@GetMapping("/test")
 	public List<Ocupacion> test(){
 		return  ocupacionSemana(semanaYear(Date.valueOf("2020-12-10")),2020,4,104); 
 		//return solicitudDAO.findHourBytest(104,Time.valueOf("00:00:00"));
 	}
 	
+	/**
+	 * Se generan archivos vacios con los reportes (Bug)
+	 * @param format
+	 * @param response
+	 * @throws JRException
+	 * @throws SQLException
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
 	@GetMapping("/super/generar-reporte/{format}")
 	@ResponseBody
 	public void generateReport(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
@@ -728,16 +748,11 @@ public class SalaControlador extends SalaServicio {
 		
 		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
 		
-	    String[] pathBroken = ubicacionReporte.split("/");
+	    String[] pathBroken = ubicacionReporte.split("/");   
 	    
-	    String pathFolder = "";
+//	    String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
 	    
-	    for(int i = 0; i < pathBroken.length - 1; i++){
-	    	pathFolder += pathBroken[i] + "/";
-	    }
-	   	    
-				
-		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
+	    String nombreDocumento = pathBroken[pathBroken.length-1];
 		
 	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
 	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
@@ -761,11 +776,54 @@ public class SalaControlador extends SalaServicio {
 	      }		
 		
 		reporteServicio.deleteDocument(ubicacionReporte);
-		
-
-			    
+		System.out.println(ubicacionReporte);			    
 						
 	}
+	
+//	@GetMapping("/super/generar-reporte/{format}")	
+//	public String generateReport(@PathVariable String format) throws JRException, SQLException, IOException, DocumentException{
+//			
+//		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
+//		
+//		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
+//		
+//	    String[] pathBroken = ubicacionReporte.split("/");
+//	    
+//	    String pathFolder = "";
+//	    
+//	    for(int i = 0; i < pathBroken.length - 1; i++){
+//	    	pathFolder += pathBroken[i] + "/";
+//	    }
+//	   	    
+//				
+//		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
+//		
+//	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
+//	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
+//	      
+//	      response.setHeader("Content-Disposition", "attachment; filename=" +nombreDocumento);
+//	      response.setHeader("Content-Transfer-Encoding", "binary");
+//	      try {
+//	    	  BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+//	    	  FileInputStream fis = new FileInputStream(ubicacionReporte);
+//	    	  int len;
+//	    	  byte[] buf = new byte[1024];
+//	    	  while((len = fis.read(buf)) > 0) {
+//	    		  bos.write(buf,0,len);
+//	    	  }
+//	    	  bos.close();
+//	    	  response.flushBuffer();
+//	      }
+//	      catch(IOException e) {
+//	    	  e.printStackTrace();
+//	    	  
+//	      }		
+//		
+//		reporteServicio.deleteDocument(ubicacionReporte);
+//		return ubicacionReporte;
+//		return reporteServicio.getPagePdf(ubicacionReporte, 3);
+//}
+
 	
 
 	
