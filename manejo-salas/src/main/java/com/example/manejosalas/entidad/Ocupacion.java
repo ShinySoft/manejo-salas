@@ -77,8 +77,8 @@ public class Ocupacion implements Serializable {
 	@Column(name="seis_ocho")
     private boolean seis_ocho = false;
 
-	@Column(name="seis_nueve")
-    private boolean seis_nueve = false;
+	@Column(name="ocho_nueve")
+    private boolean ocho_nueve = false;
 
 	@Column
     private String descripcion;
@@ -141,8 +141,8 @@ public class Ocupacion implements Serializable {
     public boolean getSeis_ocho(){
         return seis_ocho;
     }
-    public boolean getSeis_nueve(){
-        return seis_nueve;
+    public boolean getOcho_nueve(){
+        return ocho_nueve;
     }
 
     public String getDescripcion(){
@@ -188,8 +188,8 @@ public class Ocupacion implements Serializable {
     public void setSeis_ocho(boolean seis_ocho){
         this.seis_ocho = seis_ocho;
     }  
-    public void setSeis_nueve(boolean seis_nueve){
-        this.seis_nueve = seis_nueve;
+    public void setOcho_nueve(boolean seis_nueve){
+        this.ocho_nueve = seis_nueve;
     }  
 
     public void setDescripcion(String descripcion){

@@ -84,12 +84,11 @@ public class ReporteServicio {
             //JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);        
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSourceConfig.getDataSource().getConnection());
             
-            String currentDate = ( new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" ) ).format( Calendar.getInstance().getTime() );
+            String currentDate = ( new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" ) ).format( Calendar.getInstance().getTime() );            
+            //            nombreReporte = String.valueOf(id) + "_" +  Calendar.getInstance().getTime().toString();          
+            String auxDate = String.valueOf(id)+String.valueOf(Math.abs(currentDate.hashCode()));           
             
-            String nombreReporte = "super_salas_";
-            nombreReporte = String.valueOf(id) + "_" +  Calendar.getInstance().getTime().toString();
-            
-            finalPath = exportReport(nombreReporte, "pdf", jasperPrint);
+            finalPath = exportReport(auxDate, "pdf", jasperPrint);
     	}
     	else if(TipoReporte.ADMIN_SALAS.compareTo(tipoReporte) == 0){
     		finalPath = "";
@@ -106,10 +105,9 @@ public class ReporteServicio {
 	    BufferedWriter bw = new BufferedWriter(new FileWriter(fileExist));
 
 	    fileExist.delete();
-    	bw.flush();
-	    
+//    	bw.flush();	    
     	
-	    bw.close();
+	    bw.close();	    	    
     }
     
     @SuppressWarnings("deprecation")
@@ -137,25 +135,9 @@ public class ReporteServicio {
 	        stamper = new PdfStamper(reader,new FileOutputStream(path3));
 	        stamper.close();
 	        reader.close();
-	    }    
-    
+	    }        
 	    
-	    deleteDocument(src);	    
-	    
-	    
-	    /*
-	    BufferedWriter bw2 = new BufferedWriter(new FileWriter(src));
-	    	    
 
-	    	String var;
-	    	
-	    	while((var = br.readLine()) != null){
-	    		System.out.println(var);
-	    		bw2.append(var);
-	    	}
-	    	br.close();
-	    	bw2.close();
-*/
 	    PDFMergerUtility ut = new PDFMergerUtility();
 	    
 	    for(int i = 1; i < page + 1; i++){
@@ -166,7 +148,7 @@ public class ReporteServicio {
 	    ut.setDestinationFileName(src);
 	    ut.mergeDocuments();
 	    
-    	return path2;    
+    	return src;    
     }
     
     public static boolean renameFile(File toBeRenamed, String new_name) {
