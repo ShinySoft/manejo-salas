@@ -13,7 +13,10 @@ import static java.nio.file.StandardCopyOption.*;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
 import com.example.manejosalas.DAO.SalaDAO;
+import com.example.manejosalas.DAO.SolicitudDAO;
 import com.example.manejosalas.entidad.Sala;
+import com.example.manejosalas.entidad.SalaSolicitud;
+import com.example.manejosalas.entidad.SalaSolicitudSemana;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
@@ -30,7 +33,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +48,9 @@ public class ReporteServicio {
 	
     @Autowired
     private SalaDAO repository;
+    
+    @Autowired
+    private SolicitudDAO solicitudesDAO;
     
     public String exportReport(String nombre, String reportFormat, JasperPrint jasperPrint) throws FileNotFoundException, JRException, SQLException {
     	Path currentRelativePath = Paths.get("");
@@ -90,11 +98,77 @@ public class ReporteServicio {
             
             finalPath = exportReport(auxDate, "pdf", jasperPrint);
     	}
-    	else if(TipoReporte.ADMIN_SALAS.compareTo(tipoReporte) == 0){
-    		finalPath = "";
+    	else if(TipoReporte.ADMIN_SALAS_1.compareTo(tipoReporte) == 0){
+    		
+            Collection<SalaSolicitud> solicitudesSala = solicitudesDAO.findConsultas(id);
+    		
+    		/*
+    		ArrayList<SalaSolicitud> solicitudesSala = new ArrayList<>();
+    		
+    		for(int i = 0; i < 5; i++){
+    			
+    			SalaSolicitud ss = new SalaSolicitud();
+    			
+    			ss.setEdificio(i);
+    			ss.setSala(i + 2);
+    			ss.setSolicitudes(i*3);
+    			
+    			solicitudesSala.add(ss);
+    		}
+            
+            */
+            //load file and compile it
+            File file = ResourceUtils.getFile("classpath:admin_salas.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(solicitudesSala);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("createdBy", "GESCOL");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            
+            String currentDate = ( new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" ) ).format( Calendar.getInstance().getTime() );            
+            //            nombreReporte = String.valueOf(id) + "_" +  Calendar.getInstance().getTime().toString();          
+            String auxDate = String.valueOf(id)+String.valueOf(Math.abs(currentDate.hashCode()));           
+            
+            finalPath = exportReport(auxDate, "pdf", jasperPrint);
+            
+                            		
+    		    		
     	}
-    	    	
+    	else if(TipoReporte.ADMIN_SALAS_2.compareTo(tipoReporte) == 0){
+    		
+            Collection<SalaSolicitudSemana> solicitudesSala = solicitudesDAO.findDiaConsultas(id);
+            /*
+    		ArrayList<SalaSolicitudSemana> adminSalaDias = new ArrayList<>();
+    		
+    		for(int i = 0; i < 5; i++){
+    			
+    			SalaSolicitudSemana ss = new SalaSolicitudSemana();
+    			
+				ss.setDia(String.valueOf(i));
+				ss.setSolicitudes(i*2);
+    			
+    			adminSalaDias.add(ss);
+    		}
+            */
+            
+            //load file and compile it
+            File file = ResourceUtils.getFile("classpath:admin_salas_sub_dias.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(solicitudesSala);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("createdBy", "GESCOL");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+            
+            String currentDate = ( new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" ) ).format( Calendar.getInstance().getTime() );            
+            //            nombreReporte = String.valueOf(id) + "_" +  Calendar.getInstance().getTime().toString();          
+            String auxDate = String.valueOf(id)+String.valueOf(Math.abs(currentDate.hashCode()));           
+            
+            finalPath = exportReport(auxDate, "pdf", jasperPrint);              		
+    		    		
+    	}    	    	
+    	
     	return finalPath;
+    	
     }
     
     
@@ -149,6 +223,25 @@ public class ReporteServicio {
 	    ut.mergeDocuments();
 	    
     	return src;    
+    }
+    
+    public String combineTwoPDF(String path1, String path2) throws IOException{
+    	
+    	
+    	PDFMergerUtility ut = new PDFMergerUtility();
+    	
+    	File f1 = new File(path1);
+    	File f2 = new File(path2);
+    	
+    	ut.addSource(f1);
+    	ut.addSource(f2);
+    	
+	    ut.setDestinationFileName(path1);
+	    ut.mergeDocuments();
+	    
+    	return path1;    
+    	
+    	
     }
     
     public static boolean renameFile(File toBeRenamed, String new_name) {
