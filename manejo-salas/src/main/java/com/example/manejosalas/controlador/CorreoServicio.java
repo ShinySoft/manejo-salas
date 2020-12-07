@@ -138,7 +138,7 @@ public class CorreoServicio {
 		usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
 		
 		//Gotta change for the URL where the server is hosted (in our case the ipv4 of the EC2 instance)
-		validationMessage += String.format("localhost:8080/usuarios/activate-user/%d/%d", usuario.getId(), usuario.hashCode()); 
+		validationMessage += String.format("ec2-52-87-127-211.compute-1.amazonaws.com:8080/usuarios/activate-user/%d/%d", usuario.getId(), usuario.hashCode()); 
 		
 		//Here is where we send the code via email
 		sendEmail(usuario.getCorreo(), validationMessage, "Activación cuenta UNLugar");			
@@ -172,7 +172,7 @@ public class CorreoServicio {
 		usuario = usuarioDAO.findByCorreo(usuario.getCorreo());
 		
 		//Gotta change for the URL where the server is hosted (in our case the ipv4 of the EC2 instance)
-		validationMessage += String.format("localhost:8080/usuarios/forget-password/%d/%d", usuario.getId(), usuario.hashCode()); 
+		validationMessage += String.format("ec2-52-87-127-211.compute-1.amazonaws.com:8080/usuarios/forget-password/%d/%d", usuario.getId(), usuario.hashCode()); 
 		
 		//Here is where we send the code via email
 		sendEmail(usuario.getCorreo(), validationMessage, "Restaurar contraseña UNLugar");			
