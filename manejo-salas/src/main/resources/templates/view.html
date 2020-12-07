@@ -34,6 +34,7 @@
 		$(document).ready(function () {
 			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
 			$('#userList').DataTable();
+			$('#salaList1').DataTable();
 		});
 	</script>
 
@@ -153,8 +154,10 @@
 			<a aria-selected="false" role="tab" data-toggle="pill" id="solicitudes-historial-tab"
 				href="#solicitudes-historial" aria-controls="solicitudes-historial" class="nav-link">Historial de
 				solicitudes</a>
-			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="#informes"
-				aria-controls="informes" class="nav-link" th:if="${adminLogin}">Informes</a>
+<!-- 			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="/admin/generar-informes/pdf" -->
+<!-- 				aria-controls="informes" class="nav-link" th:if="${adminLogin}">Generar Informes</a> -->
+<!-- 			<a aria-selected="false" role="tab" data-toggle="pill" id="informes-tab" href="/super/generar-informes/pdf" -->
+<!-- 				aria-controls="informes" class="nav-link" th:if="${superLogin}">Generar Informes</a> -->
 			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"
 				aria-controls="caracteristicas" class="nav-link" th:if="${adminLogin}">Nueva Caracteristica</a>
 			<a aria-selected="false" role="tab" data-toggle="pill" id="caracteristicas-tab" href="#caracteristicas"

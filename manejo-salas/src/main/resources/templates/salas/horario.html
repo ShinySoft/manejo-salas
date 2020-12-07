@@ -174,14 +174,42 @@
     </div>
   </body>
 
-  <script>
+  <script th:inline="javascript">
+  /*<![CDATA[*/ 
+
+  
+ 		let lun=[[${lunes}]]; 
+		let mar=[[${martes}]];
+  		let mie=[[${miercoles}]];
+  		let jue=[[${jueves}]];
+  		let vie=[[${viernes}]];
+  		let sab=[[${sabado}]];
+  
+/*]]>*/
+  			
   		
-  		var l = "Ocupado";
+  		
+//   	7-9
+  		var l = "";
   		var m = "";
-  		var mi = "Ocupado";
+  		var mi = "";
   		var j = "";
   		var v = "";
-  		var s = "";  
+  		var s = "";
+  
+  		if (lun[0])
+  			var l = "Ocupado";
+  		if (mar[0])
+  			var m = "Ocupado";
+  		if (mie[0])
+  			var mi = "Ocupado";
+  		if (jue[0])
+  			var j = "Ocupado";
+  		if (vie[0])
+  			var v = "Ocupado";
+  		if (sab[0])
+  			var s = "Ocupado";  
+  		
 	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>07:00 09:00</span></td>
 	  	<td>${l}</td>
@@ -191,13 +219,29 @@
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
 	  	</tr>`;
+	  	
+	  //9-11	
 	  	var l = "";
-  		var m = "Ocupado";
+  		var m = "";
   		var mi = "";
   		var j = "";
-  		var v = "Ocupado";
+  		var v = "";
   		var s = "";
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+  
+  		if (lun[1])
+  			var l = "Ocupado";
+  		if (mar[1])
+  			var m = "Ocupado";
+  		if (mie[1])
+  			var mi = "Ocupado";
+  		if (jue[1])
+  			var j = "Ocupado";
+  		if (vie[1])
+  			var v = "Ocupado";
+  		if (sab[1])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>09:00 11:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -205,9 +249,30 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;		
+	  	</tr>`;
 	  	
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+	  //11-13	
+	  	var l = "";
+  		var m = "";
+  		var mi = "";
+  		var j = "";
+  		var v = "";
+  		var s = "";
+  
+  		if (lun[2])
+  			var l = "Ocupado";
+  		if (mar[2])
+  			var m = "Ocupado";
+  		if (mie[2])
+  			var mi = "Ocupado";
+  		if (jue[2])
+  			var j = "Ocupado";
+  		if (vie[2])
+  			var v = "Ocupado";
+  		if (sab[2])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>11:00 13:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -215,9 +280,30 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;	
+	  	</tr>`;
 	  	
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+	  //14-16	
+	  	var l = "";
+  		var m = "";
+  		var mi = "";
+  		var j = "";
+  		var v = "";
+  		var s = "";
+  
+  		if (lun[3])
+  			var l = "Ocupado";
+  		if (mar[3])
+  			var m = "Ocupado";
+  		if (mie[3])
+  			var mi = "Ocupado";
+  		if (jue[3])
+  			var j = "Ocupado";
+  		if (vie[3])
+  			var v = "Ocupado";
+  		if (sab[3])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>14:00 16:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -225,9 +311,30 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;	
+	  	</tr>`;
 	  	
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+	  //16-18	
+	  	var l = "";
+  		var m = "";
+  		var mi = "";
+  		var j = "";
+  		var v = "";
+  		var s = "";
+  
+  		if (lun[4])
+  			var l = "Ocupado";
+  		if (mar[4])
+  			var m = "Ocupado";
+  		if (mie[4])
+  			var mi = "Ocupado";
+  		if (jue[4])
+  			var j = "Ocupado";
+  		if (vie[4])
+  			var v = "Ocupado";
+  		if (sab[4])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>16:00 18:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -235,9 +342,30 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;	
+	  	</tr>`;
 	  	
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+	  //18-20	
+	  	var l = "";
+  		var m = "";
+  		var mi = "";
+  		var j = "";
+  		var v = "";
+  		var s = "";
+  
+  		if (lun[5])
+  			var l = "Ocupado";
+  		if (mar[5])
+  			var m = "Ocupado";
+  		if (mie[5])
+  			var mi = "Ocupado";
+  		if (jue[5])
+  			var j = "Ocupado";
+  		if (vie[5])
+  			var v = "Ocupado";
+  		if (sab[5])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>18:00 20:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -245,9 +373,30 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;	
+	  	</tr>`;
 	  	
-	  	document.getElementById("tableBody").innerHTML += `<tr>	  
+	  //20-21	
+	  	var l = "";
+  		var m = "";
+  		var mi = "";
+  		var j = "";
+  		var v = "";
+  		var s = "";
+  
+  		if (lun[6])
+  			var l = "Ocupado";
+  		if (mar[6])
+  			var m = "Ocupado";
+  		if (mie[6])
+  			var mi = "Ocupado";
+  		if (jue[6])
+  			var j = "Ocupado";
+  		if (vie[6])
+  			var v = "Ocupado";
+  		if (sab[6])
+  			var s = "Ocupado";  
+  		
+	  	document.getElementById("tableBody").innerHTML += `<tr>
 	  	<td class="hour" rowspan="1"><span>20:00 21:00</span></td>
 	  	<td>${l}</td>
 	  	<td>${m}</td>
@@ -255,7 +404,7 @@
 	  	<td>${j}</td>
 	  	<td>${v}</td>
 	  	<td>${s}</td>	  	
-	  	</tr>`;	
+	  	</tr>`;
 		
 //       drawSchedule(7, 12, 2);
 //       drawSchedule(14, 19, 2);

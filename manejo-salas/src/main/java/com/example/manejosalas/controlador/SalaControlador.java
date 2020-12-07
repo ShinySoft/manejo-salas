@@ -108,6 +108,7 @@ public class SalaControlador extends SalaServicio {
 		
 		Usuario admin = usuarioDAO.findByCorreo(userMail);
 		
+		List<Edificio> edificios = edificioDAO.findAll();
 		List<Solicitud> solicitudes = solicitudDAO.findAllBysalaid_encargado_correo(userMail);
 		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
 		ArrayList<Solicitud> solicitudesAux = new ArrayList<Solicitud>();
@@ -134,6 +135,9 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);
 		model.addAttribute("correoEncargado", userMail);	
 		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
+		model.addAttribute("salaHorario", new Sala());
+		model.addAttribute("edificiosLista",edificios);
+		model.addAttribute("semanasHorario", SemanaHorario.getPerfiles());
 		
 		model.addAttribute("adminLogin", "true");
 
@@ -148,6 +152,7 @@ public class SalaControlador extends SalaServicio {
 		
 		ArrayList<Solicitud> solicitudesAux = new ArrayList<Solicitud>();
 		
+		List<Edificio> edificios = edificioDAO.findAll();
 		List<Solicitud> solicitudes = solicitudDAO.findAllByusuarioid_correo(userMail);
 		ArrayList<Solicitud>solicitudesPendientes = new ArrayList<Solicitud>();
 		for (int i=0;i<solicitudes.size();i++) {
@@ -170,6 +175,10 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudesAux);
 		model.addAttribute("solicitudesPendientesList", solicitudesPendientes);			
 		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
+		model.addAttribute("salaHorario", new Sala());
+		model.addAttribute("edificiosLista",edificios);
+		model.addAttribute("semanasHorario", SemanaHorario.getPerfiles());
+
 		
 		model.addAttribute("userLogin", "true");
 
@@ -206,6 +215,9 @@ public class SalaControlador extends SalaServicio {
 		model.addAttribute("solicitudList", solicitudes);	
 		model.addAttribute("solicitudesAdminList2", solicitudesAdmin);
 		model.addAttribute("categCaracteristica", CategoriaSetUp.getCategorias());
+		model.addAttribute("salaHorario", new Sala());
+		model.addAttribute("semanasHorario", SemanaHorario.getPerfiles());
+
 		
 		model.addAttribute("superLogin", "true");
 
@@ -222,6 +234,35 @@ public class SalaControlador extends SalaServicio {
 	public ModelAndView add(@ModelAttribute("SalaRegistro")Sala sala, BindingResult result, Model model, boolean superEdit) {		
 		salaDAO.save(sala);
 		return showSalasRoot(model);
+	}	
+	
+	@PostMapping("/all/ver-horario")
+	public ModelAndView cargarHorario(@ModelAttribute("SalaHorario")Sala sala, BindingResult result, Model model, boolean superEdit) {
+		
+		Boolean[][] mymatriz = ocupacionSemana(sala.getCapacidad(),sala.getEdificioId(),sala.getId());
+		for(Boolean[] i: mymatriz)
+		{
+			for(Boolean j: i)
+			{
+				System.out.print(j);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+		
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		model.addAttribute("lunes", mymatriz[0]);
+		model.addAttribute("martes", mymatriz[1]);
+		model.addAttribute("miercoles", mymatriz[2]);
+		model.addAttribute("jueves", mymatriz[3]);
+		model.addAttribute("viernes", mymatriz[4]);
+		model.addAttribute("sabado", mymatriz[5]);
+		
+		modelAndView.setViewName ( "salas/horario" );	
+		
+		return modelAndView;
 	}	
 	
 	@GetMapping("/admin/show-more/{id}/{edificioId}")
@@ -733,12 +774,6 @@ public class SalaControlador extends SalaServicio {
 		return showSalasSuper(model1);
 	} 
 
-	@GetMapping("/test")
-	public List<Ocupacion> test(){
-		return  ocupacionSemana(semanaYear(Date.valueOf("2020-12-10")),2020,4,104); 
-		//return solicitudDAO.findHourBytest(104,Time.valueOf("00:00:00"));
-	}
-	
 	/**
 	 * Se generan archivos vacios con los reportes (Bug)
 	 * @param format
@@ -869,9 +904,43 @@ class CategoriaSetUp{
 		
 	}
 
+class SemanaHorario{
 	
-
-
-
-
-
+	private int id;
+	private String value;	
+	
+	public SemanaHorario(int id, String value) {
+		super();
+		this.id = id;
+		this.value = value;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public static Iterable<SemanaHorario> getPerfiles(){
+		
+		ArrayList<SemanaHorario> perfiles = new ArrayList();
+				
+		perfiles.add(new SemanaHorario(0, "Semana actual"));
+		perfiles.add(new SemanaHorario(1, "Dentro de una semana"));
+		perfiles.add(new SemanaHorario(2, "Dentro de dos semanas"));
+		perfiles.add(new SemanaHorario(3, "Dentro de tres semanas"));
+		perfiles.add(new SemanaHorario(4, "Dentro de cuatro semanas"));
+		perfiles.add(new SemanaHorario(5, "Dentro de cinco semanas"));
+		perfiles.add(new SemanaHorario(6, "Dentro de seis semanas"));
+		
+		return perfiles;	
+	}
+	
+}
