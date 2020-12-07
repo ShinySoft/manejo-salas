@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+<meta charset="UTF-8">
 
-</body>
-</html>
+<form id="formHorario" th:object="${salaHorario}" th:action="@{/salas/all/ver-horario}" method="post">	
+	
+    <div class="form-group row">
+		<label class="col-lg-3 col-form-label form-control-label">Edificio</label>
+		<div class="col-lg-9">
+			<select class="form-control" th:field="${salaHorario.edificioId}"
+				th:disabled="${disableFields}">
+				<option th:each="edificio :${edificiosLista}" th:value="${edificio.id}"
+					th:text="${edificio.id} + ' ' + ${edificio.nombre}">
+				</option>
+			</select>
+		</div>
+	</div>	    
+    
+    <div class="form-group">
+        <label for="salaHorario">Sala</label>
+        <input type="text" class="form-control" th:field="${salaHorario.id}" id="salaHorario" required>
+    </div>  
+    <div class ="form-group">
+        <label class="col-form-label form-control-label">Semana</label>
+		<div class="">
+			<select class="form-control" th:field="${salaHorario.capacidad}" >
+				<option th:each="s :${semanasHorario}" th:value="${s.id}" th:text="${s.value}">
+				</option>
+			</select>
+		</div>
+
+    </div>
+    <input type="submit" value="Buscar" id="buscar" class="btn btn-primary">   
+    
+</form>
