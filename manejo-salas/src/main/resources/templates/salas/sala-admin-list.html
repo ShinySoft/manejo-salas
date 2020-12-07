@@ -30,22 +30,27 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr th:each="caracteristica: ${caracteristicaList}">			
-				<!--  <td th:text="${caracteristica.salas}"></td>
-				<td th:text="${caracteristica.edificio}"></td>-->
-				<td th:text="${caracteristica.nombre}"></td>
-				<td th:text="${caracteristica.descripcion}"></td>
-				<td th:text="${caracteristica.categoria}"></td>
-				<td><a class="btn btn-primary" data-toggle="collapse" href="#${caracteristica.id}" role="button" aria-expanded="false" aria-controls="${caracteristica.id}">Salas</a></td>
-				<div th:each="sala: ${caracteristica.salas}" class="collapse multi-collapse" id="${caracteristica.id}">
-					<td th:text="${sala.id}" colspan="2"></td>
-					<td th:text="${sala.edificioId}"></td>
-					<td>	
-						<a href="#" th:href="@{'/salas/user/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
-						<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>				
-					</td>
+			<div th:each="caracteristica: ${caracteristicaList}">			
+					<!--  <td th:text="${caracteristica.salas}"></td>
+					<td th:text="${caracteristica.edificio}"></td>-->
+					<tr>
+						<td th:text="${caracteristica.nombre}"></td>
+						<td th:text="${caracteristica.descripcion}"></td>
+						<td th:text="${caracteristica.categoria}"></td>
+						<td><a class="btn btn-primary" data-toggle="collapse" th:href="@{'#'+${caracteristica.id}}" role="button" aria-expanded="false" th:aria-controls="${caracteristica.id}">Salas</a></td>
+					</tr>
+					<tr th:each="sala: ${caracteristica.salas}" class="collapse multi-collapse" th:id="${caracteristica.id}">
+						<td th:text="@{'Sala: '+${sala.id}}" colspan="2"></td>
+						<td th:text="@{'Edificio: '+${sala.edificioId}}"></td>
+						<td th:if="${adminLogin}">	
+							<a href="#" th:href="@{'/salas/admin/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>
+							<a href="#" th:href="@{'/salas/all/solicitar/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="far fa-calendar-check"></i></a>				
+						</td>
+						<td th:if="${superLogin}">	
+							<a href="#" th:href="@{'/salas/super/show-more/'+ ${sala.id} + '/' +${sala.edificioId}}"><i class="fas fa-info-circle"></i></a>				
+						</td>
+					</tr>
 				</div>
-			</tr>
 			</tbody>
 		</table>
 	</div>

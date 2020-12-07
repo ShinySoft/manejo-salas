@@ -539,12 +539,6 @@ public class SalaControlador extends SalaServicio {
 		Usuario requestUser = usuarioDAO.findByCorreo(SalaControlador.currentUserMail);
 		
 		//Autocheck for admin request
-		if((requestUser.getPerfil().equals("A")) || (requestUser.getPerfil().equals("A"))) {
-			solicitud.setEstado("APROBADA");
-		}
-		else {
-			solicitud.setEstado("PENDIENTE");
-		}
 		
 		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
@@ -555,13 +549,17 @@ public class SalaControlador extends SalaServicio {
 		  solicitud.setHora_fin(sqlTime2); 		
 				
 		solicitud.setUsuario(requestUser);
+		solicitud.setEstado("PENDIENTE");
 		
 		Sala salaSolicitada = salaDAO.findByIdAndEdificioId(SalaControlador.salaRegistradaSolicitud.getId(), SalaControlador.salaRegistradaSolicitud.getEdificioId());
-		
 		solicitud.setSalaId(salaSolicitada);
+
 		try
 		{
 			if(solicitudDAO.findHourByBetween(solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId(),solicitud.getFecha_prestamo(), sqlTime1, sqlTime2).isEmpty() && comprobarOcupacion(solicitud.getFecha_prestamo(), sqlTime1, sqlTime2, solicitud.getSalaID().getEdificioId(), solicitud.getSalaID().getId())) {
+        if((requestUser.getPerfil().equals("A")) || (requestUser.getPerfil().equals("A"))) {
+          solicitud.setEstado("APROBADA");
+        }
 				solicitudDAO.save(solicitud);
 			}else {
 				throw new Exception("La sala esta ocupada en esta franja horaria");
@@ -726,6 +724,12 @@ public class SalaControlador extends SalaServicio {
 		salaDAO.save(sala);
 		return showSalasSuper(model1);
 	} 
+
+	@GetMapping("/test")
+	public List<Ocupacion> test(){
+		return  ocupacionSemana(semanaYear(Date.valueOf("2020-12-10")),2020,4,104); 
+		//return solicitudDAO.findHourBytest(104,Time.valueOf("00:00:00"));
+	}
 	
 	/**
 	 * Se generan archivos vacios con los reportes (Bug)
