@@ -548,9 +548,9 @@ public class SalaControlador extends SalaServicio {
 		
 		//Gotta check this, 'cause time is not working well
 		  Time sqlTime1 = Time.valueOf(solicitud.getHora_inicio_temp()+":00");
-		  sqlTime1.setHours(sqlTime1.getHours()-5);
+		  sqlTime1.setHours(sqlTime1.getHours());
 		  Time sqlTime2 = Time.valueOf(solicitud.getHora_fin_temp()+":00");
-		  sqlTime2.setHours(sqlTime2.getHours()-5);
+		  sqlTime2.setHours(sqlTime2.getHours());
 		  solicitud.setHora_inicio(sqlTime1);
 		  solicitud.setHora_fin(sqlTime2); 		
 				
@@ -738,7 +738,7 @@ public class SalaControlador extends SalaServicio {
 	 */
 	@GetMapping("/super/generar-reporte/{format}")
 	@ResponseBody
-	public void generateReport(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
+	public void generateReportSuper(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
 			
 		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
 		
@@ -771,54 +771,85 @@ public class SalaControlador extends SalaServicio {
 	    	  
 	      }		
 		
-		reporteServicio.deleteDocument(ubicacionReporte);
-		System.out.println(ubicacionReporte);			    
+		reporteServicio.deleteDocument(ubicacionReporte);					    
 						
 	}
 	
-//	@GetMapping("/super/generar-reporte/{format}")	
+	
+	/**
+	 * Se generan archivos vacios con los reportes (Bug)
+	 * @param format
+	 * @param response
+	 * @throws JRException
+	 * @throws SQLException
+	 * @throws IOException
+	 * @throws DocumentException
+	 */
+	@GetMapping("/admin/generar-reporte/{format}")
+	@ResponseBody	
+	public void generateReportAdmin(@PathVariable String format, HttpServletResponse response) throws JRException, SQLException, IOException, DocumentException{
+		
+		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
+		
+		String ubicacionReporte1 = reporteServicio.generateReport(usuario.getId(), TipoReporte.ADMIN_SALAS_1);
+		
+	    String[] pathBroken = ubicacionReporte1.split("/");   	    
+	    
+	    String nombreDocumento = pathBroken[pathBroken.length-1];	   
+	    
+	    
+		
+		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.ADMIN_SALAS_2);
+		
+	    pathBroken = ubicacionReporte.split("/");   
+	    
+	    
+	    nombreDocumento = pathBroken[pathBroken.length-1];
+	    
+	    
+	    ubicacionReporte = reporteServicio.combineTwoPDF(ubicacionReporte1, ubicacionReporte);		
+		
+		
+	    //Bajar el reporte
+		
+	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
+	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
+	      
+	      response.setHeader("Content-Disposition", "attachment; filename=" +nombreDocumento);
+	      response.setHeader("Content-Transfer-Encoding", "binary");
+	      try {
+	    	  BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+	    	  FileInputStream fis = new FileInputStream(ubicacionReporte);
+	    	  int len;
+	    	  byte[] buf = new byte[1024];
+	    	  while((len = fis.read(buf)) > 0) {
+	    		  bos.write(buf,0,len);
+	    	  }
+	    	  bos.close();
+	    	  response.flushBuffer();
+	      }
+	      catch(IOException e) {
+	    	  e.printStackTrace();
+	    	  
+	      }		
+		
+	    reporteServicio.deleteDocument(ubicacionReporte1);	      
+		reporteServicio.deleteDocument(ubicacionReporte);			
+						
+	}	
+	
+//	
+//	
+//	@GetMapping("/admin/generar-reporte/{format}")	
 //	public String generateReport(@PathVariable String format) throws JRException, SQLException, IOException, DocumentException{
-//			
+//		
 //		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
 //		
-//		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.SUPER_SALAS);
+//		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.ADMIN_SALAS_2);
 //		
-//	    String[] pathBroken = ubicacionReporte.split("/");
-//	    
-//	    String pathFolder = "";
-//	    
-//	    for(int i = 0; i < pathBroken.length - 1; i++){
-//	    	pathFolder += pathBroken[i] + "/";
-//	    }
-//	   	    
-//				
-//		String nombreDocumento = reporteServicio.getPagePdf(ubicacionReporte, 3);
-//		
-//	      if (nombreDocumento.indexOf(".pdf")>-1) response.setContentType("application/pdf");
-//	      if (nombreDocumento.indexOf(".html")>-1) response.setContentType("application/html");
-//	      
-//	      response.setHeader("Content-Disposition", "attachment; filename=" +nombreDocumento);
-//	      response.setHeader("Content-Transfer-Encoding", "binary");
-//	      try {
-//	    	  BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-//	    	  FileInputStream fis = new FileInputStream(ubicacionReporte);
-//	    	  int len;
-//	    	  byte[] buf = new byte[1024];
-//	    	  while((len = fis.read(buf)) > 0) {
-//	    		  bos.write(buf,0,len);
-//	    	  }
-//	    	  bos.close();
-//	    	  response.flushBuffer();
-//	      }
-//	      catch(IOException e) {
-//	    	  e.printStackTrace();
-//	    	  
-//	      }		
-//		
-//		reporteServicio.deleteDocument(ubicacionReporte);
 //		return ubicacionReporte;
-//		return reporteServicio.getPagePdf(ubicacionReporte, 3);
-//}
+//		
+//	}
 
 	
 
