@@ -839,6 +839,7 @@ public class SalaControlador extends SalaServicio {
 		Usuario usuario = usuarioDAO.findByCorreo(currentUserMail);
 		
 		String ubicacionReporte1 = reporteServicio.generateReport(usuario.getId(), TipoReporte.ADMIN_SALAS_1);
+
 		
 	    String[] pathBroken = ubicacionReporte1.split("/");   	    
 	    
@@ -847,6 +848,9 @@ public class SalaControlador extends SalaServicio {
 	    
 		
 		String ubicacionReporte = reporteServicio.generateReport(usuario.getId(), TipoReporte.ADMIN_SALAS_2);
+		
+		String ubicacionReporte2 = ubicacionReporte;
+
 		
 	    pathBroken = ubicacionReporte.split("/");   
 	    
@@ -881,8 +885,8 @@ public class SalaControlador extends SalaServicio {
 	      }		
 		
 	    reporteServicio.deleteDocument(ubicacionReporte1);	      
-		reporteServicio.deleteDocument(ubicacionReporte);			
-						
+		reporteServicio.deleteDocument(ubicacionReporte2);
+
 	}	
 	
 //	
