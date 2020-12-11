@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Salas y Espacios</title>
+
+	<!--JQUERY-->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+	<!-- Nuestro css
+	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
+		th:href="@{/css/user-form.css}">
+-->
+
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+	<!-- SCRIPT QUE CONVIERTE LA TABLA EN DATA TABLE CUANDO CARGA LA P�GINA -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#caracteristicasTable').DataTable();
+			$('#caracteristicasAllButSalaTable').DataTable();
+		});
+	</script>
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.window {
+			width: 100%;
+			height: 90%;
+			display: flex;
+		}
+
+		.content {
+			width: 60%;
+			margin: auto;
+			margin-top: 40px;
+		}
+
+		.footer {
+			display: flex;
+			vertical-align: middle;
+		}
+
+		.sidebar {
+			width: 250px;
+			bottom: 0;
+			left: 0;
+			height: -webkit-fill-available;
+			transition: all 0.3s;
+			position: fixed !important;
+			padding-top: 60px;
+		}
+
+		.sidenav {
+			height: -webkit-fill-available;
+			width: 0;
+			position: fixed;
+			left: 0;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none !important;
+			font-size: 20px;
+			display: block;
+			transition: 0.3s;
+			color: dimgrey;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		#main {
+			transition: margin-left .5s;
+			padding: 0 10%;
+			margin: 0 auto;
+			width: -webkit-fill-available;
+		}
+
+		.logoUN {
+			display: flex !important;
+		}
+
+		.logoUN span {
+			margin: auto;
+			font-size: 25px;
+			color: dimgrey;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Barra Superior -->
+	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
+		<a class="navbar-brand logoUN" href="/salas/">
+			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
+				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
+			<span> Lugar</span>
+		</a>
+		<div class="my-2 my-lg-0">
+			<form th:action="@{/logout}" method="post">
+				<input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Cerrar Sesion" />
+			</form>
+		</div>
+	</nav>
+	<div class="window" id="salaEdit">
+		<div id="main">
+			<form class="form" role="form" id="salaForm" autocomplete="off" th:object="${salaRegistro}"
+				th:action="${editMode}?@{/salas/admin/edit}: @{/salas/admin/add}" method="post">
+
+				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.encargado}" th:if="${editMode}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.id}" th:if="${userLogin}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.edificioId}" th:if="${userLogin}">
+				<input class="form-control" type=hidden th:field="${salaRegistro.encargado}" th:if="${userLogin}">
+			<!-- <input class="form-control" type=hidden th:field="${salaRegistro.caracteristicas}" th:if="${editMode}"> -->
+
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Edificio
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="edificioId" type="text" th:field="${salaRegistro.edificioId} "
+							th:disabled="${disableCriticFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Sala
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="id" type="text" th:field="${salaRegistro.id}"
+							th:disabled="${disableCriticFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Nombre</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="nombre" type="text" th:field="${salaRegistro.nombre}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Tipo</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="tipo" type="text" th:field="${salaRegistro.tipo}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Capacidad</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="capacidad" type="text" th:field="${salaRegistro.capacidad}"
+							th:disabled="${disableFields}">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Encargado</label>
+					<div class="col-lg-9">
+						<select class="form-control" th:field="${salaRegistro.encargado}"
+							th:disabled="${disableCriticFields}">
+							<option th:each="encargado :${encargadoEdit}" th:value="${encargado.id}"
+								th:text="${encargado.nombre} + ' ' + ${encargado.apellido}" th:disabled="${disableCriticFields}">
+							</option>
+						</select>
+					</div>		
+					
+					<!-- Este input le coloca las caracteristicas al objeto sala -->
+					<input class="form-control" id="capacidad" th:field="${salaRegistro.caracteristicas}"
+						th:value="${caracteristicas}" hidden>
+											
+					<label class="col-lg-3 col-form-label form-control-label">Caracteristicas:</label>
+				</div>			
+						
+			<!-- Esta es la tabla de las caracteristicas con las que cuenta la sala -->				
+			<div class="table-responsive">				
+				<table id="caracteristicasTable" class="table table-bordered table-hover table-striped">
+					<thead class="thead-light">
+						<tr>
+							<th scope="col">Categoría</th>
+							<th scope="col">Nombre</th>
+							<th scope="col">Descripción</th>							
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="c: ${caracteristicas}">
+							<td th:text="${c.categoria}"></td> <!--  -->
+							<td th:text="${c.nombre}"></td>
+							<td th:text="${c.descripcion}"></td>
+							<td>
+							<a th:if="${editMode}" href="#" th:href="@{'/salas/admin/edit-caracteristicas/0/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-times"></i></a>
+							<a th:if="${superMode}" href="#" th:href="@{'/salas/super/edit-caracteristicas/0/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-times"></i></a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			</form>
+			
+			<!-- Esta es la tabla de todas las caracteristicas registradas en el sistema -->
+			<div class="d-flex justify-content-center" th:if="${editMode}">
+				<p>			
+				  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				    Agregar caracteristicas
+				  </button>
+				</p>
+			</div>
+			<div class="collapse" id="collapseExample" th:if="${editMode}">
+			  <div class="card card-body">			  
+	   			<div class="table-responsive">
+					<table id="caracteristicasAllButSalaTable" class="table table-bordered table-hover table-striped">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Categoría</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Descripción</th>
+								<th scope="col"></th>							
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="c: ${caracteristicasAllButSala}">
+								<td th:text="${c.categoria}"></td> <!--  -->
+								<td th:text="${c.nombre}"></td>
+								<td th:text="${c.descripcion}"></td>
+								<td>
+								<a href="#" th:href="@{'/salas/admin/edit-caracteristicas/1/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-check"></i></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			  </div>
+			</div>			
+			<div class="d-flex justify-content-center" th:if="${superMode}">
+				<p>			
+				  <button class="btn btn-default btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+				    Agregar caracteristicas
+				  </button>
+				</p>
+			</div>
+			<div class="collapse" id="collapseExample" th:if="${superMode}">
+			  <div class="card card-body">			  
+	   			<div class="table-responsive">
+					<table id="caracteristicasAllButSalaTable" class="table table-bordered table-hover table-striped">
+						<thead class="thead-light">
+							<tr>
+								<th scope="col">Categoría</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Descripción</th>
+								<th scope="col"></th>							
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="c: ${caracteristicasAllButSala}">
+								<td th:text="${c.categoria}"></td> <!--  -->
+								<td th:text="${c.nombre}"></td>
+								<td th:text="${c.descripcion}"></td>
+								<td>
+								<a href="#" th:href="@{'/salas/super/edit-caracteristicas/1/'+ ${salaRegistro.edificioId}} + '/' + ${salaRegistro.id} + '/' + ${c.id} "><i class="fas fa-check"></i></a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			  </div>
+			</div>	
+
+			<div class="form-group row" th:if="${userLogin}">
+				<div class="col-lg-12 text-center">
+					<a href="#" th:href="@{'/salas/all/solicitar/'+ ${salaRegistro.id} + '/' +${salaRegistro.edificioId}}" class="btn btn-primary">Solicitar</a>
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/user/view'}">Volver</a>															
+				</div>
+			</div>
+			
+			<div class="form-group row" th:if="${editMode}">
+				<div class="col-lg-12 text-center">
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/admin/view'}">Volver</a>
+					<input class="btn btn-primary" form="salaForm" type="submit" value="Guardar">
+				</div>
+			</div>
+			
+			<div class="form-group row" th:if="${superMode}">
+				<div class="col-lg-12 text-center">
+					<a type="reset" class="btn btn-secondary" th:href="@{'/salas/super/view'}">Volver</a>
+					<input class="btn btn-primary" form="salaForm" type="submit" value="Guardar">
+				</div>
+			</div>
+			
+			<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
+					th:text="${salaFormErrorMessage}">Error Message</div>
+					
+			
+		</div>
+		
+
+		<script>
+			var opened = true;
+			function openNav() {
+				if (opened) {
+					document.getElementById("mySidenav").style.width = "200px";
+					document.getElementById("main").style.marginLeft = "200px";
+					opened = false;
+				} else {
+					document.getElementById("mySidenav").style.width = "0";
+					document.getElementById("main").style.marginLeft = "0";
+					opened = true;
+				}
+
+			}
+			
+
+		</script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<div class="table-responsive">
+	<table id="solicitudesAdminList" class="table table-bordered table-hover table-striped">
+		<thead class="thead-light">
+		<tr>			
+			<th scope="col">Nombre</th>
+			<th scope="col">Apellido</th>
+			<th scope="col">Correo</th>
+			<th ></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="solicitante: ${solicitudesAdminList2}">
+			<td th:text="${solicitante.getNombre()}"></td>
+			<td th:text="${solicitante.getApellido()}"></td>
+			<td th:text="${solicitante.getCorreo()}"></td>
+			<td>	 <!-- th:if="${superLogin}" -->
+					<a href="#" th:href="@{'/salas/solicitud/accept/'+${solicitante.getId()}}"><i class="fas fa-check"></i></a>																			
+					<a href="#" th:href="@{'/salas/solicitud/rehuse/'+${solicitante.getId()}}"><i class="fas fa-times"></i></a>					
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#solicitudesAdminList').DataTable();			
+		});
+	</script>

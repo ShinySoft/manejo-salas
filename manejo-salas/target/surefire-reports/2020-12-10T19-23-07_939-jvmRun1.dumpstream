@@ -1,0 +1,73 @@
+# Created at 2020-12-10T19:23:11.850
+TestSet has not finished before stream error has appeared >> initializing exit by non-null configuration: null
+java.io.EOFException
+	at java.base/java.io.DataInputStream.readInt(DataInputStream.java:396)
+	at org.apache.maven.surefire.booter.MasterProcessCommand.decode(MasterProcessCommand.java:115)
+	at org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:391)
+	at java.base/java.lang.Thread.run(Thread.java:832)
+
+
+# Created at 2020-12-10T19:23:13.495
+Unexpected IOException with stream: 2020-12-10 19:23:13.493  INFO 19872 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+
+
+# Created at 2020-12-10T19:23:13.564
+Unexpected IOException with stream: 2020-12-10 19:23:13.564  INFO 19872 --- [         task-1] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+
+
+# Created at 2020-12-10T19:23:13.623
+Unexpected IOException with stream: 2020-12-10 19:23:13.623  INFO 19872 --- [         task-1] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.21.Final
+
+
+# Created at 2020-12-10T19:23:13.736
+Unexpected IOException with stream: 2020-12-10 19:23:13.735  WARN 19872 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+
+
+# Created at 2020-12-10T19:23:13.767
+Unexpected IOException with stream: 2020-12-10 19:23:13.766  INFO 19872 --- [         task-1] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+
+
+# Created at 2020-12-10T19:23:13.913
+Unexpected IOException with stream: 2020-12-10 19:23:13.912  INFO 19872 --- [         task-1] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL57Dialect
+
+
+# Created at 2020-12-10T19:23:14.097
+Unexpected IOException with stream: 2020-12-10 19:23:14.096  INFO 19872 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@611c3eae, org.springframework.security.web.context.SecurityContextPersistenceFilter@5e9bf744, org.springframework.security.web.header.HeaderWriterFilter@440ef8d, org.springframework.security.web.csrf.CsrfFilter@1c62c3fd, org.springframework.security.web.authentication.logout.LogoutFilter@159ac15f, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@2ee92e7d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4b4814d0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1a2773a8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@13e00016, org.springframework.security.web.session.SessionManagementFilter@6f315b08, org.springframework.security.web.access.ExceptionTranslationFilter@3915e7c3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@687eb455]
+
+
+# Created at 2020-12-10T19:23:14.693
+Unexpected IOException with stream: 2020-12-10 19:23:14.693  INFO 19872 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+
+
+# Created at 2020-12-10T19:23:14.828
+Unexpected IOException with stream: 2020-12-10 19:23:14.827  INFO 19872 --- [         task-1] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+
+
+# Created at 2020-12-10T19:23:14.838
+Unexpected IOException with stream: 2020-12-10 19:23:14.838  INFO 19872 --- [         task-1] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+
+
+# Created at 2020-12-10T19:23:15.068
+Unexpected IOException with stream: 2020-12-10 19:23:15.067  INFO 19872 --- [           main] DeferredRepositoryInitializationListener : Triggering deferred initialization of Spring Data repositories…
+
+
+# Created at 2020-12-10T19:23:15.713
+Unexpected IOException with stream: 2020-12-10 19:23:15.712  INFO 19872 --- [           main] DeferredRepositoryInitializationListener : Spring Data repositories initialized!
+
+
+# Created at 2020-12-10T19:23:15.723
+Unexpected IOException with stream: 2020-12-10 19:23:15.722  INFO 19872 --- [           main] c.e.m.ManejoSalasApplicationTests        : Started ManejoSalasApplicationTests in 6.25 seconds (JVM running for 7.568)
+
+
+# Created at 2020-12-10T19:23:15.738
+Unexpected IOException: 5,1,com.example.manejosalas.ManejoSalasApplicationTests,contextLoads,null,null,null
+
+
+# Created at 2020-12-10T19:23:15.897
+Unexpected IOException: 6,1,com.example.manejosalas.ManejoSalasApplicationTests,contextLoads,null,null,null
+
+
+# Created at 2020-12-10T19:23:15.900
+Unexpected IOException: 2,1,org.apache.maven.surefire.junitplatform.JUnitPlatformProvider,com.example.manejosalas.ManejoSalasApplicationTests,null,null,null
+
+
