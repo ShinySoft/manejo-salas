@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -55,7 +56,7 @@ public class ReporteServicio {
     public String exportReport(String nombre, String reportFormat, JasperPrint jasperPrint) throws FileNotFoundException, JRException, SQLException {
     	Path currentRelativePath = Paths.get("");
     	String s = currentRelativePath.toAbsolutePath().toString();    	    
-    	
+
         String path = s + "/reports";
                             
         String finalPath = path;
@@ -76,7 +77,7 @@ public class ReporteServicio {
     }
     
     
-    public String generateReport(int id, TipoReporte tipoReporte) throws FileNotFoundException, JRException, SQLException{
+    public String generateReport(int id, TipoReporte tipoReporte) throws JRException, SQLException, IOException{
     	
     	String finalPath = "";
     	
@@ -84,8 +85,8 @@ public class ReporteServicio {
     	if(TipoReporte.SUPER_SALAS.compareTo(tipoReporte) == 0){
     		
     		//load file and compile it
-            File file = ResourceUtils.getFile("classpath:super_salas.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            InputStream file = ResourceUtils.getURL("classpath:super_salas.jrxml").openStream();
+            JasperReport jasperReport = JasperCompileManager.compileReport(file);
             
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("createdBy", "GESCOL");
@@ -117,9 +118,9 @@ public class ReporteServicio {
     		}
             
             */
-            //load file and compile it
-            File file = ResourceUtils.getFile("classpath:admin_salas.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+          //load file and compile it
+            InputStream file = ResourceUtils.getURL("classpath:admin_salas.jrxml").openStream();
+            JasperReport jasperReport = JasperCompileManager.compileReport(file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(solicitudesSala);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("createdBy", "GESCOL");
@@ -152,8 +153,9 @@ public class ReporteServicio {
             */
             
             //load file and compile it
-            File file = ResourceUtils.getFile("classpath:admin_salas_sub_dias.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+          //load file and compile it
+            InputStream file = ResourceUtils.getURL("classpath:admin_salas_sub_dias.jrxml").openStream();
+            JasperReport jasperReport = JasperCompileManager.compileReport(file);
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(solicitudesSala);
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("createdBy", "GESCOL");
