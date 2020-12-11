@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Salas y Espacios</title>
+
+	<!--JQUERY-->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+
+	<!-- Los iconos tipo Solid de Fontawesome-->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+	<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+
+	<!-- Nuestro css
+	<link rel="stylesheet" type="text/css" href="static/css/user-form.css"
+		th:href="@{/css/user-form.css}">
+-->
+
+	<!-- DATA TABLE -->
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		.window {
+			width: 100%;
+			height: 90%;
+			display: flex;
+		}
+
+		.content {
+			width: 60%;
+			margin: auto;
+			margin-top: 40px;
+		}
+
+		.footer {
+			display: flex;
+			vertical-align: middle;
+		}
+
+		.sidebar {
+			width: 250px;
+			bottom: 0;
+			left: 0;
+			height: -webkit-fill-available;
+			transition: all 0.3s;
+			position: fixed !important;
+			padding-top: 60px;
+		}
+
+		.sidenav {
+			height: -webkit-fill-available;
+			width: 0;
+			position: fixed;
+			left: 0;
+			overflow-x: hidden;
+			transition: 0.5s;
+			padding-top: 60px;
+		}
+
+		.sidenav a {
+			padding: 8px 8px 8px 32px;
+			text-decoration: none !important;
+			font-size: 20px;
+			display: block;
+			transition: 0.3s;
+			color: dimgrey;
+		}
+
+		.sidenav a:hover {
+			color: #f1f1f1;
+		}
+
+		#main {
+			transition: margin-left .5s;
+			padding: 0 10%;
+			margin: 0 auto;
+			width: -webkit-fill-available;
+		}
+
+		.logoUN {
+			display: flex !important;
+		}
+
+		.logoUN span {
+			margin: auto;
+			font-size: 25px;
+			color: dimgrey;
+		}
+
+		@media screen and (max-height: 450px) {
+			.sidenav {
+				padding-top: 15px;
+			}
+
+			.sidenav a {
+				font-size: 18px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Barra Superior -->
+	<nav class="navbar navbar-light bg-light" style="z-index: 10; height: 10%;">
+		
+		<a class="navbar-brand logoUN" href="/salas/">
+			<img src="https://logosvector.net/wp-content/uploads/2013/06/universidad-nacional-de-colombia-vector-logo.png"
+				width="50" height="50" class="d-inline-block align-top" alt="UN Logo">
+			<span> Lugar</span>
+		</a>
+		<div class="my-2 my-lg-0">
+			<form th:action="@{/logout}" method="post">
+				<input class="btn btn-outline-danger my-2 my-sm-0" type="submit" value="Cerrar Sesion" />
+			</form>
+		</div>
+	</nav>
+	<div class="window" id="solicitar">
+		<div id="main">
+			<form class="form" role="form" autocomplete="off" th:object="${ocupacion}"
+				th:action="@{/salas/admin/ocupacion}" method="post">
+
+				
+				<input class="form-control" type=hidden th:field="${ocupacion.salaEdificioId}">
+				<input class="form-control" type=hidden th:field="${ocupacion.salaId}">
+				
+				<div class="form-group row">
+					<label class="col-lg-3 col-form-label form-control-label">Descripción
+					</label>
+					<div class="col-lg-9">
+						<input class="form-control" id="descripcion" type="text" th:field="${ocupacion.descripcion} ">
+					</div>
+				</div>
+				
+				 <div class="d-flex justify-content-center" >
+					<div id="contenedorDias">
+					        <p>
+					            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDias"
+					                aria-expanded="false" aria-controls="collapseDias">
+					                Días
+					            </button>
+					        </p>
+					        <div class="collapse" id="collapseDias">
+					            <div class="card card-body">
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="lunes" aria-label="Lunes" th:field="${ocupacion.lunes}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Lunes</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="martes" aria-label="Martes" th:field="${ocupacion.martes}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Martes</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="miercoles" aria-label="Miercoles" th:field="${ocupacion.miercoles}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Miercoles</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="jueves" aria-label="Jueves" th:field="${ocupacion.jueves}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Jueves</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="viernes" aria-label="Viernes" th:field="${ocupacion.viernes}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Viernes</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="sabado" aria-label="Sábado" th:field="${ocupacion.sabado}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">Sábado</span>
+					                </div>
+					            </div>
+					        </div>
+					    </div>					
+				</div>
+				
+				 <div class="d-flex justify-content-center">
+					<div id="contenedorHoras">
+					        <p>
+					            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseHoras"
+					                aria-expanded="false" aria-controls="collapseHoras">
+					                Horarios
+					            </button>
+					        </p>
+					        <div class="collapse" id="collapseHoras">
+					            <div class="card card-body">
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="siete_nueve" aria-label="siete_nueve" th:field="${ocupacion.siete_nueve}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">7:00 - 9:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="nueve_once" aria-label="nueve_once" th:field="${ocupacion.nueve_once}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">9:00 - 11:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="once_una" aria-label="once_una" th:field="${ocupacion.once_una}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">11:00 - 13:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="dos_cuatro" aria-label="dos_cuatro" th:field="${ocupacion.dos_cuatro}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">14:00 - 16:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="cuatro_seis" aria-label="cuatro_seis" th:field="${ocupacion.cuatro_seis}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">16:00 - 18:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="seis_ocho" aria-label="seis_ocho" th:field="${ocupacion.seis_ocho}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">18:00 - 20:00</span>
+					                </div>
+					                <div class="input-group mb-3">
+					                    <div class="input-group-prepend">
+					                        <div class="input-group-text">
+					                            <input type="checkbox" id="ocho_nueve" aria-label="ocho_nueve" th:field="${ocupacion.ocho_nueve}">
+					                        </div>
+					                    </div>
+					                    <span class="input-group-text">20:00 - 21:00</span>
+					                </div>
+					            </div>
+					        </div>
+					    </div>					
+				</div>				
+
+				<div class="alert alert-danger text-center" th:if="${salaFormErrorMessage}"
+					th:text="${salaFormErrorMessage}">Error Message</div>
+					
+				<div class="form-group row">
+					<div class="col-lg-12 text-center">
+						<a type="reset" class="btn btn-secondary" th:href="@{'/salas/admin/view'}">Volver</a>
+						<input class="btn btn-primary" type="submit" value="Enviar">
+						<!-- <a class="btn btn-primary" href="#" th:onclick="'javascript:solicitar(\''+ ${sala.id} +'\',\''+ ${sala.edificioId} +'\');'">Solicitar</a>  -->
+					</div>
+				</div>
+			</form>
+		</div>
+		
+
+		<script>
+			var opened = true;
+			function openNav() {
+				if (opened) {
+					document.getElementById("mySidenav").style.width = "200px";
+					document.getElementById("main").style.marginLeft = "200px";
+					opened = false;
+				} else {
+					document.getElementById("mySidenav").style.width = "0";
+					document.getElementById("main").style.marginLeft = "0";
+					opened = true;
+				}
+
+			}
+			
+			function solicitar(id, edificioId){
+				$('#solicitarModal').modal('show');
+				$("#id").val(id);	
+				$("#edificioId").val(edificioId);
+			}
+			
+			
+
+		</script>
+</body>
+
+</html>

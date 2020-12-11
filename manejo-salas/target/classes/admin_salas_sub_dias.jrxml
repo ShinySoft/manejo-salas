@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adminSalasDias" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9fb9d3c4-3e0b-463e-a12b-af3d055b7b1b">
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FBFDFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="adminSalasDias" uuid="536d683b-8fff-4272-9358-8a4deb950055">
+		<field name="dia" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="dia"/>
+			<property name="com.jaspersoft.studio.field.label" value="dia"/>
+		</field>
+		<field name="solicitudes" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="solicitudes"/>
+			<property name="com.jaspersoft.studio.field.label" value="solicitudes"/>
+		</field>
+		<group name="dia">
+			<groupExpression><![CDATA[$F{dia}]]></groupExpression>
+		</group>
+		<group name="solicitudes">
+			<groupExpression><![CDATA[$F{solicitudes}]]></groupExpression>
+		</group>
+	</subDataset>
+	<field name="dia" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="dia"/>
+		<property name="com.jaspersoft.studio.field.label" value="dia"/>
+	</field>
+	<field name="solicitudes" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="solicitudes"/>
+		<property name="com.jaspersoft.studio.field.label" value="solicitudes"/>
+	</field>
+	<group name="dia">
+		<groupExpression><![CDATA[$F{dia}]]></groupExpression>
+	</group>
+	<group name="solicitudes">
+		<groupExpression><![CDATA[$F{solicitudes}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="587" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="80" width="290" height="200" uuid="e0e540ec-6a32-4d69-b77d-8e34e774d2b8">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="adminSalasDias" uuid="4cb64542-fa6e-4fe4-8280-0fb554509def">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="100" uuid="52afbef3-6401-4933-ba8b-5b440637f8cb">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="87dcab65-ff6b-4fa6-9af4-bfa5dbed873f"/>
+								<text><![CDATA[Día]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="0a2d9296-923e-4812-9b6f-ef5241bc63ba"/>
+								<textFieldExpression><![CDATA[$F{dia}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="4dfc2e93-da49-405e-bc4f-819563bd65d5">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="30" uuid="c1ce7dba-49a0-4257-88ef-b5233d3e4f2c"/>
+								<text><![CDATA[Solicitudes]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="100" height="30" uuid="80a39863-b9c7-43cc-80b8-6233fe7e59f9"/>
+								<textFieldExpression><![CDATA[$F{solicitudes}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<barChart>
+				<chart evaluationTime="Report">
+					<reportElement x="20" y="360" width="460" height="200" uuid="06a866b6-0c7c-427c-bde8-bceb06ee2820"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<dataset resetType="Report"/>
+					<categorySeries>
+						<seriesExpression><![CDATA["OCUPACIÓN POR DIAS"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{solicitudes}]]></valueExpression>
+						<labelExpression><![CDATA[$F{dia}]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel/>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<staticText>
+				<reportElement x="20" y="20" width="440" height="30" uuid="0ec7a541-b6c7-4a92-a27d-41655b9db1a6"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Solicitudes por día de la semana]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="300" y="80" width="200" height="200" uuid="b555229e-221e-4011-8181-b01998ea9de9"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset resetType="Report"/>
+					<keyExpression><![CDATA[$F{dia}]]></keyExpression>
+					<valueExpression><![CDATA[$F{solicitudes}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>

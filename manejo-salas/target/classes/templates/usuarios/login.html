@@ -1,0 +1,47 @@
+<form id="formIngreso" th:object="${userLogin}" th:action="@{/usuarios/login}" method="post">
+	
+	<meta charset="UTF-8">
+    <div class="form-group">
+        <label for="nombreIngreso">Usuario</label>
+        <div class="input-group">
+	        <input type="text" class="form-control" placeholder="Correo" aria-label="Correo" aria-describedby="correo-addon"
+	        	th:field="${userLogin.correo}" id="nombreIngreso" minlength="1" maxlength="25" required>
+	        <div class="input-group-append">
+				<span class="input-group-text" id="correo-addon">@unal.edu.co</span>
+			</div>
+		</div>
+    </div>
+    
+    
+    <div class="form-group">
+        <label for="passwordIngreso">Clave</label>
+        <input type="password" class="form-control" th:field="${userLogin.password}" id="passwordIngreso" minlength="3"
+            maxlength="25" required>
+    </div>
+    
+    <div>
+    	<a  id="botonEnvio" href="send-mail/forget-password" ><label>Olvidé mi contraseña</label></a>
+    </div>
+    
+    <input type="submit" value="Ingresar" id="ingreso" class="btn btn-primary">
+    
+    <div class="alert alert-danger text-center" th:if="${loginError}" th:text="${loginErrorMessage}">Error Message</div>
+</form>
+
+<script>
+
+$("#ingreso")[0].onclick = function () 
+{
+	
+	if ($("#nombreIngreso")[0].value != ""){
+		$("#nombreIngreso")[0].value = $("#nombreIngreso")[0].value + "@unal.edu.co";
+	}	  
+}
+
+
+// 	alert("Registro exitoso");
+
+	
+
+
+</script>

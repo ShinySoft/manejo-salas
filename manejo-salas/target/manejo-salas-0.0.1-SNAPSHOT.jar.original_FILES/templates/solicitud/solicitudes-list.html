@@ -1,0 +1,67 @@
+<div class="table-responsive">
+	<table id="solicitudesPendientesList" class="table table-bordered table-hover table-striped">
+		<thead class="thead-light">
+		<tr>			
+			<th scope="col">Fecha solicitud</th>
+			<th scope="col" th:if="${adminLogin}">Solicitante</th>
+			<th scope="col">Edificio</th>
+			<th scope="col">Sala</th>
+			<th scope="col">Fecha prestamo</th>
+			<th scope="col">Hora inicio</th>
+			<th scope="col">Hora fin</th>
+			<th scope="col">Detalle</th>
+			<th scope="col">Estado</th>
+			<th ></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="solicitud: ${solicitudesPendientesList}">
+			<td th:text="${solicitud.fecha_solicitud}"></td>
+			<td th:text="${solicitud.getUsuarioID().getCorreo()}" th:if="${adminLogin}"></td>
+			<td th:text="${solicitud.getSalaID().getEdificioId()}"></td>
+			<td th:text="${solicitud.getSalaID().getId()}"></td>
+			<td th:text="${solicitud.fecha_prestamo}"></td>
+			<td th:text="${solicitud.hora_inicio}"></td>	
+			<td th:text="${solicitud.hora_fin}"></td>	
+			<td th:text="${solicitud.descripcion}"></td>
+			<td th:text="${solicitud.estado}"></td>	
+			<td th:if="${adminLogin}" >	
+					<a href="#" th:href="@{'/salas/acept/'+ ${solicitud.getID()}}"><i class="fas fa-check"></i></a>																			
+					<a href="#" th:href="@{'/salas/rehuse/'+ ${solicitud.getID()}}"><i class="fas fa-times"></i></a>					
+			</td>
+			<td th:if="${userLogin}" >	
+					<a href="#" th:href="@{'/salas/cancel/'+ ${solicitud.getID()}}"><i class="fas fa-times"></i></a>					
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</div>
+	<!-- Button trigger modal 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+</button>-->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sala</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div th:include="salas/sala-form.html" th:remove="tag"></div>
+      </div>
+    </div>
+  </div>
+</div>
+	<div class="alert alert-danger text-center" th:if="${salaListErrorMessage}" th:text="${salaListErrorMessage}">Error Message</div>
+</div>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			//Asegurate que el id que le diste a la tabla sea igual al texto despues del simbolo #
+			$('#solicitudesPendientesList').DataTable();
+		});
+	</script>

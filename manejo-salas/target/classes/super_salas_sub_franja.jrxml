@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.14.0.final using JasperReports Library version 6.14.0-2ab0d8625be255bf609c78e1181801213e51db8f  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="super_salas_sub_franja" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="394dfe5c-7486-4143-ad75-b95e5d98e33b">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<subDataset name="SolicitudFranja" uuid="8d6bca94-fd9e-4edb-b378-f86b11ccc1e8">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+		<queryString language="SQL">
+			<![CDATA[SELECT hora_inicio, hora_fin, COUNT(*) AS Solicitudes
+FROM proyecto.solicitud
+WHERE TIMESTAMPDIFF(MONTH, fecha_prestamo, CURDATE()) < 6
+GROUP BY hora_inicio, hora_fin]]>
+		</queryString>
+		<field name="hora_inicio" class="java.sql.Time">
+			<property name="com.jaspersoft.studio.field.name" value="Hora_inicio"/>
+			<property name="com.jaspersoft.studio.field.label" value="hora_inicio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="hora_fin" class="java.sql.Time">
+			<property name="com.jaspersoft.studio.field.name" value="Hora_fin"/>
+			<property name="com.jaspersoft.studio.field.label" value="hora_fin"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Solicitudes" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.name" value="Solicitudes"/>
+			<property name="com.jaspersoft.studio.field.label" value="Solicitudes"/>
+		</field>
+		<group name="hora_inicio">
+			<groupExpression><![CDATA[$F{hora_inicio}]]></groupExpression>
+		</group>
+		<group name="hora_fin">
+			<groupExpression><![CDATA[$F{hora_fin}]]></groupExpression>
+		</group>
+		<group name="Solicitudes">
+			<groupExpression><![CDATA[$F{Solicitudes}]]></groupExpression>
+		</group>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[SELECT hora_inicio, hora_fin, COUNT(*) AS Solicitudes
+FROM proyecto.solicitud
+WHERE TIMESTAMPDIFF(MONTH, fecha_prestamo, CURDATE()) < 6
+GROUP BY hora_inicio, hora_fin]]>
+	</queryString>
+	<field name="hora_inicio" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="Hora_inicio"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora_inicio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hora_fin" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="Hora_fin"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora_fin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="solicitud"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Solicitudes" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="Solicitudes"/>
+		<property name="com.jaspersoft.studio.field.label" value="Solicitudes"/>
+	</field>
+	<group name="hora_inicio">
+		<groupExpression><![CDATA[$F{hora_inicio}]]></groupExpression>
+	</group>
+	<group name="hora_fin">
+		<groupExpression><![CDATA[$F{hora_fin}]]></groupExpression>
+	</group>
+	<group name="Solicitudes">
+		<groupExpression><![CDATA[$F{Solicitudes}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="638">
+			<staticText>
+				<reportElement x="0" y="10" width="350" height="30" uuid="7b2dbaa7-edc8-4b51-9a24-2c589a7645ff"/>
+				<textElement>
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Solicitudes por franja horaria]]></text>
+			</staticText>
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="80" width="540" height="412" uuid="24066ecc-bfec-4882-87f4-96fe3ca27ecc"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset resetType="Report"/>
+					<keyExpression><![CDATA[$F{hora_inicio}.toString() + " - " + $F{hora_fin}.toString()]]></keyExpression>
+					<valueExpression><![CDATA[$F{Solicitudes}]]></valueExpression>
+					<labelExpression><![CDATA[$F{hora_inicio}.toString() + " - " + $F{hora_fin}.toString()]]></labelExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</pageHeader>
+</jasperReport>
